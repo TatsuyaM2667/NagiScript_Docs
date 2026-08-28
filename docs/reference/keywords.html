@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>キーワード一覧 - NagiScript</title>
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <div class="sky-decor" aria-hidden="true">
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="cloud c3"></div>
+    <div class="cloud c4"></div>
+  </div>
+  <header class="header">
+    <a href="../../index.html" class="header-logo"><span class="logo-text">⚡ NagiScript</span></a>
+    <nav class="header-nav">
+      <a href="../../index.html">ホーム</a>
+      <a href="../getting-started.html">ドキュメント</a>
+      <a href="../tutorial/basics.html">チュートリアル</a>
+      <a href="types.html">リファレンス</a>
+      <button class="theme-toggle" aria-label="テーマ切替">🌓</button>
+    </nav>
+  </header>
+  <div class="sidebar-overlay"></div>
+
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">入门</div>
+      <a href="../getting-started.html" class="sidebar-link">はじめに</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">チュートリアル</div>
+      <a href="../tutorial/basics.html" class="sidebar-link">基本概念</a>
+      <a href="../tutorial/functions.html" class="sidebar-link">関数とモジュール</a>
+      <a href="../tutorial/structs-enums.html" class="sidebar-link">構造体と列挙型</a>
+      <a href="../tutorial/generics.html" class="sidebar-link">ジェネリクス</a>
+      <a href="../tutorial/error-handling.html" class="sidebar-link">エラーハンドリング</a>
+      <a href="../tutorial/memory.html" class="sidebar-link">メモリ管理</a>
+      <a href="../tutorial/async.html" class="sidebar-link">非同期プログラミング</a>
+      <a href="../tutorial/webassembly.html" class="sidebar-link">WebAssembly</a>
+      <a href="../tutorial/browser-app.html" class="sidebar-link">ブラウザアプリ</a>
+      <a href="../tutorial/tui-app.html" class="sidebar-link">TUI アプリ</a>
+      <a href="../tutorial/cli.html" class="sidebar-link">CLI ツール開発</a>
+      <a href="../tutorial/microcontroller.html" class="sidebar-link">組み込み開発</a>
+      <a href="../tutorial/cinterop.html" class="sidebar-link">C言語との相互運用</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">リファレンス</div>
+      <a href="types.html" class="sidebar-link">型システム</a>
+      <a href="syntax.html" class="sidebar-link">構文リファレンス</a>
+      <a href="operators.html" class="sidebar-link">演算子リファレンス</a>
+      <a href="standard-library.html" class="sidebar-link">標準ライブラリ</a>
+      <a href="standard-c-library.html" class="sidebar-link">C 標準ライブラリ</a>
+      <a href="compiler.html" class="sidebar-link">コンパイラ内部構造</a>
+      <a href="keywords.html" class="sidebar-link active">キーワード一覧</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">実践</div>
+      <a href="../examples/todo-app.html" class="sidebar-link">Todo アプリ</a>
+      <a href="../examples/web-framework.html" class="sidebar-link">Web フレームワーク</a>
+      <a href="../examples/iot-sensor.html" class="sidebar-link">IoT センサー</a>
+    </div>
+  </aside>
+
+  <main class="main content">
+    <h1>キーワード一覧</h1>
+    <p>NagiScript のキーワード全体を解説します。</p>
+
+    <hr>
+
+    <h2>型を定義するキーワード</h2>
+    <table>
+      <thead>
+        <tr><th>キーワード</th><th>説明</th><th>例</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>struct</code></td><td>構造体の定義</td><td><code>struct Point { x: f64 }</code></td></tr>
+        <tr><td><code>enum</code></td><td>列挙型の定義</td><td><code>enum Color { Red, Green }</code></td></tr>
+        <tr><td><code>fn</code></td><td>関数の定義</td><td><code>fn add(a: i32, b: i32) i32</code></td></tr>
+        <tr><td><code>type</code></td><td>型エイリアス</td><td><code>type Int = i32</code></td></tr>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <h2>変数宣言</h2>
+    <table>
+      <thead>
+        <tr><th>キーワード</th><th>説明</th><th>例</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>val</code></td><td>不変変数の宣言</td><td><code>val x = 42</code></td></tr>
+        <tr><td><code>var</code></td><td>可変変数の宣言</td><td><code>var counter = 0</code></td></tr>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <h2>制御構文</h2>
+    <table>
+      <thead>
+        <tr><th>キーワード</th><th>説明</th><th>例</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>if</code></td><td>条件分岐</td><td><code>if x &gt; 0 { ... }</code></td></tr>
+        <tr><td><code>else</code></td><td>else ブランチ</td><td><code>if ... { } else { }</code></td></tr>
+        <tr><td><code>for</code></td><td>for ループ</td><td><code>for i in 0..5 { }</code></td></tr>
+        <tr><td><code>while</code></td><td>while ループ</td><td><code>while x &lt; 10 { }</code></td></tr>
+        <tr><td><code>match</code></td><td>パターンマッチング</td><td><code>match x { 1 =&gt; ... }</code></td></tr>
+        <tr><td><code>return</code></td><td>関数からの返却</td><td><code>return 42</code></td></tr>
+        <tr><td><code>break</code></td><td>ループの脱出</td><td><code>break</code></td></tr>
+        <tr><td><code>continue</code></td><td>次の反復へ</td><td><code>continue</code></td></tr>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <h2>メモリ管理</h2>
+    <table>
+      <thead>
+        <tr><th>キーワード</th><th>説明</th><th>例</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>unsafe</code></td><td>Unsafe ブロック</td><td><code>unsafe { *ptr }</code></td></tr>
+        <tr><td><code>async</code></td><td>非同期関数</td><td><code>async fn fetch() {}</code></td></tr>
+        <tr><td><code>await</code></td><td>非同期操作の待機</td><td><code>await fetch_data()</code></td></tr>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <h2>モジュール</h2>
+    <table>
+      <thead>
+        <tr><th>キーワード</th><th>説明</th><th>例</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>import</code></td><td>モジュールのインポート</td><td><code>import "std:io"</code></td></tr>
+        <tr><td><code>export</code></td><td>関数のエクスポート</td><td><code>export fn add()</code></td></tr>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <h2>リテラル</h2>
+    <table>
+      <thead>
+        <tr><th>キーワード</th><th>説明</th><th>例</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>true</code></td><td>真</td><td><code>val flag = true</code></td></tr>
+        <tr><td><code>false</code></td><td>偽</td><td><code>val flag = false</code></td></tr>
+        <tr><td><code>void</code></td><td>単型</td><td><code>fn do_nothing() void</code></td></tr>
+        <tr><td><code>null</code></td><td>ヌルポインタ</td><td><code>val ptr = null</code></td></tr>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <h2>基本型</h2>
+    <table>
+      <thead>
+        <tr><th>キーワード</th><th>説明</th><th>例</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>i8</code></td><td>8ビット整数</td><td><code>val x: i8 = 42</code></td></tr>
+        <tr><td><code>i16</code></td><td>16ビット整数</td><td><code>val x: i16 = 42</code></td></tr>
+        <tr><td><code>i32</code></td><td>32ビット整数</td><td><code>val x: i32 = 42</code></td></tr>
+        <tr><td><code>i64</code></td><td>64ビット整数</td><td><code>val x: i64 = 42</code></td></tr>
+        <tr><td><code>u8</code></td><td>8ビット符号なし整数</td><td><code>val x: u8 = 255</code></td></tr>
+        <tr><td><code>u16</code></td><td>16ビット符号なし整数</td><td><code>val x: u16 = 65535</code></td></tr>
+        <tr><td><code>u32</code></td><td>32ビット符号なし整数</td><td><code>val x: u32 = 4294967295</code></td></tr>
+        <tr><td><code>u64</code></td><td>64ビット符号なし整数</td><td><code>val x: u64 = 18446744073709551615</code></td></tr>
+        <tr><td><code>f32</code></td><td>32ビット浮動小数点</td><td><code>val x: f32 = 3.14</code></td></tr>
+        <tr><td><code>f64</code></td><td>64ビット浮動小数点</td><td><code>val x: f64 = 3.14159</code></td></tr>
+        <tr><td><code>bool</code></td><td>真偽値</td><td><code>val flag: bool = true</code></td></tr>
+        <tr><td><code>str</code></td><td>文字列</td><td><code>val name: str = "Alice"</code></td></tr>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <h2>演算子</h2>
+    <table>
+      <thead>
+        <tr><th>キーワード</th><th>説明</th><th>例</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>and</code></td><td>論理AND</td><td><code>a and b</code></td></tr>
+        <tr><td><code>or</code></td><td>論理OR</td><td><code>a or b</code></td></tr>
+        <tr><td><code>not</code></td><td>論理NOT</td><td><code>not a</code></td></tr>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <h2>特殊なキーワード</h2>
+    <table>
+      <thead>
+        <tr><th>キーワード</th><th>説明</th><th>例</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>step</code></td><td>for ループのステップ</td><td><code>for i in 0..10 step 2</code></td></tr>
+        <tr><td><code>as</code></td><td>型変換</td><td><code>val y = x as f64</code></td></tr>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <h2>予約語 (将来の拡張用)</h2>
+    <p>以下のキーワードは現在使用されていませんが、将来の拡張用に予約されています：</p>
+    <ul>
+      <li><code>class</code> — クラス (予約)</li>
+      <li><code>interface</code> — インターフェース (予約)</li>
+      <li><code>trait</code> — トレイト (予約)</li>
+      <li><code>impl</code> — 実装 (予約)</li>
+      <li><code>pub</code> — 公開 (予約)</li>
+      <li><code>self</code> — 自分自身 (予約)</li>
+    </ul>
+
+    <hr>
+
+    <h2>キーワードの使用例</h2>
+    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">// 型定義
+struct Point {
+    x: f64
+    y: f64
+}
+
+enum Color {
+    Red
+    Green
+    Blue
+}
+
+// 関数定義
+fn add(a: i32, b: i32) i32 {
+    a + b
+}
+
+// 変数宣言
+val x = 42
+var counter = 0
+
+// 制御構文
+if x &gt; 0 {
+    io.println("Positive")
+} else if x &lt; 0 {
+    io.println("Negative")
+} else {
+    io.println("Zero")
+}
+
+for i in 0..10 {
+    io.println(i)
+}
+
+while counter &lt; 10 {
+    counter += 1
+}
+
+match color {
+    Color.Red =&gt; "Red",
+    Color.Green =&gt; "Green",
+    Color.Blue =&gt; "Blue"
+}
+
+// メモリ管理
+unsafe {
+    val ptr = &amp;x
+    val value = *ptr
+}
+
+// 非同期
+async fn fetch_data() void {
+    val data = await http.get("https://example.com")
+}
+
+// モジュール
+import "std:io"
+export fn public_function() void {}</code></pre>
+
+    <hr>
+
+    <div class="page-nav">
+      <a href="compiler.html" class="nav-link prev">← コンパイラ内部構造</a>
+      <a href="../examples/todo-app.html" class="nav-link next">Todo アプリ →</a>
+    </div>
+  </main>
+
+  <script src="../../js/main.js"></script>
+  <script src="../../js/play-wasm.js"></script>
+</body>
+</html>

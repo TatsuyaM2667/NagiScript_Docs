@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo アプリ - NagiScript</title>
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <div class="sky-decor" aria-hidden="true">
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="cloud c3"></div>
+    <div class="cloud c4"></div>
+  </div>
+  <header class="header">
+    <a href="../../index.html" class="header-logo"><span class="logo-text">⚡ NagiScript</span></a>
+    <nav class="header-nav">
+      <a href="../../index.html">ホーム</a>
+      <a href="../getting-started.html">ドキュメント</a>
+      <a href="../tutorial/basics.html">チュートリアル</a>
+      <a href="../reference/types.html">リファレンス</a>
+      <button class="theme-toggle" aria-label="テーマ切替">🌓</button>
+    </nav>
+  </header>
+  <div class="sidebar-overlay"></div>
+
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">入门</div>
+      <a href="../getting-started.html" class="sidebar-link">はじめに</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">チュートリアル</div>
+      <a href="../tutorial/basics.html" class="sidebar-link">基本概念</a>
+      <a href="../tutorial/functions.html" class="sidebar-link">関数とモジュール</a>
+      <a href="../tutorial/structs-enums.html" class="sidebar-link">構造体と列挙型</a>
+      <a href="../tutorial/generics.html" class="sidebar-link">ジェネリクス</a>
+      <a href="../tutorial/error-handling.html" class="sidebar-link">エラーハンドリング</a>
+      <a href="../tutorial/memory.html" class="sidebar-link">メモリ管理</a>
+      <a href="../tutorial/async.html" class="sidebar-link">非同期プログラミング</a>
+      <a href="../tutorial/webassembly.html" class="sidebar-link">WebAssembly</a>
+      <a href="../tutorial/browser-app.html" class="sidebar-link">ブラウザアプリ</a>
+      <a href="../tutorial/tui-app.html" class="sidebar-link">TUI アプリ</a>
+      <a href="../tutorial/cli.html" class="sidebar-link">CLI ツール開発</a>
+      <a href="../tutorial/microcontroller.html" class="sidebar-link">組み込み開発</a>
+      <a href="../tutorial/cinterop.html" class="sidebar-link">C言語との相互運用</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">リファレンス</div>
+      <a href="../reference/types.html" class="sidebar-link">型システム</a>
+      <a href="../reference/syntax.html" class="sidebar-link">構文リファレンス</a>
+      <a href="../reference/operators.html" class="sidebar-link">演算子リファレンス</a>
+      <a href="../reference/standard-library.html" class="sidebar-link">標準ライブラリ</a>
+      <a href="../reference/standard-c-library.html" class="sidebar-link">C 標準ライブラリ</a>
+      <a href="../reference/compiler.html" class="sidebar-link">コンパイラ内部構造</a>
+      <a href="../reference/keywords.html" class="sidebar-link">キーワード一覧</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">実践</div>
+      <a href="todo-app.html" class="sidebar-link active">Todo アプリ</a>
+      <a href="web-framework.html" class="sidebar-link">Web フレームワーク</a>
+      <a href="iot-sensor.html" class="sidebar-link">IoT センサー</a>
+    </div>
+  </aside>
+
+  <main class="main content">
+    <h1>Todo アプリケーション</h1>
+    <p>NagiScript で Todo アプリケーションを開発するチュートリアルです。</p>
+    <hr>
+
+    <h2>概要</h2>
+    <p>このチュートリアルでは、NagiScript で简单的な Todo アプリケーションを作成します。</p>
+    <ul>
+      <li>Todo の追加、削除、一覧表示</li>
+      <li>ファイルへの保存と読み込み</li>
+      <li>エラーハンドリング</li>
+    </ul>
+    <hr>
+
+    <h2>プロジェクト構成</h2>
+    <div class="code-header"><span class="code-lang">text</span><button class="copy-btn">Copy</button></div>
+    <pre><code>todo_app/
+├── main.ngs
+├── todo.ngs
+└── storage.ngs</code></pre>
+    <hr>
+
+    <h2>実装</h2>
+
+    <h3>todo.ngs — Todo 型の定義</h3>
+    <div class="code-header"><span class="code-lang">todo.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">struct Todo {
+    id: i32
+    title: str
+    completed: bool
+}
+
+fn Todo.to_string(self: Todo) str {
+    val status = if self.completed { "[x]" } else { "[ ]" }
+    status + " " + self.title
+}</code></pre>
+
+    <h3>storage.ngs — ファイル操作</h3>
+    <div class="code-header"><span class="code-lang">storage.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">import "std:io"
+import "std:fs"
+
+fn save_todos(todos: List&lt;Todo&gt;, path: str) Result&lt;void, str&gt; {
+    var content = ""
+
+    for todo in todos {
+        val line = str(todo.id) + "," + todo.title + "," + str(todo.completed)
+        content = content + line + "\n"
+    }
+
+    fs.write_to_string(path, content)
+        .map_err(fn(e: str) str { "Failed to save: " + e })
+}
+
+fn load_todos(path: str) Result&lt;List&lt;Todo&gt;, str&gt; {
+    val content = fs.read_to_string(path)
+        .map_err(fn(e: str) str { "Failed to load: " + e })?
+
+    var todos = List&lt;Todo&gt; {}
+    var id_counter = 1
+
+    for line in content.split("\n") {
+        if line.len() > 0 {
+            val parts = line.split(",")
+            if parts.len() >= 2 {
+                todos.add(Todo {
+                    id: id_counter,
+                    title: parts[1],
+                    completed: parts[2] == "true"
+                })
+                id_counter += 1
+            }
+        }
+    }
+
+    Result.Ok(todos)
+}</code></pre>
+
+    <h3>main.ngs — メインプログラム</h3>
+    <div class="code-header"><span class="code-lang">main.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">import "std:io"
+import "std:args"
+import "todo"
+import "storage"
+
+fn main() void {
+    val command = args.get("command")
+
+    match command {
+        Option.Some(cmd) => {
+            match cmd {
+                "add" => add_todo(),
+                "list" => list_todos(),
+                "done" => complete_todo(),
+                "remove" => remove_todo(),
+                _ => print_help()
+            }
+        },
+        Option.None => print_help()
+    }
+}
+
+fn print_help() void {
+    io.println("Usage:")
+    io.println("  todo add &lt;title&gt;     - Add a new todo")
+    io.println("  todo list            - List all todos")
+    io.println("  todo done &lt;id&gt;       - Mark todo as completed")
+    io.println("  todo remove &lt;id&gt;     - Remove a todo")
+}
+
+fn add_todo() void {
+    val title = args.get("title")
+
+    match title {
+        Option.Some(t) => {
+            val todos = load_todos("todos.txt")
+                .unwrap_or(List&lt;Todo&gt; {})
+
+            val new_todo = Todo {
+                id: todos.len() + 1,
+                title: t,
+                completed: false
+            }
+
+            todos.add(new_todo)
+
+            match save_todos(todos, "todos.txt") {
+                Result.Ok(_) => io.println("Added: " + t),
+                Result.Err(e) => io.println("Error: " + e)
+            }
+        },
+        Option.None => io.println("Please provide a title")
+    }
+}
+
+fn list_todos() void {
+    val todos = load_todos("todos.txt")
+        .unwrap_or(List&lt;Todo&gt; {})
+
+    if todos.is_empty() {
+        io.println("No todos yet!")
+    } else {
+        for todo in todos {
+            io.println(todo.to_string())
+        }
+    }
+}
+
+fn complete_todo() void {
+    val id = args.get("id")
+
+    match id {
+        Option.Some(id_str) => {
+            val target_id = atoi(id_str)
+            val todos = load_todos("todos.txt")
+                .unwrap_or(List&lt;Todo&gt; {})
+
+            var found = false
+            var i = 0
+
+            while i < todos.len() {
+                if todos[i].id == target_id {
+                    todos[i].completed = true
+                    found = true
+                }
+                i += 1
+            }
+
+            if found {
+                match save_todos(todos, "todos.txt") {
+                    Result.Ok(_) => io.println("Completed todo " + id_str),
+                    Result.Err(e) => io.println("Error: " + e)
+                }
+            } else {
+                io.println("Todo not found")
+            }
+        },
+        Option.None => io.println("Please provide a todo ID")
+    }
+}
+
+fn remove_todo() void {
+    val id = args.get("id")
+
+    match id {
+        Option.Some(id_str) => {
+            val target_id = atoi(id_str)
+            val todos = load_todos("todos.txt")
+                .unwrap_or(List&lt;Todo&gt; {})
+
+            var new_todos = List&lt;Todo&gt; {}
+            var found = false
+
+            for todo in todos {
+                if todo.id != target_id {
+                    new_todos.add(todo)
+                } else {
+                    found = true
+                }
+            }
+
+            if found {
+                match save_todos(new_todos, "todos.txt") {
+                    Result.Ok(_) => io.println("Removed todo " + id_str),
+                    Result.Err(e) => io.println("Error: " + e)
+                }
+            } else {
+                io.println("Todo not found")
+            }
+        },
+        Option.None => io.println("Please provide a todo ID")
+    }
+}</code></pre>
+    <hr>
+
+    <h2>実行例</h2>
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-bash"># Todo を追加
+nagiscript run main.ngs --command add --title "Buy groceries"
+
+# Todo を一覧表示
+nagiscript run main.ngs --command list
+
+# Todo を完了
+nagiscript run main.ngs --command done --id 1
+
+# Todo を削除
+nagiscript run main.ngs --command remove --id 1</code></pre>
+    <hr>
+
+    <h2>学べること</h2>
+    <ol>
+      <li><strong>モジュール分割</strong>: 複数ファイルに分けてコードを整理</li>
+      <li><strong>ファイル操作</strong>: fs モジュールを使った読み書き</li>
+      <li><strong>エラーハンドリング</strong>: Result 型を使用したエラー処理</li>
+      <li><strong>コマンドライン引数</strong>: args モジュールを使用</li>
+    </ol>
+    <hr>
+
+    <nav class="page-nav">
+      <a href="../reference/keywords.html">← キーワード一覧</a>
+      <a href="web-framework.html">Web フレームワーク →</a>
+    </nav>
+  </main>
+
+  <script src="../../js/main.js"></script>
+  <script src="../../js/play-wasm.js"></script>
+</body>
+</html>

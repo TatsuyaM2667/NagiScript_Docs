@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ジェネリクス - NagiScript</title>
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <div class="sky-decor" aria-hidden="true">
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="cloud c3"></div>
+    <div class="cloud c4"></div>
+  </div>
+  <header class="header">
+    <a href="../../index.html" class="header-logo"><span class="logo-text">⚡ NagiScript</span></a>
+    <nav class="header-nav">
+      <a href="../../index.html">ホーム</a>
+      <a href="../getting-started.html">ドキュメント</a>
+      <a href="basics.html">チュートリアル</a>
+      <a href="../reference/types.html">リファレンス</a>
+      <button class="theme-toggle" aria-label="テーマ切替">🌓</button>
+    </nav>
+  </header>
+  <div class="sidebar-overlay"></div>
+
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">入门</div>
+      <a href="../getting-started.html" class="sidebar-link">はじめに</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">チュートリアル</div>
+      <a href="basics.html" class="sidebar-link">基本概念</a>
+      <a href="functions.html" class="sidebar-link">関数とモジュール</a>
+      <a href="structs-enums.html" class="sidebar-link">構造体と列挙型</a>
+      <a href="generics.html" class="sidebar-link active">ジェネリクス</a>
+      <a href="error-handling.html" class="sidebar-link">エラーハンドリング</a>
+      <a href="memory.html" class="sidebar-link">メモリ管理</a>
+      <a href="async.html" class="sidebar-link">非同期プログラミング</a>
+      <a href="webassembly.html" class="sidebar-link">WebAssembly</a>
+      <a href="browser-app.html" class="sidebar-link">ブラウザアプリ</a>
+      <a href="tui-app.html" class="sidebar-link">TUI アプリ</a>
+      <a href="cli.html" class="sidebar-link">CLI ツール開発</a>
+      <a href="microcontroller.html" class="sidebar-link">組み込み開発</a>
+      <a href="cinterop.html" class="sidebar-link">C言語との相互運用</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">リファレンス</div>
+      <a href="../reference/types.html" class="sidebar-link">型システム</a>
+      <a href="../reference/syntax.html" class="sidebar-link">構文リファレンス</a>
+      <a href="../reference/operators.html" class="sidebar-link">演算子リファレンス</a>
+      <a href="../reference/standard-library.html" class="sidebar-link">標準ライブラリ</a>
+      <a href="../reference/standard-c-library.html" class="sidebar-link">C 標準ライブラリ</a>
+      <a href="../reference/compiler.html" class="sidebar-link">コンパイラ内部構造</a>
+      <a href="../reference/keywords.html" class="sidebar-link">キーワード一覧</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">実践</div>
+      <a href="../examples/todo-app.html" class="sidebar-link">Todo アプリ</a>
+      <a href="../examples/web-framework.html" class="sidebar-link">Web フレームワーク</a>
+      <a href="../examples/iot-sensor.html" class="sidebar-link">IoT センサー</a>
+    </div>
+  </aside>
+
+  <main class="main content">
+    <h1>ジェネリクス</h1>
+    <p>型をパラメータとして受け取る汎用コードの書き方を学びます。</p>
+
+    <hr>
+
+    <h2>基本概念</h2>
+
+    <p>NagiScript のジェネリクスは<strong>コンパイル時に単型化（monomorphization）</strong>されます。 Zig や Odin と同様に、 使用時には具体的な型に展開されます。</p>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">// この関数は T が i32 なら fn(i32) i32 に、
+// T が str なら fn(str) str に展開されます
+fn identity&lt;T&gt;(x: T) T {
+    x
+}
+
+val n = identity&lt;i32&gt;(42)    // 42
+val s = identity&lt;str&gt;("hi")  // "hi"</code></pre>
+
+    <hr>
+
+    <h2>型推論</h2>
+
+    <p>型パラメータを省略すると推論されます：</p>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">val n = identity(42)      // T = i32 と推論
+val s = identity("hi")    // T = str と推論</code></pre>
+
+    <hr>
+
+    <h2>複数の型パラメータ</h2>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">fn pair&lt;A, B&gt;(first: A, second: B) (A, B) {
+    (first, second)
+}
+
+val p = pair&lt;i32, str&gt;(42, "hello")
+// p = (42, "hello")</code></pre>
+
+    <hr>
+
+    <h2>制約 (Constraints)</h2>
+
+    <h3>型クラス風の制約</h3>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">// Printable 型クラス（仮想的）
+fn print_all&lt;T: Printable&gt;(items: List&lt;T&gt;) void {
+    for item in items {
+        item.print()
+    }
+}</code></pre>
+
+    <h3>構造的制約</h3>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">// T が .len() メソッドを持つことを要求（構造的制約）
+fn length_of&lt;T&gt;(x: T) i32 {
+    x.len()
+}
+
+val s_len = length_of("hello")  // 5
+val v_len = length_of(List&lt;i32&gt; { 1, 2, 3 })  // 3</code></pre>
+
+    <hr>
+
+    <h2>ジェネリクス構造体</h2>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">struct Stack&lt;T&gt; {
+    items: List&lt;T&gt;
+}
+
+fn Stack&lt;T&gt;.push(self: Stack&lt;T&gt;, item: T) void {
+    self.items.add(item)
+}
+
+fn Stack&lt;T&gt;.pop(self: Stack&lt;T&gt;) Option&lt;T&gt; {
+    if self.items.is_empty() {
+        Option.None
+    } else {
+        val last = self.items[self.items.len() - 1]
+        self.items.remove(self.items.len() - 1)
+        Option.Some(last)
+    }
+}
+
+fn Stack&lt;T&gt;.peek(self: Stack&lt;T&gt;) Option&lt;T&gt; {
+    if self.items.is_empty() {
+        Option.None
+    } else {
+        Option.Some(self.items[self.items.len() - 1])
+    }
+}
+
+// 使用例
+var stack = Stack&lt;i32&gt; { items: List&lt;i32&gt; {} }
+stack.push(10)
+stack.push(20)
+stack.push(30)
+
+val top = stack.pop()  // Option.Some(30)</code></pre>
+
+    <hr>
+
+    <h2>ジェネリクス列挙型</h2>
+
+    <h3>Result 型</h3>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">enum Result&lt;T, E&gt; {
+    Ok(T)
+    Err(E)
+}
+
+fn Result&lt;T, E&gt;.is_ok(self: Result&lt;T, E&gt;) bool {
+    match self {
+        Result.Ok(_) => true,
+        Result.Err(_) => false
+    }
+}
+
+fn Result&lt;T, E&gt;.unwrap(self: Result&lt;T, E&gt;) T {
+    match self {
+        Result.Ok(v) => v,
+        Result.Err(_) => panic("unwrap on Err")
+    }
+}</code></pre>
+
+    <h3>Option 型</h3>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">enum Option&lt;T&gt; {
+    Some(T)
+    None
+}
+
+fn Option&lt;T&gt;.is_some(self: Option&lt;T&gt;) bool {
+    match self {
+        Option.Some(_) => true,
+        Option.None => false
+    }
+}
+
+fn Option&lt;T&gt;.unwrap_or(self: Option&lt;T&gt;, default: T) T {
+    match self {
+        Option.Some(v) => v,
+        Option.None => default
+    }
+}</code></pre>
+
+    <hr>
+
+    <h2>関数型のジェネリクス</h2>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">fn map&lt;T, U&gt;(list: List&lt;T&gt;, f: fn(T) U) List&lt;U&gt; {
+    var result = List&lt;U&gt; {}
+    for item in list {
+        result.add(f(item))
+    }
+    result
+}
+
+val doubled = map(List&lt;i32&gt; { 1, 2, 3 }, fn(x: i32) i32 { x * 2 })
+// doubled = [2, 4, 6]
+
+val lengths = map(List&lt;str&gt; { "hello", "world" }, fn(s: str) i32 { s.len() })
+// lengths = [5, 5]</code></pre>
+
+    <hr>
+
+    <h2>型推論の仕組み</h2>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">// 型パラメータが明示的
+val v1 = Vec2&lt;i32&gt; { x: 1, y: 2 }
+
+// 型推論による省略
+val v2 = Vec2 { x: 1, y: 2 }  // Vec2&lt;i32&gt; と推論
+
+// 複数の型パラメータでは推論が難しい場合
+val p = pair&lt;i32, str&gt;(42, "hello")  // 明示的に指定</code></pre>
+
+    <hr>
+
+    <h2>モノモーフィゼーションの例</h2>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">// このコードは以下のように展開されます
+
+// 元のコード
+fn add&lt;T: Numeric&gt;(a: T, b: T) T {
+    a + b
+}
+
+val x = add(10, 20)      // T = i32
+val y = add(1.5, 2.5)    // T = f64
+
+// 展開後（コンパイル時に生成される）
+fn add_i32(a: i32, b: i32) i32 {
+    a + b
+}
+
+fn add_f64(a: f64, b: f64) f64 {
+    a + b
+}</code></pre>
+
+    <hr>
+
+    <h2>実践的な例: 汎用リスト</h2>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">struct List&lt;T&gt; {
+    data: Rc&lt;ListData&lt;T&gt;&gt;
+}
+
+struct ListData&lt;T&gt; {
+    items: RawSlice&lt;T&gt;
+    len: i32
+}
+
+fn List&lt;T&gt;.push(self: List&lt;T&gt;, item: T) void {
+    // Rc を fork してコピー-on-write を実現
+    val new_data = self.data.fork()
+    new_data.items.add(item)
+    self.data = new_data
+}
+
+fn List&lt;T&gt;.get(self: List&lt;T&gt;, index: i32) T {
+    self.data.items[index]
+}
+
+fn List&lt;T&gt;.len(self: List&lt;T&gt;) i32 {
+    self.data.len
+}
+
+// 使用例
+val numbers = List&lt;i32&gt; {}
+numbers.push(10)
+numbers.push(20)
+numbers.push(30)
+
+io.println(numbers.get(0))  // 10
+io.println(numbers.len())   // 3</code></pre>
+
+    <hr>
+
+    <div class="nav-links">
+      <a href="structs-enums.html" class="nav-link prev">← 構造体と列挙型</a>
+      <a href="error-handling.html" class="nav-link next">エラーハンドリング →</a>
+    </div>
+  </main>
+
+  <script src="../../js/main.js"></script>
+  <script src="../../js/play-wasm.js"></script>
+</body>
+</html>

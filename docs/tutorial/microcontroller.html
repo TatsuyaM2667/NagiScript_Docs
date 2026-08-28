@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>組み込み・マイコン開発 - NagiScript</title>
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <div class="sky-decor" aria-hidden="true">
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="cloud c3"></div>
+    <div class="cloud c4"></div>
+  </div>
+  <header class="header">
+    <a href="../../index.html" class="header-logo"><span class="logo-text">⚡ NagiScript</span></a>
+    <nav class="header-nav">
+      <a href="../../index.html">ホーム</a>
+      <a href="../getting-started.html">ドキュメント</a>
+      <a href="basics.html">チュートリアル</a>
+      <a href="../reference/types.html">リファレンス</a>
+      <button class="theme-toggle" aria-label="テーマ切替">🌓</button>
+    </nav>
+  </header>
+  <div class="sidebar-overlay"></div>
+
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">入门</div>
+      <a href="../getting-started.html" class="sidebar-link">はじめに</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">チュートリアル</div>
+      <a href="basics.html" class="sidebar-link">基本概念</a>
+      <a href="functions.html" class="sidebar-link">関数とモジュール</a>
+      <a href="structs-enums.html" class="sidebar-link">構造体と列挙型</a>
+      <a href="generics.html" class="sidebar-link">ジェネリクス</a>
+      <a href="error-handling.html" class="sidebar-link">エラーハンドリング</a>
+      <a href="memory.html" class="sidebar-link">メモリ管理</a>
+      <a href="async.html" class="sidebar-link">非同期プログラミング</a>
+      <a href="webassembly.html" class="sidebar-link">WebAssembly</a>
+      <a href="browser-app.html" class="sidebar-link">ブラウザアプリ</a>
+      <a href="tui-app.html" class="sidebar-link">TUI アプリ</a>
+      <a href="cli.html" class="sidebar-link">CLI ツール開発</a>
+      <a href="microcontroller.html" class="sidebar-link active">組み込み開発</a>
+      <a href="cinterop.html" class="sidebar-link">C言語との相互運用</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">リファレンス</div>
+      <a href="../reference/types.html" class="sidebar-link">型システム</a>
+      <a href="../reference/syntax.html" class="sidebar-link">構文リファレンス</a>
+      <a href="../reference/operators.html" class="sidebar-link">演算子リファレンス</a>
+      <a href="../reference/standard-library.html" class="sidebar-link">標準ライブラリ</a>
+      <a href="../reference/standard-c-library.html" class="sidebar-link">C 標準ライブラリ</a>
+      <a href="../reference/compiler.html" class="sidebar-link">コンパイラ内部構造</a>
+      <a href="../reference/keywords.html" class="sidebar-link">キーワード一覧</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">実践</div>
+      <a href="../examples/todo-app.html" class="sidebar-link">Todo アプリ</a>
+      <a href="../examples/web-framework.html" class="sidebar-link">Web フレームワーク</a>
+      <a href="../examples/iot-sensor.html" class="sidebar-link">IoT センサー</a>
+    </div>
+  </aside>
+
+  <main class="main content">
+    <h1>組み込み・マイコン開発</h1>
+    <p>NagiScript での組み込みシステム開発を学びます。</p>
+
+    <hr>
+
+    <h2>概要</h2>
+
+    <p>NagiScript は以下の特性により、組み込み開発に適しています：</p>
+
+    <ul>
+      <li><strong>軽量ランタイム</strong>: libc のみに依存</li>
+      <li><strong>C ABI 互換</strong>: 既存の C ライブラリをそのまま利用可能</li>
+      <li><strong>Unsafe ブロック</strong>: 低レベルなハードウェア操作をサポート</li>
+      <li><strong>静的型付け</strong>: 実行時エラーを排除</li>
+    </ul>
+
+    <hr>
+
+    <h2>対応プラットフォーム（準備中）</h2>
+
+    <table>
+      <thead>
+        <tr><th>プラットフォーム</th><th>状態</th><th>用途</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>ARM Cortex-M</td><td>🔶 準備中</td><td>STM32, nRF52, etc.</td></tr>
+        <tr><td>RISC-V</td><td>🔶 準備中</td><td>ESP32-C3, etc.</td></tr>
+        <tr><td>x86 ベアメタル</td><td>🔶 準備中</td><td>UEFI, etc.</td></tr>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <h2>基本的な LED 点滅</h2>
+
+    <h3>C言語との連携</h3>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">// ハードウェア定義（C言語で記述）
+extern fn gpio_init(pin: i32) void
+extern fn gpio_set(pin: i32, state: bool) void
+extern fn delay(ms: i32) void
+
+// NagiScript での利用
+fn blink_led(pin: i32, count: i32) void {
+    gpio_init(pin)
+    
+    var i = 0
+    while i &lt; count {
+        gpio_set(pin, true)
+        delay(500)
+        
+        gpio_set(pin, false)
+        delay(500)
+        
+        i += 1
+    }
+}
+
+fn main() void {
+    blink_led(13, 10)  // ピン 13 の LED を 10 回点滅
+}</code></pre>
+
+    <hr>
+
+    <h2>GPIO 操作</h2>
+
+    <h3>ピン定義</h3>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">struct GpioPin {
+    pin: i32
+    mode: GpioMode
+}
+
+enum GpioMode {
+    Input
+    Output
+    Alternate
+}
+
+fn GpioPin.init(self: GpioPin, mode: GpioMode) void {
+    self.mode = mode
+    gpio_init(self.pin)
+}
+
+fn GpioPin.write(self: GpioPin, state: bool) void {
+    gpio_set(self.pin, state)
+}
+
+fn GpioPin.read(self: GpioPin) bool {
+    gpio_read(self.pin)
+}</code></pre>
+
+    <hr>
+
+    <h2>センサー読み取り</h2>
+
+    <h3>温度センサーの例</h3>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">extern fn adc_read(channel: i32) i32
+extern fn delay(ms: i32) void
+
+fn read_temperature(sensor_pin: i32) f64 {
+    val raw = adc_read(sensor_pin)
+    // 10 ビット ADC の場合
+    val voltage = (raw as f64) * 3.3 / 1023.0
+    // TMP36 センサーの場合
+    val temperature = (voltage - 0.5) * 100.0
+    temperature
+}
+
+fn main() void {
+    loop {
+        val temp = read_temperature(0)
+        io.println("Temperature: " + str(temp) + " C")
+        delay(1000)
+    }
+}</code></pre>
+
+    <hr>
+
+    <h2>UART 通信</h2>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">extern fn uart_init(baud_rate: i32) void
+extern fn uart_send(data: *const u8, len: i32) void
+extern fn uart_receive(buffer: *mut u8, len: i32) i32
+
+fn send_message(msg: str) void {
+    unsafe {
+        uart_send(msg.as_ptr(), msg.len())
+    }
+}
+
+fn receive_message(buffer_size: i32) str {
+    var buffer = alloc&lt;u8&gt;(buffer_size)
+    val len = uart_receive(buffer, buffer_size)
+    
+    if len &gt; 0 {
+        val result = str::from_utf8(buffer, len)
+        free(buffer)
+        result
+    } else {
+        free(buffer)
+        ""
+    }
+}</code></pre>
+
+    <hr>
+
+    <h2>I2C デバイス</h2>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">extern fn i2c_init(sda: i32, scl: i32, freq: i32) void
+extern fn i2c_write(addr: u8, data: *const u8, len: i32) void
+extern fn i2c_read(addr: u8, buffer: *mut u8, len: i32) void
+
+struct I2cDevice {
+    addr: u8
+}
+
+fn I2cDevice.write(self: I2cDevice, data: u8) void {
+    i2c_write(self.addr, &amp;data, 1)
+}
+
+fn I2cDevice.read(self: I2cDevice) u8 {
+    var buffer: u8 = 0
+    i2c_read(self.addr, &amp;buffer, 1)
+    buffer
+}</code></pre>
+
+    <hr>
+
+    <h2>SPI 通信</h2>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">extern fn spi_init(mosi: i32, miso: i32, sck: i32, cs: i32) void
+extern fn spi_transfer(data: u8) u8
+
+fn spi_write(buffer: *const u8, len: i32) void {
+    var i = 0
+    while i &lt; len {
+        unsafe {
+            spi_transfer(*buffer.offset(i))
+        }
+        i += 1
+    }
+}</code></pre>
+
+    <hr>
+
+    <h2>割り込み</h2>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">extern fn interrupt_enable(irq: i32, handler: fn() void) void
+extern fn interrupt_disable(irq: i32) void
+
+fn button_handler() void {
+    io.println("Button pressed!")
+}
+
+fn setup_interrupts() void {
+    interrupt_enable(10, button_handler)  // IRQ 10
+}
+
+fn main() void {
+    setup_interrupts()
+    
+    loop {
+        // メインループ
+        delay(100)
+    }
+}</code></pre>
+
+    <hr>
+
+    <h2>パワーマネジメント</h2>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">extern fn sleep_enter() void
+extern fn sleep_exit() void
+extern fn deep_sleep(ms: i32) void
+
+fn low_power_mode() void {
+    sleep_enter()
+    // 低消費電力モード
+    sleep_exit()
+}
+
+fn power_save(seconds: i32) void {
+    deep_sleep(seconds * 1000)
+}</code></pre>
+
+    <hr>
+
+    <h2>実践的な例: IoT センサーノード</h2>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">import "std:io"
+
+extern fn gpio_init(pin: i32) void
+extern fn gpio_set(pin: i32, state: bool) void
+extern fn adc_read(channel: i32) i32
+extern fn uart_init(baud_rate: i32) void
+extern fn uart_send(data: *const u8, len: i32) void
+extern fn delay(ms: i32) void
+extern fn deep_sleep(ms: i32) void
+
+struct SensorNode {
+    led_pin: i32
+    sensor_pin: i32
+    uart_baud: i32
+}
+
+fn SensorNode.init(self: SensorNode) void {
+    gpio_init(self.led_pin)
+    uart_init(self.uart_baud)
+}
+
+fn SensorNode.read_sensor(self: SensorNode) f64 {
+    val raw = adc_read(self.sensor_pin)
+    (raw as f64) * 3.3 / 1023.0
+}
+
+fn SensorNode.send_data(self: SensorNode, data: str) void {
+    gpio_set(self.led_pin, true)
+    unsafe {
+        uart_send(data.as_ptr(), data.len())
+    }
+    gpio_set(self.led_pin, false)
+}
+
+fn main() void {
+    val node = SensorNode {
+        led_pin: 13,
+        sensor_pin: 0,
+        uart_baud: 115200
+    }
+    
+    node.init()
+    
+    loop {
+        val temp = node.read_sensor()
+        val msg = "TEMP:" + str(temp)
+        
+        node.send_data(msg)
+        
+        // 1 秒間スリープ
+        deep_sleep(1000)
+    }
+}</code></pre>
+
+    <hr>
+
+    <h2>ビルドとフラッシュ</h2>
+
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-bash"># アーム Cortex-M の場合
+nagiscript build main.ngs --target arm-cortex-m4 -o firmware.bin
+
+# フラッシュ
+openocd -f interface/stlink.cfg -f target/stm32f4x.cfg \
+    -c "program firmware.bin verify reset exit 0x08000000"</code></pre>
+
+    <hr>
+
+    <h2>注意事項</h2>
+
+    <ol>
+      <li><strong>スタックサイズ</strong>: 組み込み環境ではスタックが限られる</li>
+      <li><strong>ヒープ確保</strong>: Rc を使用する場合はヒープサイズに注意</li>
+      <li><strong>割り込み安全性</strong>: 割り込みハンドラ内でのメモリ確保は避ける</li>
+      <li><strong>ボルテージ</strong>: ハードウェアの仕様を確認する</li>
+    </ol>
+
+    <hr>
+
+    <div class="nav-links">
+      <a href="cli.html" class="nav-link prev">← CLI ツール開発</a>
+      <a href="cinterop.html" class="nav-link next">C言語との相互運用 →</a>
+    </div>
+  </main>
+
+  <script src="../../js/main.js"></script>
+  <script src="../../js/play-wasm.js"></script>
+</body>
+</html>

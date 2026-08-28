@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "include": [],
+  "exclude": [
+    "/*.html",
+    "/css/*",
+    "/js/*",
+    "/nagiscript/*.wasm",
+    "/nagiscript/*.d.ts",
+    "/nagiscript/*.wat",
+    "/assets/*",
+    "/*.md",
+    "/*.jpg",
+    "/*.png",
+    "/*.svg",
+    "/*.ico"
+  ]
+}

@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>型システム - NagiScript</title>
+        <link rel="stylesheet" href="../../css/style.css" />
+        <link
+            rel="icon"
+            href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>"
+        />
+    </head>
+    <body>
+  <div class="sky-decor" aria-hidden="true">
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="cloud c3"></div>
+    <div class="cloud c4"></div>
+  </div>
+        <header class="header">
+            <a href="../../index.html" class="header-logo"
+                ><span class="logo-text">⚡ NagiScript</span></a
+            >
+            <nav class="header-nav">
+                <a href="../../index.html">ホーム</a>
+                <a href="../getting-started.html">ドキュメント</a>
+                <a href="../tutorial/basics.html">チュートリアル</a>
+                <a href="types.html">リファレンス</a>
+                <button class="theme-toggle" aria-label="テーマ切替">🌓</button>
+            </nav>
+        </header>
+        <div class="sidebar-overlay"></div>
+
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">入门</div>
+                <a href="../getting-started.html" class="sidebar-link"
+                    >はじめに</a
+                >
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">チュートリアル</div>
+                <a href="../tutorial/basics.html" class="sidebar-link"
+                    >基本概念</a
+                >
+                <a href="../tutorial/functions.html" class="sidebar-link"
+                    >関数とモジュール</a
+                >
+                <a href="../tutorial/structs-enums.html" class="sidebar-link"
+                    >構造体と列挙型</a
+                >
+                <a href="../tutorial/generics.html" class="sidebar-link"
+                    >ジェネリクス</a
+                >
+                <a href="../tutorial/error-handling.html" class="sidebar-link"
+                    >エラーハンドリング</a
+                >
+                <a href="../tutorial/memory.html" class="sidebar-link"
+                    >メモリ管理</a
+                >
+                <a href="../tutorial/async.html" class="sidebar-link"
+                    >非同期プログラミング</a
+                >
+                <a href="../tutorial/webassembly.html" class="sidebar-link"
+                    >WebAssembly</a
+                >
+                <a href="../tutorial/browser-app.html" class="sidebar-link"
+                    >ブラウザアプリ</a
+                >
+                <a href="../tutorial/tui-app.html" class="sidebar-link"
+                    >TUI アプリ</a
+                >
+                <a href="../tutorial/cli.html" class="sidebar-link"
+                    >CLI ツール開発</a
+                >
+                <a href="../tutorial/microcontroller.html" class="sidebar-link"
+                    >組み込み開発</a
+                >
+                <a href="../tutorial/cinterop.html" class="sidebar-link"
+                    >C言語との相互運用</a
+                >
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">リファレンス</div>
+                <a href="types.html" class="sidebar-link active">型システム</a>
+                <a href="syntax.html" class="sidebar-link">構文リファレンス</a>
+                <a href="operators.html" class="sidebar-link"
+                    >演算子リファレンス</a
+                >
+                <a href="standard-library.html" class="sidebar-link"
+                    >標準ライブラリ</a
+                >
+                <a href="standard-c-library.html" class="sidebar-link"
+                    >C 標準ライブラリ</a
+                >
+                <a href="compiler.html" class="sidebar-link"
+                    >コンパイラ内部構造</a
+                >
+                <a href="keywords.html" class="sidebar-link">キーワード一覧</a>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">実践</div>
+                <a href="../examples/todo-app.html" class="sidebar-link"
+                    >Todo アプリ</a
+                >
+                <a href="../examples/web-framework.html" class="sidebar-link"
+                    >Web フレームワーク</a
+                >
+                <a href="../examples/iot-sensor.html" class="sidebar-link"
+                    >IoT センサー</a
+                >
+            </div>
+        </aside>
+
+        <main class="main content">
+            <h1>型システム リファレンス</h1>
+            <p>NagiScript の型システム全体を解説します。</p>
+
+            <hr />
+
+            <h2>基本型</h2>
+
+            <h3>整数型</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>型</th>
+                        <th>ビット幅</th>
+                        <th>範囲</th>
+                        <th>デフォルト</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>i8</code></td>
+                        <td>8</td>
+                        <td>-128 〜 127</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><code>i16</code></td>
+                        <td>16</td>
+                        <td>-32,768 〜 32,767</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><code>i32</code></td>
+                        <td>32</td>
+                        <td>約 ±21 億</td>
+                        <td>✓</td>
+                    </tr>
+                    <tr>
+                        <td><code>i64</code></td>
+                        <td>64</td>
+                        <td>約 ±922京</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><code>u8</code></td>
+                        <td>8</td>
+                        <td>0 〜 255</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><code>u16</code></td>
+                        <td>16</td>
+                        <td>0 〜 65,535</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><code>u32</code></td>
+                        <td>32</td>
+                        <td>0 〜 約42億</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><code>u64</code></td>
+                        <td>64</td>
+                        <td>0 〜 約1844京</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>浮動小数点型</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>型</th>
+                        <th>ビット幅</th>
+                        <th>精度</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>f32</code></td>
+                        <td>32</td>
+                        <td>約7桁</td>
+                    </tr>
+                    <tr>
+                        <td><code>f64</code></td>
+                        <td>64</td>
+                        <td>約15桁</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>その他の基本型</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>型</th>
+                        <th>説明</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>bool</code></td>
+                        <td>真偽値 (<code>true</code> / <code>false</code>)</td>
+                    </tr>
+                    <tr>
+                        <td><code>str</code></td>
+                        <td>文字列（不変）</td>
+                    </tr>
+                    <tr>
+                        <td><code>void</code></td>
+                        <td>単型（戻り値なし）</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <hr />
+
+            <h2>複合型</h2>
+
+            <h3>構造体 (Struct)</h3>
+            <div class="code-header">
+                <span class="code-lang">main.ngs</span
+                ><button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="lang-ngs">struct Point {
+    x: f64
+    y: f64
+}
+
+struct Person {
+    name: str
+    age: i32
+    email: str
+}</code></pre>
+
+            <h3>列挙型 (Enum)</h3>
+            <div class="code-header">
+                <span class="code-lang">main.ngs</span
+                ><button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="lang-ngs">enum Color {
+    Red
+    Green
+    Blue
+}
+
+// データを持つ列挙型
+enum Shape {
+    Circle(f64)
+    Rectangle(f64, f64)
+    Triangle(f64, f64, f64)
+}</code></pre>
+
+            <h3>タプル</h3>
+            <div class="code-header">
+                <span class="code-lang">main.ngs</span
+                ><button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="lang-ngs">val pair: (i32, str) = (42, "hello")
+val triple: (i32, f64, bool) = (1, 2.0, true)
+
+val (a, b, c) = triple  // デストラクチャリング</code></pre>
+
+            <hr />
+
+            <h2>ジェネリクス型</h2>
+
+            <h3>基本的なジェネリクス</h3>
+            <div class="code-header">
+                <span class="code-lang">main.ngs</span
+                ><button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="lang-ngs">struct Vec2&lt;T&gt; {
+    x: T
+    y: T
+}
+
+val v1 = Vec2&lt;i32&gt; { x: 1, y: 2 }
+val v2 = Vec2&lt;f64&gt; { x: 1.5, y: 2.5 }</code></pre>
+
+            <h3>複数の型パラメータ</h3>
+            <div class="code-header">
+                <span class="code-lang">main.ngs</span
+                ><button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="lang-ngs">struct Pair&lt;A, B&gt; {
+    first: A
+    second: B
+}
+
+val p = Pair&lt;i32, str&gt; { first: 42, second: "hello" }</code></pre>
+
+            <hr />
+
+            <h2>標準ジェネリクス型</h2>
+
+            <h3>Option&lt;T&gt;</h3>
+            <div class="code-header">
+                <span class="code-lang">main.ngs</span
+                ><button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="lang-ngs">enum Option&lt;T&gt; {
+    Some(T)
+    None
+}</code></pre>
+
+            <h3>Result&lt;T, E&gt;</h3>
+            <div class="code-header">
+                <span class="code-lang">main.ngs</span
+                ><button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="lang-ngs">enum Result&lt;T, E&gt; {
+    Ok(T)
+    Err(E)
+}</code></pre>
+
+            <h3>List&lt;T&gt;</h3>
+            <div class="code-header">
+                <span class="code-lang">main.ngs</span
+                ><button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="lang-ngs">struct List&lt;T&gt; {
+    data: Rc&lt;ListData&lt;T&gt;&gt;
+}
+
+struct ListData&lt;T&gt; {
+    items: RawSlice&lt;T&gt;
+    len: i32
+}</code></pre>
+
+            <hr />
+
+            <h2>型変換</h2>
+
+            <h3>隠示的変換</h3>
+            <div class="code-header">
+                <span class="code-lang">main.ngs</span
+                ><button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="lang-ngs">val a: i64 = 100
+val b: i32 = a  // OK: i64 から i32 へ安全な縮小
+
+val x: i32 = 42
+val y: f64 = x  // OK: i32 から f64 への拡張</code></pre>
+
+            <h3>明示的なキャスト</h3>
+            <div class="code-header">
+                <span class="code-lang">main.ngs</span
+                ><button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="lang-ngs">val x: i32 = 42
+val y: f64 = x as f64  // 明示的な型変換</code></pre>
+
+            <hr />
+
+            <h2>ポインタ型</h2>
+
+            <h3>基本的なポインタ</h3>
+            <div class="code-header">
+                <span class="code-lang">main.ngs</span
+                ><button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="lang-ngs">val x = 42
+val ptr: *const i32 = &amp;x  // 不変ポインタ
+val mut_ptr: *mut i32 = &amp;x  // 可変ポインタ</code></pre>
+
+            <h3>配列ポインタ</h3>
+            <div class="code-header">
+                <span class="code-lang">main.ngs</span
+                ><button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="lang-ngs">val arr = [1, 2, 3, 4, 5]
+val ptr: *const i32 = &amp;arr[0]</code></pre>
+
+            <hr />
+
+            <h2>関数型</h2>
+            <div class="code-header">
+                <span class="code-lang">main.ngs</span
+                ><button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="lang-ngs">// 関数ポインタ
+val add: fn(i32, i32) i32 = fn(a: i32, b: i32) i32 { a + b }
+
+// 関数型の引数
+fn apply(f: fn(i32) i32, x: i32) i32 {
+    f(x)
+}
+
+val result = apply(fn(x: i32) i32 { x * 2 }, 5)  // 10</code></pre>
+
+            <hr />
+
+            <h2>型エイリアス</h2>
+            <div class="code-header">
+                <span class="code-lang">main.ngs</span
+                ><button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="lang-ngs">type IntVec = Vec2&lt;i32&gt;
+type Result&lt;T&gt; = Result&lt;T, str&gt;
+
+val v: IntVec = Vec2 { x: 1, y: 2 }</code></pre>
+
+            <hr />
+
+            <h2>型安全性</h2>
+
+            <h3>コンパイル時チェック</h3>
+            <div class="code-header">
+                <span class="code-lang">main.ngs</span
+                ><button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="lang-ngs">val x: i32 = 42
+val y: str = "hello"
+
+// 型エラー: i32 と str は加算できない
+// val z = x + y  // コンパイルエラー</code></pre>
+
+            <h3>実行時チェック</h3>
+            <div class="code-header">
+                <span class="code-lang">main.ngs</span
+                ><button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="lang-ngs">val list = List&lt;i32&gt; { 1, 2, 3 }
+// val value = list[5]  // 実行時エラー: インデックス範囲外</code></pre>
+
+            <hr />
+
+            <div class="nav-links">
+                <a href="../tutorial/cinterop.html" class="nav-link">
+                    <span class="label">前</span>
+                    <span class="title">← C言語との相互運用</span>
+                </a>
+                <a href="syntax.html" class="nav-link">
+                    <span class="label">次</span>
+                    <span class="title">構文リファレンス →</span>
+                </a>
+            </div>
+        </main>
+
+        <script src="../../js/main.js"></script>
+  <script src="../../js/play-wasm.js"></script>
+    </body>
+</html>

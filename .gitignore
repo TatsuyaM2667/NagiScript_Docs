@@ -1,0 +1,14 @@
+# Wrangler (Cloudflare Pages) cache
+.wrangler/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Build artifacts
+build/
+dist/
+out/

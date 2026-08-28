@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebAssembly 対応 - NagiScript</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+</head>
+<body>
+  <div class="sky-decor" aria-hidden="true">
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="cloud c3"></div>
+    <div class="cloud c4"></div>
+  </div>
+  <header class="header">
+    <a href="../../index.html" class="header-logo"><span class="logo-text">⚡ NagiScript</span></a>
+    <nav class="header-nav">
+      <a href="../../index.html">ホーム</a>
+      <a href="../getting-started.html">ドキュメント</a>
+      <a href="basics.html">チュートリアル</a>
+      <a href="../reference/types.html">リファレンス</a>
+      <button class="theme-toggle" aria-label="テーマ切替">🌓</button>
+    </nav>
+  </header>
+  <div class="sidebar-overlay"></div>
+
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">入门</div>
+      <a href="../getting-started.html" class="sidebar-link">はじめに</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">チュートリアル</div>
+      <a href="basics.html" class="sidebar-link">基本概念</a>
+      <a href="functions.html" class="sidebar-link">関数とモジュール</a>
+      <a href="structs-enums.html" class="sidebar-link">構造体と列挙型</a>
+      <a href="generics.html" class="sidebar-link">ジェネリクス</a>
+      <a href="error-handling.html" class="sidebar-link">エラーハンドリング</a>
+      <a href="memory.html" class="sidebar-link">メモリ管理</a>
+      <a href="async.html" class="sidebar-link">非同期プログラミング</a>
+      <a href="webassembly.html" class="sidebar-link">WebAssembly</a>
+      <a href="browser-app.html" class="sidebar-link">ブラウザアプリ</a>
+      <a href="tui-app.html" class="sidebar-link">TUI アプリ</a>
+      <a href="cli.html" class="sidebar-link">CLI ツール開発</a>
+      <a href="microcontroller.html" class="sidebar-link">組み込み開発</a>
+      <a href="cinterop.html" class="sidebar-link">C言語との相互運用</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">リファレンス</div>
+      <a href="../reference/types.html" class="sidebar-link">型システム</a>
+      <a href="../reference/syntax.html" class="sidebar-link">構文リファレンス</a>
+      <a href="../reference/operators.html" class="sidebar-link">演算子リファレンス</a>
+      <a href="../reference/standard-library.html" class="sidebar-link">標準ライブラリ</a>
+      <a href="../reference/standard-c-library.html" class="sidebar-link">C 標準ライブラリ</a>
+      <a href="../reference/compiler.html" class="sidebar-link">コンパイラ内部構造</a>
+      <a href="../reference/keywords.html" class="sidebar-link">キーワード一覧</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">実践</div>
+      <a href="../examples/todo-app.html" class="sidebar-link">Todo アプリ</a>
+      <a href="../examples/web-framework.html" class="sidebar-link">Web フレームワーク</a>
+      <a href="../examples/iot-sensor.html" class="sidebar-link">IoT センサー</a>
+    </div>
+  </aside>
+
+  <main class="main content">
+    <h1>WebAssembly 対応</h1>
+    <p>NagiScript を WebAssembly にコンパイルし、ブラウザで実行する方法を学びます。</p>
+
+    <hr>
+
+    <h2>基本的な Wasm コンパイル</h2>
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-bash">nagiscript wasm main.ngs -o output.wasm</code></pre>
+    <p>生成されるファイル：</p>
+    <ul>
+      <li><code>output.wasm</code> — Wasm バイナリ</li>
+      <li><code>output.d.ts</code> — TypeScript 型定義</li>
+    </ul>
+
+    <hr>
+
+    <h2>ブラウザでの利用</h2>
+    <h3>HTML ファイル</h3>
+    <div class="code-header"><span class="code-lang">index.html</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;title&gt;NagiScript Wasm&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div id="output"&gt;&lt;/div&gt;
+    &lt;script&gt;
+        async function loadWasm() {
+            const response = await fetch('output.wasm');
+            const bytes = await response.arrayBuffer();
+            const { instance } = await WebAssembly.instantiate(bytes, {
+                env: {
+                    memory: new WebAssembly.Memory({ initial: 256 })
+                }
+            });
+
+            // 関数を呼び出す
+            const result = instance.exports.add(10, 20);
+            document.getElementById('output').textContent = result;
+        }
+        loadWasm();
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+    <hr>
+
+    <h2>React との連携</h2>
+    <h3>コンポーネント例</h3>
+    <div class="code-header"><span class="code-lang">WasmComponent.tsx</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ts">import React, { useEffect, useState } from 'react';
+
+function WasmComponent() {
+    const [result, setResult] = useState&lt;number | null&gt;(null);
+
+    useEffect(() =&gt; {
+        async function loadWasm() {
+            const response = await fetch('/output.wasm');
+            const bytes = await response.arrayBuffer();
+            const { instance } = await WebAssembly.instantiate(bytes);
+
+            const result = instance.exports.process(42);
+            setResult(result);
+        }
+        loadWasm();
+    }, []);
+
+    return (
+        &lt;div&gt;
+            &lt;h1&gt;NagiScript Wasm Result&lt;/h1&gt;
+            &lt;p&gt;Result: {result}&lt;/p&gt;
+        &lt;/div&gt;
+    );
+}
+
+export default WasmComponent;</code></pre>
+
+    <hr>
+
+    <h2>型定義ファイル (.d.ts)</h2>
+    <p>コンパイル時に自動生成される型定義：</p>
+    <div class="code-header"><span class="code-lang">output.d.ts</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ts">// output.d.ts
+export function add(a: number, b: number): number;
+export function process(input: string): string;</code></pre>
+
+    <hr>
+
+    <h2>メモリ操作</h2>
+    <h3>JS 側からのメモリアクセス</h3>
+    <div class="code-header"><span class="code-lang">memory.js</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-js">const memory = new WebAssembly.Memory({ initial: 256 });
+const { instance } = await WebAssembly.instantiate(bytes, {
+    env: { memory }
+});
+
+// メモリに文字列を書き込む
+const encoder = new TextEncoder();
+const str = encoder.encode("Hello, Wasm!");
+const ptr = instance.exports.malloc(str.length);
+new Uint8Array(memory.buffer, ptr, str.length).set(str);
+
+// Wasm 関数を呼び出す
+instance.exports.process_string(ptr, str.length);</code></pre>
+
+    <hr>
+
+    <h2>ビルド設定</h2>
+    <h3>project.toml</h3>
+    <div class="code-header"><span class="code-lang">project.toml</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-toml">[build]
+target = "wasm"
+output = "dist/"
+
+[build.wasm]
+memory_initial = 256
+memory_maximum = 512</code></pre>
+
+    <hr>
+
+    <h2>パフォーマンスのヒント</h2>
+    <ol>
+      <li><strong>関数エクスポートを最小限に</strong>: 必要な関数のみエクスポート</li>
+      <li><strong>バッチ処理</strong>: 大量のデータは一度に渡す</li>
+      <li><strong>TypedArray の活用</strong>: メモリ操作には <code>Uint8Array</code> を使用</li>
+    </ol>
+
+    <hr>
+
+    <div class="nav-links">
+      <a href="async.html" class="nav-link">
+        <span class="label">前</span>
+        <span class="title">← 非同期プログラミング</span>
+      </a>
+      <a href="browser-app.html" class="nav-link">
+        <span class="label">次</span>
+        <span class="title">ブラウザアプリ →</span>
+      </a>
+    </div>
+  </main>
+
+  <script src="../../js/main.js"></script>
+  <script src="../../js/play-wasm.js"></script>
+</body>
+</html>

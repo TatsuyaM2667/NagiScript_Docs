@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CLI ツール開発 - NagiScript</title>
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <div class="sky-decor" aria-hidden="true">
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="cloud c3"></div>
+    <div class="cloud c4"></div>
+  </div>
+  <header class="header">
+    <a href="../../index.html" class="header-logo"><span class="logo-text">⚡ NagiScript</span></a>
+    <nav class="header-nav">
+      <a href="../../index.html">ホーム</a>
+      <a href="../getting-started.html">ドキュメント</a>
+      <a href="basics.html">チュートリアル</a>
+      <a href="../reference/types.html">リファレンス</a>
+      <button class="theme-toggle" aria-label="テーマ切替">🌓</button>
+    </nav>
+  </header>
+  <div class="sidebar-overlay"></div>
+
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">入门</div>
+      <a href="../getting-started.html" class="sidebar-link">はじめに</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">チュートリアル</div>
+      <a href="basics.html" class="sidebar-link">基本概念</a>
+      <a href="functions.html" class="sidebar-link">関数とモジュール</a>
+      <a href="structs-enums.html" class="sidebar-link">構造体と列挙型</a>
+      <a href="generics.html" class="sidebar-link">ジェネリクス</a>
+      <a href="error-handling.html" class="sidebar-link">エラーハンドリング</a>
+      <a href="memory.html" class="sidebar-link">メモリ管理</a>
+      <a href="async.html" class="sidebar-link">非同期プログラミング</a>
+      <a href="webassembly.html" class="sidebar-link">WebAssembly</a>
+      <a href="browser-app.html" class="sidebar-link">ブラウザアプリ</a>
+      <a href="tui-app.html" class="sidebar-link">TUI アプリ</a>
+      <a href="cli.html" class="sidebar-link active">CLI ツール開発</a>
+      <a href="microcontroller.html" class="sidebar-link">組み込み開発</a>
+      <a href="cinterop.html" class="sidebar-link">C言語との相互運用</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">リファレンス</div>
+      <a href="../reference/types.html" class="sidebar-link">型システム</a>
+      <a href="../reference/syntax.html" class="sidebar-link">構文リファレンス</a>
+      <a href="../reference/operators.html" class="sidebar-link">演算子リファレンス</a>
+      <a href="../reference/standard-library.html" class="sidebar-link">標準ライブラリ</a>
+      <a href="../reference/standard-c-library.html" class="sidebar-link">C 標準ライブラリ</a>
+      <a href="../reference/compiler.html" class="sidebar-link">コンパイラ内部構造</a>
+      <a href="../reference/keywords.html" class="sidebar-link">キーワード一覧</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">実践</div>
+      <a href="../examples/todo-app.html" class="sidebar-link">Todo アプリ</a>
+      <a href="../examples/web-framework.html" class="sidebar-link">Web フレームワーク</a>
+      <a href="../examples/iot-sensor.html" class="sidebar-link">IoT センサー</a>
+    </div>
+  </aside>
+
+  <main class="main content">
+    <h1>CLI ツール開発</h1>
+    <p>NagiScript でコマンドラインツールを開発する方法を学びます。</p>
+
+    <hr>
+
+    <h2>基本的な CLI ツール</h2>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">import "std:io"
+import "std:args"
+
+fn main() void {
+    val arguments = args.get_all()
+    
+    if arguments.len() &lt; 2 {
+        io.println("Usage: mytool &lt;command&gt;")
+        std.process.exit(1)
+    }
+    
+    val command = arguments[1]
+    
+    match command {
+        "help" =&gt; print_help(),
+        "version" =&gt; io.println("1.0.0"),
+        "run" =&gt; run_task(arguments),
+        _ =&gt; {
+            io.println("Unknown command: " + command)
+            std.process.exit(1)
+        }
+    }
+}</code></pre>
+
+    <hr>
+
+    <h2>引数パース</h2>
+
+    <h3>基本的な引数取得</h3>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">import "std:args"
+
+fn main() void {
+    val name = args.get("name")
+    val verbose = args.has("verbose")
+    val output = args.get("output")
+    
+    match name {
+        Option.Some(n) =&gt; io.println("Name: " + n),
+        Option.None =&gt; io.println("No name provided")
+    }
+    
+    if verbose {
+        io.println("Verbose mode enabled")
+    }
+}</code></pre>
+
+    <h3>使用例</h3>
+
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-bash">$ mytool --name Alice --verbose --output result.txt
+Name: Alice
+Verbose mode enabled</code></pre>
+
+    <hr>
+
+    <h2>出力の制御</h2>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">import "std:io"
+
+fn print_colored(text: str, color: str) void {
+    val prefix = match color {
+        "red" =&gt; "\x1b[31m",
+        "green" =&gt; "\x1b[32m",
+        "blue" =&gt; "\x1b[34m",
+        _ =&gt; ""
+    }
+    val reset = "\x1b[0m"
+    
+    io.println(prefix + text + reset)
+}</code></pre>
+
+    <hr>
+
+    <h2>エラーハンドリング</h2>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">import "std:io"
+import "std:fs"
+
+fn main() void {
+    match run() {
+        Result.Ok(_) =&gt; std.process.exit(0),
+        Result.Err(e) =&gt; {
+            io.println("Error: " + e)
+            std.process.exit(1)
+        }
+    }
+}
+
+fn run() Result&lt;void, str&gt; {
+    val content = fs.read_to_string("config.toml")
+        .map_err(fn(e: str) str {
+            "Failed to read config: " + e
+        })?
+    
+    // 処理
+    Result.Ok(())
+}</code></pre>
+
+    <hr>
+
+    <h2>実践的な例: ファイルチェッカー</h2>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">import "std:io"
+import "std:fs"
+import "std:args"
+
+fn main() void {
+    val path = args.get("path")
+        .unwrap_or(".")
+    
+    match check_path(path) {
+        Result.Ok(report) =&gt; io.println(report),
+        Result.Err(e) =&gt; {
+            io.println("Error: " + e)
+            std.process.exit(1)
+        }
+    }
+}
+
+fn check_path(path: str) Result&lt;str, str&gt; {
+    val metadata = fs.metadata(path)
+        .map_err(fn(e: str) str {
+            "Cannot access path: " + e
+        })?
+    
+    if metadata.is_dir {
+        Result.Ok("Directory: " + path)
+    } else {
+        Result.Ok("File: " + path + " (" + str(metadata.size) + " bytes)")
+    }
+}</code></pre>
+
+    <hr>
+
+    <h2>ビルドと配布</h2>
+
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-bash"># ビルド
+nagiscript build main.ngs -o mytool
+
+# 実行
+./mytool --help</code></pre>
+
+    <hr>
+
+    <div class="nav-links">
+      <a href="tui-app.html" class="nav-link prev">← TUI アプリ</a>
+      <a href="microcontroller.html" class="nav-link next">組み込み開発 →</a>
+    </div>
+  </main>
+
+  <script src="../../js/main.js"></script>
+  <script src="../../js/play-wasm.js"></script>
+</body>
+</html>

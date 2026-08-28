@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>C言語との相互運用 - NagiScript</title>
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <div class="sky-decor" aria-hidden="true">
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="cloud c3"></div>
+    <div class="cloud c4"></div>
+  </div>
+  <header class="header">
+    <a href="../../index.html" class="header-logo"><span class="logo-text">⚡ NagiScript</span></a>
+    <nav class="header-nav">
+      <a href="../../index.html">ホーム</a>
+      <a href="../getting-started.html">ドキュメント</a>
+      <a href="basics.html">チュートリアル</a>
+      <a href="../reference/types.html">リファレンス</a>
+      <button class="theme-toggle" aria-label="テーマ切替">🌓</button>
+    </nav>
+  </header>
+  <div class="sidebar-overlay"></div>
+
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">入门</div>
+      <a href="../getting-started.html" class="sidebar-link">はじめに</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">チュートリアル</div>
+      <a href="basics.html" class="sidebar-link">基本概念</a>
+      <a href="functions.html" class="sidebar-link">関数とモジュール</a>
+      <a href="structs-enums.html" class="sidebar-link">構造体と列挙型</a>
+      <a href="generics.html" class="sidebar-link">ジェネリクス</a>
+      <a href="error-handling.html" class="sidebar-link">エラーハンドリング</a>
+      <a href="memory.html" class="sidebar-link">メモリ管理</a>
+      <a href="async.html" class="sidebar-link">非同期プログラミング</a>
+      <a href="webassembly.html" class="sidebar-link">WebAssembly</a>
+      <a href="browser-app.html" class="sidebar-link">ブラウザアプリ</a>
+      <a href="tui-app.html" class="sidebar-link">TUI アプリ</a>
+      <a href="cli.html" class="sidebar-link">CLI ツール開発</a>
+      <a href="microcontroller.html" class="sidebar-link">組み込み開発</a>
+      <a href="cinterop.html" class="sidebar-link active">C言語との相互運用</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">リファレンス</div>
+      <a href="../reference/types.html" class="sidebar-link">型システム</a>
+      <a href="../reference/syntax.html" class="sidebar-link">構文リファレンス</a>
+      <a href="../reference/operators.html" class="sidebar-link">演算子リファレンス</a>
+      <a href="../reference/standard-library.html" class="sidebar-link">標準ライブラリ</a>
+      <a href="../reference/standard-c-library.html" class="sidebar-link">C 標準ライブラリ</a>
+      <a href="../reference/compiler.html" class="sidebar-link">コンパイラ内部構造</a>
+      <a href="../reference/keywords.html" class="sidebar-link">キーワード一覧</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">実践</div>
+      <a href="../examples/todo-app.html" class="sidebar-link">Todo アプリ</a>
+      <a href="../examples/web-framework.html" class="sidebar-link">Web フレームワーク</a>
+      <a href="../examples/iot-sensor.html" class="sidebar-link">IoT センサー</a>
+    </div>
+  </aside>
+
+  <main class="main content">
+    <h1>C言語との相互運用</h1>
+    <p>NagiScript から C 関数を呼び出す方法と、C から NagiScript を呼び出す方法を学びます。</p>
+
+    <hr>
+
+    <h2>C 関数の呼び出し</h2>
+
+    <h3>extern 宣言</h3>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">// C 関数の宣言
+extern fn printf(format: *const u8, ...) i32
+extern fn malloc(size: i32) *mut u8
+extern fn free(ptr: *mut u8) void
+extern fn strlen(s: *const u8) i32</code></pre>
+
+    <h3>使用例</h3>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">fn main() void {
+    val msg = "Hello, C!"
+    
+    unsafe {
+        printf(msg.as_ptr())
+    }
+}</code></pre>
+
+    <hr>
+
+    <h2>C 標準ライブラリ</h2>
+
+    <h3>math.h</h3>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">extern fn sqrt(x: f64) f64
+extern fn pow(base: f64, exp: f64) f64
+extern fn sin(x: f64) f64
+extern fn cos(x: f64) f64
+
+fn main() void {
+    val result = sqrt(16.0)  // 4.0
+    val power = pow(2.0, 10.0)  // 1024.0
+}</code></pre>
+
+    <h3>stdio.h</h3>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">extern fn fopen(path: *const u8, mode: *const u8) *mut FILE
+extern fn fclose(stream: *mut FILE) i32
+extern fn fgets(buffer: *mut u8, size: i32, stream: *mut FILE) *mut u8
+
+fn read_file(path: str) str {
+    unsafe {
+        val file = fopen(path.as_ptr(), "r".as_ptr())
+        if file == null {
+            return ""
+        }
+        
+        var buffer = alloc&lt;u8&gt;(1024)
+        fgets(buffer, 1024, file)
+        fclose(file)
+        
+        val result = str::from_cstr(buffer)
+        free(buffer)
+        result
+    }
+}</code></pre>
+
+    <hr>
+
+    <h2>C 構造体との連携</h2>
+
+    <h3>構造体の定義</h3>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">// C 側の構造体
+// struct Point { double x; double y; };
+
+// NagiScript 側
+struct Point {
+    x: f64
+    y: f64
+}
+
+extern fn c_distance(p1: *const Point, p2: *const Point) f64
+
+fn main() void {
+    val p1 = Point { x: 0.0, y: 0.0 }
+    val p2 = Point { x: 3.0, y: 4.0 }
+    
+    val dist = c_distance(&amp;p1, &amp;p2)  // 5.0
+}</code></pre>
+
+    <hr>
+
+    <h2>C から NagiScript を呼び出す</h2>
+
+    <h3>エクスポート関数</h3>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">// NagiScript 関数を C から呼び出せるようにエクスポート
+export fn add(a: i32, b: i32) i32 {
+    a + b
+}
+
+export fn process_string(input: *const u8, len: i32) *mut u8 {
+    unsafe {
+        val s = str::from_utf8(input, len)
+        val result = s.to_upper()
+        result.as_mut_ptr()
+    }
+}</code></pre>
+
+    <h3>C 側の宣言</h3>
+
+    <div class="code-header"><span class="code-lang">header.h</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-c">// header.h
+extern int add(int a, int b);
+extern char* process_string(const char* input, int len);</code></pre>
+
+    <hr>
+
+    <h2>ポインタ操作</h2>
+
+    <h3>アドレス取得</h3>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">val x = 42
+val ptr = &amp;x  // アドレスを取得
+
+unsafe {
+    val value = *ptr  // 値を参照
+    io.println(value)  // 42
+}</code></pre>
+
+    <h3>ポインタ演算</h3>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">fn sum_array(arr: *const i32, len: i32) i32 {
+    var total = 0
+    var i = 0
+    
+    unsafe {
+        while i &lt; len {
+            total += *arr.offset(i)
+            i += 1
+        }
+    }
+    
+    total
+}
+
+fn main() void {
+    val numbers = [10, 20, 30, 40, 50]
+    val sum = sum_array(&amp;numbers[0], 5)  // 150
+}</code></pre>
+
+    <hr>
+
+    <h2>動的ライブラリのロード</h2>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">extern fn dlopen(path: *const u8, flags: i32) *mut void
+extern fn dlsym(handle: *mut void, symbol: *const u8) *mut void
+extern fn dlclose(handle: *mut void) i32
+
+fn load_library(path: str) *mut void {
+    unsafe {
+        dlopen(path.as_ptr(), 1)  // RTLD_LAZY
+    }
+}
+
+fn get_function(handle: *mut void, name: str) *mut void {
+    unsafe {
+        dlsym(handle, name.as_ptr())
+    }
+}</code></pre>
+
+    <hr>
+
+    <h2>実践的な例: C ライブラリのラッパー</h2>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">// libcurl のラッパー例
+
+extern fn curl_easy_init() *mut void
+extern fn curl_easy_setopt(curl: *mut void, option: i32, ...) i32
+extern fn curl_easy_perform(curl: *mut void) i32
+extern fn curl_easy_cleanup(curl: *mut void) void
+
+struct Curl {
+    handle: *mut void
+}
+
+fn Curl.init() Curl {
+    Curl {
+        handle: curl_easy_init()
+    }
+}
+
+fn Curl.get(self: Curl, url: str) Result&lt;str, str&gt; {
+    unsafe {
+        curl_easy_setopt(self.handle, 10002, url.as_ptr())  // CURLOPT_URL
+        val result = curl_easy_perform(self.handle)
+        
+        if result == 0 {
+            Result.Ok("Success")
+        } else {
+            Result.Err("Request failed")
+        }
+    }
+}
+
+fn Curl.cleanup(self: Curl) void {
+    curl_easy_cleanup(self.handle)
+}
+
+fn main() void {
+    val curl = Curl.init()
+    
+    match curl.get("https://example.com") {
+        Result.Ok(response) =&gt; io.println(response),
+        Result.Err(e) =&gt; io.println("Error: " + e)
+    }
+    
+    curl.cleanup()
+}</code></pre>
+
+    <hr>
+
+    <h2>注意事項</h2>
+
+    <ol>
+      <li><strong>型の整合性</strong>: C と NagiScript の型サイズが一致することを確認</li>
+      <li><strong>メモリ管理</strong>: C で確保したメモリは C で解放する</li>
+      <li><strong>文字列の変換</strong>: C の文字列は null 終端、NagiScript は長さ付き</li>
+      <li><strong>スレッド安全性</strong>: C 関数がスレッド安全かどうかを確認</li>
+    </ol>
+
+    <hr>
+
+    <div class="nav-links">
+      <a href="microcontroller.html" class="nav-link prev">← 組み込み開発</a>
+      <a href="../reference/types.html" class="nav-link next">型システム →</a>
+    </div>
+  </main>
+
+  <script src="../../js/main.js"></script>
+  <script src="../../js/play-wasm.js"></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+# Static assets caching (dev: revalidate until stable)
+/css/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+/js/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+/nagiscript/*.wasm
+  Cache-Control: public, max-age=0, must-revalidate
+  Content-Type: application/wasm
+
+/nagiscript/*.d.ts
+  Cache-Control: public, max-age=31536000, immutable
+
+# HTML pages - no cache for fresh content
+/docs/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Security headers
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()

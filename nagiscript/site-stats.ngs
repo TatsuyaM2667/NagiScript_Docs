@@ -1,0 +1,115 @@
+// NagiScript Site Stats — コンパイル時にドキュメント情報を計算
+// このプログラムは NagiScript の型システムと制御フローをデモする
+
+struct TypeInfo {
+    name: string,
+    size: i32,
+    category: string,
+}
+
+fn get_type_info(idx: i32) -> TypeInfo {
+    if idx == 0 { return TypeInfo { name: "i8", size: 1, category: "integer" } }
+    if idx == 1 { return TypeInfo { name: "i16", size: 2, category: "integer" } }
+    if idx == 2 { return TypeInfo { name: "i32", size: 4, category: "integer" } }
+    if idx == 3 { return TypeInfo { name: "i64", size: 8, category: "integer" } }
+    if idx == 4 { return TypeInfo { name: "u8", size: 1, category: "unsigned" } }
+    if idx == 5 { return TypeInfo { name: "u16", size: 2, category: "unsigned" } }
+    if idx == 6 { return TypeInfo { name: "u32", size: 4, category: "unsigned" } }
+    if idx == 7 { return TypeInfo { name: "u64", size: 8, category: "unsigned" } }
+    if idx == 8 { return TypeInfo { name: "f32", size: 4, category: "float" } }
+    if idx == 9 { return TypeInfo { name: "f64", size: 8, category: "float" } }
+    if idx == 10 { return TypeInfo { name: "bool", size: 1, category: "other" } }
+    if idx == 11 { return TypeInfo { name: "str", size: 16, category: "other" } }
+    if idx == 12 { return TypeInfo { name: "ptr", size: 8, category: "pointer" } }
+    return TypeInfo { name: "unknown", size: 0, category: "unknown" }
+}
+
+fn max(a: i32, b: i32) -> i32 {
+    if a > b { return a }
+    return b
+}
+
+fn min(a: i32, b: i32) -> i32 {
+    if a < b { return a }
+    return b
+}
+
+fn clamp(v: i32, lo: i32, hi: i32) -> i32 {
+    return min(max(v, lo), hi)
+}
+
+fn abs(x: i32) -> i32 {
+    if x < 0 { return -x }
+    return x
+}
+
+fn pow(base: i32, exp: i32) -> i32 {
+    var result: i32 = 1
+    var i: i32 = 0
+    while i < exp {
+        result = result * base
+        i = i + 1
+    }
+    return result
+}
+
+fn main() {
+    print("========================================")
+    print("  NagiScript Type System Reference")
+    print("========================================")
+    print("")
+
+    var total_size: i32 = 0
+    var max_size: i32 = 0
+    var min_size: i32 = 999
+    var i: i32 = 0
+    while i < 13 {
+        val info = get_type_info(i)
+        print(info.name)
+        print("  size: ")
+        print(info.size)
+        print(" bytes  category: ")
+        print(info.category)
+        print("")
+        total_size = total_size + info.size
+        max_size = max(max_size, info.size)
+        min_size = min(min_size, info.size)
+        i = i + 1
+    }
+
+    print("========================================")
+    print("  Summary")
+    print("========================================")
+    print("Total types: 13")
+    print("Min size: ")
+    print(min_size)
+    print(" bytes")
+    print("Max size: ")
+    print(max_size)
+    print(" bytes")
+    print("")
+
+    print("========================================")
+    print("  Useful Functions")
+    print("========================================")
+    print("fibonacci(10) = ")
+    var a: i32 = 0
+    var b: i32 = 1
+    var j: i32 = 0
+    while j < 10 {
+        val next = a + b
+        a = b
+        b = next
+        j = j + 1
+    }
+    print(b)
+    print("")
+    print("2^10 = ")
+    print(pow(2, 10))
+    print("")
+    print("clamp(15, 0, 10) = ")
+    print(clamp(15, 0, 10))
+    print("")
+    print("abs(-42) = ")
+    print(abs(-42))
+}

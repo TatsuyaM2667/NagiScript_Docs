@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>非同期プログラミング - NagiScript</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+</head>
+<body>
+  <div class="sky-decor" aria-hidden="true">
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="cloud c3"></div>
+    <div class="cloud c4"></div>
+  </div>
+  <header class="header">
+    <a href="../../index.html" class="header-logo"><span class="logo-text">⚡ NagiScript</span></a>
+    <nav class="header-nav">
+      <a href="../../index.html">ホーム</a>
+      <a href="../getting-started.html">ドキュメント</a>
+      <a href="basics.html">チュートリアル</a>
+      <a href="../reference/types.html">リファレンス</a>
+      <button class="theme-toggle" aria-label="テーマ切替">🌓</button>
+    </nav>
+  </header>
+  <div class="sidebar-overlay"></div>
+
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">入门</div>
+      <a href="../getting-started.html" class="sidebar-link">はじめに</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">チュートリアル</div>
+      <a href="basics.html" class="sidebar-link">基本概念</a>
+      <a href="functions.html" class="sidebar-link">関数とモジュール</a>
+      <a href="structs-enums.html" class="sidebar-link">構造体と列挙型</a>
+      <a href="generics.html" class="sidebar-link">ジェネリクス</a>
+      <a href="error-handling.html" class="sidebar-link">エラーハンドリング</a>
+      <a href="memory.html" class="sidebar-link">メモリ管理</a>
+      <a href="async.html" class="sidebar-link active">非同期プログラミング</a>
+      <a href="webassembly.html" class="sidebar-link">WebAssembly</a>
+      <a href="browser-app.html" class="sidebar-link">ブラウザアプリ</a>
+      <a href="tui-app.html" class="sidebar-link">TUI アプリ</a>
+      <a href="cli.html" class="sidebar-link">CLI ツール開発</a>
+      <a href="microcontroller.html" class="sidebar-link">組み込み開発</a>
+      <a href="cinterop.html" class="sidebar-link">C言語との相互運用</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">リファレンス</div>
+      <a href="../reference/types.html" class="sidebar-link">型システム</a>
+      <a href="../reference/syntax.html" class="sidebar-link">構文リファレンス</a>
+      <a href="../reference/operators.html" class="sidebar-link">演算子リファレンス</a>
+      <a href="../reference/standard-library.html" class="sidebar-link">標準ライブラリ</a>
+      <a href="../reference/standard-c-library.html" class="sidebar-link">C 標準ライブラリ</a>
+      <a href="../reference/compiler.html" class="sidebar-link">コンパイラ内部構造</a>
+      <a href="../reference/keywords.html" class="sidebar-link">キーワード一覧</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">実践</div>
+      <a href="../examples/todo-app.html" class="sidebar-link">Todo アプリ</a>
+      <a href="../examples/web-framework.html" class="sidebar-link">Web フレームワーク</a>
+      <a href="../examples/iot-sensor.html" class="sidebar-link">IoT センサー</a>
+    </div>
+  </aside>
+
+  <main class="main content">
+    <h1>非同期プログラミング</h1>
+    <p>async/await による非同期処理を学びます。</p>
+
+    <hr>
+
+    <h2>async 関数</h2>
+    <div class="code-header"><span class="code-lang">async_fetch.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">import "std:io"
+import "std:async"
+
+async fn fetch_data(url: str) Result&lt;str, str&gt; {
+    val response = await http.get(url)
+    match response {
+        Result.Ok(res) =&gt; Result.Ok(res.body),
+        Result.Err(e) =&gt; Result.Err(e)
+    }
+}
+
+fn main() async void {
+    val data = await fetch_data("https://api.example.com/data")
+
+    match data {
+        Result.Ok(body) =&gt; io.println(body),
+        Result.Err(e) =&gt; io.println("Error: " + e)
+    }
+}</code></pre>
+
+    <hr>
+
+    <h2>await</h2>
+    <p><code>await</code> は非同期操作の完了を待ちます：</p>
+    <div class="code-header"><span class="code-lang">await.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">async fn process() void {
+    val a = await heavy_computation()
+    val b = await another_computation()
+    io.println(a + b)
+}</code></pre>
+
+    <hr>
+
+    <h2>async ブロック</h2>
+    <div class="code-header"><span class="code-lang">async_block.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">async fn parallel() void {
+    val result = async {
+        val a = await fetch("url1")
+        val b = await fetch("url2")
+        (a, b)
+    }
+
+    val (data1, data2) = await result
+}</code></pre>
+
+    <hr>
+
+    <h2>Result との組み合わせ</h2>
+    <div class="code-header"><span class="code-lang">safe_fetch.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">async fn safe_fetch(url: str) Result&lt;str, str&gt; {
+    val response = await http.get(url)
+        .map_err(fn(e: str) str { "Network error: " + e })
+
+    response
+}</code></pre>
+
+    <hr>
+
+    <div class="nav-links">
+      <a href="memory.html" class="nav-link">
+        <span class="label">前</span>
+        <span class="title">← メモリ管理</span>
+      </a>
+      <a href="webassembly.html" class="nav-link">
+        <span class="label">次</span>
+        <span class="title">WebAssembly →</span>
+      </a>
+    </div>
+  </main>
+
+  <script src="../../js/main.js"></script>
+  <script src="../../js/play-wasm.js"></script>
+</body>
+</html>

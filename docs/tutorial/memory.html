@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>メモリ管理 - NagiScript</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+</head>
+<body>
+  <div class="sky-decor" aria-hidden="true">
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="cloud c3"></div>
+    <div class="cloud c4"></div>
+  </div>
+  <header class="header">
+    <a href="../../index.html" class="header-logo"><span class="logo-text">⚡ NagiScript</span></a>
+    <nav class="header-nav">
+      <a href="../../index.html">ホーム</a>
+      <a href="../getting-started.html">ドキュメント</a>
+      <a href="basics.html">チュートリアル</a>
+      <a href="../reference/types.html">リファレンス</a>
+      <button class="theme-toggle" aria-label="テーマ切替">🌓</button>
+    </nav>
+  </header>
+  <div class="sidebar-overlay"></div>
+
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">入门</div>
+      <a href="../getting-started.html" class="sidebar-link">はじめに</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">チュートリアル</div>
+      <a href="basics.html" class="sidebar-link">基本概念</a>
+      <a href="functions.html" class="sidebar-link">関数とモジュール</a>
+      <a href="structs-enums.html" class="sidebar-link">構造体と列挙型</a>
+      <a href="generics.html" class="sidebar-link">ジェネリクス</a>
+      <a href="error-handling.html" class="sidebar-link">エラーハンドリング</a>
+      <a href="memory.html" class="sidebar-link active">メモリ管理</a>
+      <a href="async.html" class="sidebar-link">非同期プログラミング</a>
+      <a href="webassembly.html" class="sidebar-link">WebAssembly</a>
+      <a href="browser-app.html" class="sidebar-link">ブラウザアプリ</a>
+      <a href="tui-app.html" class="sidebar-link">TUI アプリ</a>
+      <a href="cli.html" class="sidebar-link">CLI ツール開発</a>
+      <a href="microcontroller.html" class="sidebar-link">組み込み開発</a>
+      <a href="cinterop.html" class="sidebar-link">C言語との相互運用</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">リファレンス</div>
+      <a href="../reference/types.html" class="sidebar-link">型システム</a>
+      <a href="../reference/syntax.html" class="sidebar-link">構文リファレンス</a>
+      <a href="../reference/operators.html" class="sidebar-link">演算子リファレンス</a>
+      <a href="../reference/standard-library.html" class="sidebar-link">標準ライブラリ</a>
+      <a href="../reference/standard-c-library.html" class="sidebar-link">C 標準ライブラリ</a>
+      <a href="../reference/compiler.html" class="sidebar-link">コンパイラ内部構造</a>
+      <a href="../reference/keywords.html" class="sidebar-link">キーワード一覧</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">実践</div>
+      <a href="../examples/todo-app.html" class="sidebar-link">Todo アプリ</a>
+      <a href="../examples/web-framework.html" class="sidebar-link">Web フレームワーク</a>
+      <a href="../examples/iot-sensor.html" class="sidebar-link">IoT センサー</a>
+    </div>
+  </aside>
+
+  <main class="main content">
+    <h1>メモリ管理</h1>
+    <p>NagiScript のメモリ管理戦略を学びます。</p>
+
+    <hr>
+
+    <h2>メモリ管理の設計方針</h2>
+    <table>
+      <thead><tr><th>戦略</th><th>用途</th><th>特徴</th></tr></thead>
+      <tbody>
+        <tr><td><strong>スタック確保</strong></td><td>基本型、構造体</td><td>最速、自動管理</td></tr>
+        <tr><td><strong>Rc (参照カウント)</strong></td><td>ヒープ確保</td><td>自動解放、安全</td></tr>
+        <tr><td><strong>Unsafe</strong></td><td>ポインタ操作</td><td>開発者責任</td></tr>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <h2>スタック確保</h2>
+    <p>基本型と小さな構造体はスタックに確保されます：</p>
+    <div class="code-header"><span class="code-lang">stack.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">val x: i32 = 42
+val p = Point { x: 1.0, y: 2.0 }
+
+fn add(a: i32, b: i32) i32 {
+    a + b
+}</code></pre>
+
+    <hr>
+
+    <h2>Rc (参照カウント)</h2>
+    <p>大きなオブジェクトや動的サイズのオブジェクトには Rc を使用します：</p>
+    <div class="code-header"><span class="code-lang">rc_basic.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">import "std:io"
+
+val data = Rc.new(Data {
+    values: List&lt;i32&gt; { 1, 2, 3, 4, 5 }
+})
+
+val data2 = data  // 参照カウント: 2
+io.println(data.values.len())  // 5</code></pre>
+
+    <h3>参照カウントの動作</h3>
+    <div class="code-header"><span class="code-lang">rc_count.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">val a = Rc.new(Data { x: 10 })  // 参照カウント: 1
+val b = a                        // 参照カウント: 2
+val c = a                        // 参照カウント: 3
+// b, c がスコープを抜けると a のみ残り、最終解放時にメモリ解放</code></pre>
+
+    <hr>
+
+    <h2>リスト (List)</h2>
+    <p>動的配列はヒープに確保されます：</p>
+    <div class="code-header"><span class="code-lang">list.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">import "std:io"
+
+var numbers = List&lt;i32&gt; {}
+numbers.add(10)
+numbers.add(20)
+numbers.add(30)
+
+io.println(numbers.len())  // 3
+
+val first = numbers[0]  // 10
+numbers[1] = 200</code></pre>
+
+    <h3>コピー-on-Write</h3>
+    <div class="code-header"><span class="code-lang">cow.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">val a = List&lt;i32&gt; { 1, 2, 3 }
+val b = a  // shallow copy（同じメモリを参照）
+
+b.add(4)
+
+io.println(a.len())  // 3（元のまま）
+io.println(b.len())  // 4（コピーが変更された）</code></pre>
+
+    <hr>
+
+    <h2>Unsafe ブロック</h2>
+    <p>ポインタ操作が必要な場合は <code>unsafe</code> ブロックを使用します：</p>
+    <div class="code-header"><span class="code-lang">unsafe.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">fn process_data(data: *mut i32, len: i32) void {
+    unsafe {
+        var i = 0
+        while i &lt; len {
+            *data = *data * 2
+            data = data.offset(1)
+            i += 1
+        }
+    }
+}</code></pre>
+
+    <hr>
+
+    <h2>C言語とのメモリ共有</h2>
+    <div class="code-header"><span class="code-lang">c_memory.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">extern fn malloc(size: i32) *mut u8
+extern fn free(ptr: *mut u8) void
+
+fn process_c_buffer() void {
+    val ptr = malloc(100)
+    unsafe { *ptr = 42 }
+    free(ptr)
+}</code></pre>
+
+    <hr>
+
+    <div class="nav-links">
+      <a href="error-handling.html" class="nav-link">
+        <span class="label">前</span>
+        <span class="title">← エラーハンドリング</span>
+      </a>
+      <a href="async.html" class="nav-link">
+        <span class="label">次</span>
+        <span class="title">非同期プログラミング →</span>
+      </a>
+    </div>
+  </main>
+
+  <script src="../../js/main.js"></script>
+  <script src="../../js/play-wasm.js"></script>
+</body>
+</html>

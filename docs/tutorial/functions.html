@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>関数とモジュール - NagiScript</title>
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <div class="sky-decor" aria-hidden="true">
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="cloud c3"></div>
+    <div class="cloud c4"></div>
+  </div>
+  <header class="header">
+    <a href="../../index.html" class="header-logo"><span class="logo-text">⚡ NagiScript</span></a>
+    <nav class="header-nav">
+      <a href="../../index.html">ホーム</a>
+      <a href="../getting-started.html">ドキュメント</a>
+      <a href="basics.html">チュートリアル</a>
+      <a href="../reference/types.html">リファレンス</a>
+      <button class="theme-toggle" aria-label="テーマ切替">🌓</button>
+    </nav>
+  </header>
+  <div class="sidebar-overlay"></div>
+
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">入门</div>
+      <a href="../getting-started.html" class="sidebar-link">はじめに</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">チュートリアル</div>
+      <a href="basics.html" class="sidebar-link">基本概念</a>
+      <a href="functions.html" class="sidebar-link active">関数とモジュール</a>
+      <a href="structs-enums.html" class="sidebar-link">構造体と列挙型</a>
+      <a href="generics.html" class="sidebar-link">ジェネリクス</a>
+      <a href="error-handling.html" class="sidebar-link">エラーハンドリング</a>
+      <a href="memory.html" class="sidebar-link">メモリ管理</a>
+      <a href="async.html" class="sidebar-link">非同期プログラミング</a>
+      <a href="webassembly.html" class="sidebar-link">WebAssembly</a>
+      <a href="browser-app.html" class="sidebar-link">ブラウザアプリ</a>
+      <a href="tui-app.html" class="sidebar-link">TUI アプリ</a>
+      <a href="cli.html" class="sidebar-link">CLI ツール開発</a>
+      <a href="microcontroller.html" class="sidebar-link">組み込み開発</a>
+      <a href="cinterop.html" class="sidebar-link">C言語との相互運用</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">リファレンス</div>
+      <a href="../reference/types.html" class="sidebar-link">型システム</a>
+      <a href="../reference/syntax.html" class="sidebar-link">構文リファレンス</a>
+      <a href="../reference/operators.html" class="sidebar-link">演算子リファレンス</a>
+      <a href="../reference/standard-library.html" class="sidebar-link">標準ライブラリ</a>
+      <a href="../reference/standard-c-library.html" class="sidebar-link">C 標準ライブラリ</a>
+      <a href="../reference/compiler.html" class="sidebar-link">コンパイラ内部構造</a>
+      <a href="../reference/keywords.html" class="sidebar-link">キーワード一覧</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">実践</div>
+      <a href="../examples/todo-app.html" class="sidebar-link">Todo アプリ</a>
+      <a href="../examples/web-framework.html" class="sidebar-link">Web フレームワーク</a>
+      <a href="../examples/iot-sensor.html" class="sidebar-link">IoT センサー</a>
+    </div>
+  </aside>
+
+  <main class="main content">
+    <h1>関数とモジュール</h1>
+    <p>関数の定義、呼び出し、モジュール分割を学びます。</p>
+
+    <hr>
+
+    <h2>関数の定義</h2>
+
+    <h3>基本構文</h3>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">fn add(a: i32, b: i32) i32 {
+    a + b
+}</code></pre>
+
+    <h3>戻り値なし</h3>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">fn greet(name: str) void {
+    io.println("Hello, " + name + "!")
+}</code></pre>
+
+    <h3>引数なし</h3>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">fn get_version() str {
+    "1.0.0"
+}</code></pre>
+
+    <hr>
+
+    <h2>関数の呼び出し</h2>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">val result = add(10, 20)  // 30
+greet("Alice")            // Hello, Alice!
+val ver = get_version()   // "1.0.0"</code></pre>
+
+    <hr>
+
+    <h2>関数式 (Fn)</h2>
+
+    <p>関数は変数に代入できます：</p>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">val double = fn(x: i32) i32 {
+    x * 2
+}
+
+val result = double(5)  // 10</code></pre>
+
+    <hr>
+
+    <h2>高階関数</h2>
+
+    <p>関数を引数に取る関数：</p>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">fn apply(f: fn(i32) i32, x: i32) i32 {
+    f(x)
+}
+
+val result = apply(double, 5)  // 10</code></pre>
+
+    <hr>
+
+    <h2>モジュール</h2>
+
+    <h3>import</h3>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">// 標準ライブラリ
+import "std:io"
+import "std:math"
+
+// ローカルファイル
+import "utils.ngs"
+import "utils/string.ngs"</code></pre>
+
+    <h3>モジュールの利用</h3>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">import "std:io"
+import "std:math"
+
+fn main() void {
+    io.println("Hello!")
+    
+    val pi = math.PI
+    val sqrt2 = math.sqrt(2.0)
+    
+    io.println(pi)
+    io.println(sqrt2)
+}</code></pre>
+
+    <h3>エクスポート</h3>
+
+    <div class="code-header"><span class="code-lang">utils.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">// utils.ngs
+export fn add(a: i32, b: i32) i32 {
+    a + b
+}
+
+export fn multiply(a: i32, b: i32) i32 {
+    a * b
+}</code></pre>
+
+    <div class="code-header"><span class="code-lang">main.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">// main.ngs
+import "utils"
+
+fn main() void {
+    val sum = utils.add(10, 20)
+    val product = utils.multiply(10, 20)
+    
+    io.println(sum)
+    io.println(product)
+}</code></pre>
+
+    <hr>
+
+    <h2>ドキュメントコメント</h2>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">@doc {
+    doc = "2つの整数を加算します"
+    param_a = "最初の整数"
+    param_b = "2番目の整数"
+    return = "加算結果"
+    example = """
+    val result = add(10, 20)
+    // result = 30
+    """
+}
+fn add(a: i32, b: i32) i32 {
+    a + b
+}</code></pre>
+
+    <hr>
+
+    <h2>メソッド（関数の呼び出し方）</h2>
+
+    <h3>メソッド構文</h3>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">import "std:io"
+
+val s = "Hello, World!"
+
+// 通常の呼び出し
+val len1 = str.len(s)
+
+// メソッド構文
+val len2 = s.len()
+// len1 == len2</code></pre>
+
+    <h3>チェーン呼び出し</h3>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">val result = "hello".to_upper().len()
+// "hello" → "HELLO" → 5</code></pre>
+
+    <hr>
+
+    <h2>再帰関数</h2>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">fn factorial(n: i32) i32 {
+    if n &lt;= 1 {
+        1
+    } else {
+        n * factorial(n - 1)
+    }
+}
+
+val result = factorial(5)  // 120</code></pre>
+
+    <hr>
+
+    <h2>クロージャ</h2>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">fn make_adder(x: i32) fn(i32) i32 {
+    fn(y: i32) i32 {
+        x + y
+    }
+}
+
+val add5 = make_adder(5)
+val result = add5(10)  // 15</code></pre>
+
+    <hr>
+
+    <div class="nav-links">
+      <a href="basics.html" class="nav-link prev">← 基本概念</a>
+      <a href="structs-enums.html" class="nav-link next">構造体と列挙型 →</a>
+    </div>
+  </main>
+
+  <script src="../../js/main.js"></script>
+  <script src="../../js/play-wasm.js"></script>
+</body>
+</html>

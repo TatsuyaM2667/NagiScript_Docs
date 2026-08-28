@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>演算子リファレンス - NagiScript</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+</head>
+<body>
+  <div class="sky-decor" aria-hidden="true">
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="cloud c3"></div>
+    <div class="cloud c4"></div>
+  </div>
+  <header class="header">
+    <a href="../../index.html" class="header-logo"><span class="logo-text">⚡ NagiScript</span></a>
+    <nav class="header-nav">
+      <a href="../../index.html">ホーム</a>
+      <a href="../getting-started.html">ドキュメント</a>
+      <a href="../tutorial/basics.html">チュートリアル</a>
+      <a href="types.html">リファレンス</a>
+      <button class="theme-toggle" aria-label="テーマ切替">🌓</button>
+    </nav>
+  </header>
+  <div class="sidebar-overlay"></div>
+
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">入门</div>
+      <a href="../getting-started.html" class="sidebar-link">はじめに</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">チュートリアル</div>
+      <a href="../tutorial/basics.html" class="sidebar-link">基本概念</a>
+      <a href="../tutorial/functions.html" class="sidebar-link">関数とモジュール</a>
+      <a href="../tutorial/structs-enums.html" class="sidebar-link">構造体と列挙型</a>
+      <a href="../tutorial/generics.html" class="sidebar-link">ジェネリクス</a>
+      <a href="../tutorial/error-handling.html" class="sidebar-link">エラーハンドリング</a>
+      <a href="../tutorial/memory.html" class="sidebar-link">メモリ管理</a>
+      <a href="../tutorial/async.html" class="sidebar-link">非同期プログラミング</a>
+      <a href="../tutorial/webassembly.html" class="sidebar-link">WebAssembly</a>
+      <a href="../tutorial/browser-app.html" class="sidebar-link">ブラウザアプリ</a>
+      <a href="../tutorial/tui-app.html" class="sidebar-link">TUI アプリ</a>
+      <a href="../tutorial/cli.html" class="sidebar-link">CLI ツール開発</a>
+      <a href="../tutorial/microcontroller.html" class="sidebar-link">組み込み開発</a>
+      <a href="../tutorial/cinterop.html" class="sidebar-link">C言語との相互運用</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">リファレンス</div>
+      <a href="types.html" class="sidebar-link">型システム</a>
+      <a href="syntax.html" class="sidebar-link">構文リファレンス</a>
+      <a href="operators.html" class="sidebar-link active">演算子リファレンス</a>
+      <a href="standard-library.html" class="sidebar-link">標準ライブラリ</a>
+      <a href="standard-c-library.html" class="sidebar-link">C 標準ライブラリ</a>
+      <a href="compiler.html" class="sidebar-link">コンパイラ内部構造</a>
+      <a href="keywords.html" class="sidebar-link">キーワード一覧</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">実践</div>
+      <a href="../examples/todo-app.html" class="sidebar-link">Todo アプリ</a>
+      <a href="../examples/web-framework.html" class="sidebar-link">Web フレームワーク</a>
+      <a href="../examples/iot-sensor.html" class="sidebar-link">IoT センサー</a>
+    </div>
+  </aside>
+
+  <main class="main content">
+    <h1>演算子リファレンス</h1>
+    <p>NagiScript の演算子全体を解説します。</p>
+
+    <hr>
+
+    <h2>算術演算子</h2>
+    <table>
+      <thead><tr><th>演算子</th><th>説明</th><th>例</th><th>結果</th></tr></thead>
+      <tbody>
+        <tr><td><code>+</code></td><td>加算</td><td><code>5 + 3</code></td><td><code>8</code></td></tr>
+        <tr><td><code>-</code></td><td>減算</td><td><code>5 - 3</code></td><td><code>2</code></td></tr>
+        <tr><td><code>*</code></td><td>乗算</td><td><code>5 * 3</code></td><td><code>15</code></td></tr>
+        <tr><td><code>/</code></td><td>除算</td><td><code>5 / 3</code></td><td><code>1</code> (整数除算)</td></tr>
+        <tr><td><code>%</code></td><td>剰余</td><td><code>5 % 3</code></td><td><code>2</code></td></tr>
+      </tbody>
+    </table>
+
+    <h3>浮動小数点の除算</h3>
+    <div class="code-header"><span class="code-lang">main.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">val a: f64 = 5.0
+val b: f64 = 3.0
+val result = a / b  // 1.66666...</code></pre>
+
+    <hr>
+
+    <h2>比較演算子</h2>
+    <table>
+      <thead><tr><th>演算子</th><th>説明</th><th>例</th><th>結果</th></tr></thead>
+      <tbody>
+        <tr><td><code>==</code></td><td>等しい</td><td><code>5 == 5</code></td><td><code>true</code></td></tr>
+        <tr><td><code>!=</code></td><td>等しくない</td><td><code>5 != 3</code></td><td><code>true</code></td></tr>
+        <tr><td><code>&lt;</code></td><td>小さい</td><td><code>5 &lt; 3</code></td><td><code>false</code></td></tr>
+        <tr><td><code>&gt;</code></td><td>大きい</td><td><code>5 &gt; 3</code></td><td><code>true</code></td></tr>
+        <tr><td><code>&lt;=</code></td><td>以下</td><td><code>5 &lt;= 5</code></td><td><code>true</code></td></tr>
+        <tr><td><code>&gt;=</code></td><td>以上</td><td><code>5 &gt;= 3</code></td><td><code>true</code></td></tr>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <h2>論理演算子</h2>
+    <table>
+      <thead><tr><th>演算子</th><th>説明</th><th>例</th><th>結果</th></tr></thead>
+      <tbody>
+        <tr><td><code>and</code></td><td>論理AND</td><td><code>true and false</code></td><td><code>false</code></td></tr>
+        <tr><td><code>or</code></td><td>論理OR</td><td><code>true or false</code></td><td><code>true</code></td></tr>
+        <tr><td><code>not</code></td><td>論理NOT</td><td><code>not true</code></td><td><code>false</code></td></tr>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <h2>代入演算子</h2>
+    <table>
+      <thead><tr><th>演算子</th><th>説明</th><th>例</th></tr></thead>
+      <tbody>
+        <tr><td><code>=</code></td><td>代入</td><td><code>x = 5</code></td></tr>
+        <tr><td><code>+=</code></td><td>加算代入</td><td><code>x += 5</code></td></tr>
+        <tr><td><code>-=</code></td><td>減算代入</td><td><code>x -= 5</code></td></tr>
+        <tr><td><code>*=</code></td><td>乗算代入</td><td><code>x *= 5</code></td></tr>
+        <tr><td><code>/=</code></td><td>除算代入</td><td><code>x /= 5</code></td></tr>
+        <tr><td><code>%=</code></td><td>剰余代入</td><td><code>x %= 5</code></td></tr>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <h2>ポインタ演算子</h2>
+    <table>
+      <thead><tr><th>演算子</th><th>説明</th><th>例</th></tr></thead>
+      <tbody>
+        <tr><td><code>&amp;&amp;</code></td><td>アドレス取得</td><td><code>val ptr = &amp;&amp;x</code></td></tr>
+        <tr><td><code>*</code></td><td>参照</td><td><code>val value = *ptr</code></td></tr>
+        <tr><td><code>.offset(n)</code></td><td>ポインタ加算</td><td><code>ptr.offset(1)</code></td></tr>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <h2>型演算子</h2>
+    <table>
+      <thead><tr><th>演算子</th><th>説明</th><th>例</th></tr></thead>
+      <tbody>
+        <tr><td><code>as</code></td><td>型変換</td><td><code>val y = x as f64</code></td></tr>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <h2>エラー伝播演算子</h2>
+    <table>
+      <thead><tr><th>演算子</th><th>説明</th><th>例</th></tr></thead>
+      <tbody>
+        <tr><td><code>?</code></td><td>エラー伝播</td><td><code>val n = parse_int(s)?</code></td></tr>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <h2>演算子の優先順位</h2>
+    <table>
+      <thead><tr><th>優先順位</th><th>演算子</th><th>説明</th></tr></thead>
+      <tbody>
+        <tr><td>1 (最高)</td><td><code>()</code></td><td>括弧</td></tr>
+        <tr><td>2</td><td><code>!</code>, <code>not</code></td><td>否定</td></tr>
+        <tr><td>3</td><td><code>*</code>, <code>/</code>, <code>%</code></td><td>乗算、除算、剰余</td></tr>
+        <tr><td>4</td><td><code>+</code>, <code>-</code></td><td>加算、減算</td></tr>
+        <tr><td>5</td><td><code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code></td><td>比較</td></tr>
+        <tr><td>6</td><td><code>==</code>, <code>!=</code></td><td>等値比較</td></tr>
+        <tr><td>7</td><td><code>and</code></td><td>論理AND</td></tr>
+        <tr><td>8</td><td><code>or</code></td><td>論理OR</td></tr>
+        <tr><td>9</td><td><code>=</code></td><td>代入</td></tr>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <h2>文字列演算子</h2>
+    <table>
+      <thead><tr><th>演算子</th><th>説明</th><th>例</th></tr></thead>
+      <tbody>
+        <tr><td><code>+</code></td><td>文字列連結</td><td><code>"Hello" + " World"</code></td></tr>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <h2>リスト演算子</h2>
+    <table>
+      <thead><tr><th>演算子</th><th>説明</th><th>例</th></tr></thead>
+      <tbody>
+        <tr><td><code>[]</code></td><td>インデックスアクセス</td><td><code>list[0]</code></td></tr>
+        <tr><td><code>+</code></td><td>リスト結合</td><td><code>list1 + list2</code></td></tr>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <h2>タプル演算子</h2>
+    <table>
+      <thead><tr><th>演算子</th><th>説明</th><th>例</th></tr></thead>
+      <tbody>
+        <tr><td><code>()</code></td><td>タプル作成</td><td><code>(1, 2, 3)</code></td></tr>
+        <tr><td><code>.0</code>, <code>.1</code>, <code>.2</code></td><td>タプル要素アクセス</td><td><code>t.0</code></td></tr>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <h2>関数型演算子</h2>
+    <table>
+      <thead><tr><th>演算子</th><th>説明</th><th>例</th></tr></thead>
+      <tbody>
+        <tr><td><code>()</code></td><td>関数呼び出し</td><td><code>f(x)</code></td></tr>
+        <tr><td><code>fn</code></td><td>関数式</td><td><code>fn(x: i32) i32 { x * 2 }</code></td></tr>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <div class="nav-links">
+      <a href="syntax.html" class="nav-link">
+        <span class="label">前</span>
+        <span class="title">← 構文リファレンス</span>
+      </a>
+      <a href="standard-library.html" class="nav-link">
+        <span class="label">次</span>
+        <span class="title">標準ライブラリ →</span>
+      </a>
+    </div>
+  </main>
+
+  <script src="../../js/main.js"></script>
+  <script src="../../js/play-wasm.js"></script>
+</body>
+</html>

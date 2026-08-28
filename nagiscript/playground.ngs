@@ -1,0 +1,78 @@
+// NagiScript Playground — WASM デモ: 型サイズ計算機
+// JS から呼び出し可能な関数をエクスポート
+
+export "C" fn fibonacci(n: i32) -> i32 {
+    if n <= 1 {
+        return n
+    }
+    var a: i32 = 0
+    var b: i32 = 1
+    var i: i32 = 2
+    while i <= n {
+        val next = a + b
+        a = b
+        b = next
+        i = i + 1
+    }
+    return b
+}
+
+export "C" fn factorial(n: i32) -> i32 {
+    if n <= 1 {
+        return 1
+    }
+    return n * factorial(n - 1)
+}
+
+export "C" fn gcd(a: i32, b: i32) -> i32 {
+    var x = a
+    var y = b
+    while y != 0 {
+        val t = y
+        y = x % y
+        x = t
+    }
+    return x
+}
+
+export "C" fn is_prime(n: i32) -> i32 {
+    if n < 2 {
+        return 0
+    }
+    if n == 2 {
+        return 1
+    }
+    if n % 2 == 0 {
+        return 0
+    }
+    var i: i32 = 3
+    while i * i <= n {
+        if n % i == 0 {
+            return 0
+        }
+        i = i + 2
+    }
+    return 1
+}
+
+export "C" fn type_size(kind: i32) -> i32 {
+    if kind == 0 { return 1 }   // i8
+    if kind == 1 { return 2 }   // i16
+    if kind == 2 { return 4 }   // i32
+    if kind == 3 { return 8 }   // i64
+    if kind == 4 { return 1 }   // u8
+    if kind == 5 { return 2 }   // u16
+    if kind == 6 { return 4 }   // u32
+    if kind == 7 { return 8 }   // u64
+    if kind == 8 { return 4 }   // f32
+    if kind == 9 { return 8 }   // f64
+    if kind == 10 { return 1 }  // bool
+    if kind == 11 { return 16 } // str
+    if kind == 12 { return 8 }  // ptr
+    return 0
+}
+
+fn main() {
+    print("=== NagiScript Playground ===")
+    print("WASM module loaded successfully!")
+}

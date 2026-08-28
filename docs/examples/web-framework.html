@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web フレームワーク - NagiScript</title>
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <div class="sky-decor" aria-hidden="true">
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="cloud c3"></div>
+    <div class="cloud c4"></div>
+  </div>
+  <header class="header">
+    <a href="../../index.html" class="header-logo"><span class="logo-text">⚡ NagiScript</span></a>
+    <nav class="header-nav">
+      <a href="../../index.html">ホーム</a>
+      <a href="../getting-started.html">ドキュメント</a>
+      <a href="../tutorial/basics.html">チュートリアル</a>
+      <a href="../reference/types.html">リファレンス</a>
+      <button class="theme-toggle" aria-label="テーマ切替">🌓</button>
+    </nav>
+  </header>
+  <div class="sidebar-overlay"></div>
+
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">入门</div>
+      <a href="../getting-started.html" class="sidebar-link">はじめに</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">チュートリアル</div>
+      <a href="../tutorial/basics.html" class="sidebar-link">基本概念</a>
+      <a href="../tutorial/functions.html" class="sidebar-link">関数とモジュール</a>
+      <a href="../tutorial/structs-enums.html" class="sidebar-link">構造体と列挙型</a>
+      <a href="../tutorial/generics.html" class="sidebar-link">ジェネリクス</a>
+      <a href="../tutorial/error-handling.html" class="sidebar-link">エラーハンドリング</a>
+      <a href="../tutorial/memory.html" class="sidebar-link">メモリ管理</a>
+      <a href="../tutorial/async.html" class="sidebar-link">非同期プログラミング</a>
+      <a href="../tutorial/webassembly.html" class="sidebar-link">WebAssembly</a>
+      <a href="../tutorial/browser-app.html" class="sidebar-link">ブラウザアプリ</a>
+      <a href="../tutorial/tui-app.html" class="sidebar-link">TUI アプリ</a>
+      <a href="../tutorial/cli.html" class="sidebar-link">CLI ツール開発</a>
+      <a href="../tutorial/microcontroller.html" class="sidebar-link">組み込み開発</a>
+      <a href="../tutorial/cinterop.html" class="sidebar-link">C言語との相互運用</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">リファレンス</div>
+      <a href="../reference/types.html" class="sidebar-link">型システム</a>
+      <a href="../reference/syntax.html" class="sidebar-link">構文リファレンス</a>
+      <a href="../reference/operators.html" class="sidebar-link">演算子リファレンス</a>
+      <a href="../reference/standard-library.html" class="sidebar-link">標準ライブラリ</a>
+      <a href="../reference/standard-c-library.html" class="sidebar-link">C 標準ライブラリ</a>
+      <a href="../reference/compiler.html" class="sidebar-link">コンパイラ内部構造</a>
+      <a href="../reference/keywords.html" class="sidebar-link">キーワード一覧</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">実践</div>
+      <a href="todo-app.html" class="sidebar-link">Todo アプリ</a>
+      <a href="web-framework.html" class="sidebar-link active">Web フレームワーク</a>
+      <a href="iot-sensor.html" class="sidebar-link">IoT センサー</a>
+    </div>
+  </aside>
+
+  <main class="main content">
+    <h1>Web フレームワーク</h1>
+    <p>NagiScript でシンプルな Web フレームワークを開発するチュートリアルです。</p>
+    <hr>
+
+    <h2>概要</h2>
+    <p>このチュートリアルでは、NagiScript で基本的な Web フレームワークを作成します。</p>
+    <ul>
+      <li>HTTP リクエストの処理</li>
+      <li>ルーティング</li>
+      <li>JSON レスポンス</li>
+    </ul>
+    <hr>
+
+    <h2>プロジェクト構成</h2>
+    <div class="code-header"><span class="code-lang">text</span><button class="copy-btn">Copy</button></div>
+    <pre><code>web_framework/
+├── main.ngs
+├── router.ngs
+└── handler.ngs</code></pre>
+    <hr>
+
+    <h2>実装</h2>
+
+    <h3>router.ngs — ルーター</h3>
+    <div class="code-header"><span class="code-lang">router.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">struct Route {
+    method: str
+    path: str
+    handler: fn(Request) Response
+}
+
+struct Router {
+    routes: List&lt;Route&gt;
+}
+
+fn Router.init() Router {
+    Router {
+        routes: List&lt;Route&gt; {}
+    }
+}
+
+fn Router.add_route(self: Router, method: str, path: str, handler: fn(Request) Response) void {
+    self.routes.add(Route {
+        method: method,
+        path: path,
+        handler: handler
+    })
+}
+
+fn Router.handle(self: Router, request: Request) Response {
+    for route in self.routes {
+        if route.method == request.method &amp;&amp; route.path == request.path {
+            return route.handler(request)
+        }
+    }
+
+    Response {
+        status: 404,
+        body: "Not Found"
+    }
+}</code></pre>
+
+    <h3>handler.ngs — ハンドラー</h3>
+    <div class="code-header"><span class="code-lang">handler.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">struct Request {
+    method: str
+    path: str
+    body: str
+}
+
+struct Response {
+    status: i32
+    body: str
+}
+
+fn home_handler(request: Request) Response {
+    Response {
+        status: 200,
+        body: "Welcome to NagiScript Web Framework!"
+    }
+}
+
+fn hello_handler(request: Request) Response {
+    Response {
+        status: 200,
+        body: "Hello, World!"
+    }
+}
+
+fn not_found_handler(request: Request) Response {
+    Response {
+        status: 404,
+        body: "Page not found"
+    }
+}</code></pre>
+
+    <h3>main.ngs — メインプログラム</h3>
+    <div class="code-header"><span class="code-lang">main.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">import "std:io"
+import "std:net"
+import "router"
+import "handler"
+
+fn main() void {
+    val router = Router.init()
+
+    router.add_route("GET", "/", home_handler)
+    router.add_route("GET", "/hello", hello_handler)
+
+    io.println("Starting server on port 8080...")
+
+    val server = net.listen("0.0.0.0:8080")
+
+    loop {
+        val client = server.accept()
+
+        val request = parse_request(client)
+        val response = router.handle(request)
+
+        send_response(client, response)
+        client.close()
+    }
+}
+
+fn parse_request(client: net.TcpStream) Request {
+    val raw = client.read_line()
+    val parts = raw.split(" ")
+
+    Request {
+        method: parts[0],
+        path: parts[1],
+        body: ""
+    }
+}
+
+fn send_response(client: net.TcpStream, response: Response) void {
+    val status_text = match response.status {
+        200 => "OK",
+        404 => "Not Found",
+        _ => "Unknown"
+    }
+
+    val header = "HTTP/1.1 " + str(response.status) + " " + status_text + "\r\n" +
+                 "Content-Length: " + str(response.body.len()) + "\r\n" +
+                 "Content-Type: text/plain\r\n" +
+                 "\r\n"
+
+    client.write(header + response.body)
+}</code></pre>
+    <hr>
+
+    <h2>実行例</h2>
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-bash">nagiscript run main.ngs</code></pre>
+
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-bash"># テスト
+curl http://localhost:8080/
+# Welcome to NagiScript Web Framework!
+
+curl http://localhost:8080/hello
+# Hello, World!
+
+curl http://localhost:8080/notfound
+# Page not found</code></pre>
+    <hr>
+
+    <h2>学べること</h2>
+    <ol>
+      <li><strong>ルーティング</strong>: URL パスに基づくリクエスト振り分け</li>
+      <li><strong>HTTP プロトコル</strong>: リクエスト/レスポンスの構造</li>
+      <li><strong>コールバック</strong>: 関数を引数として渡す</li>
+      <li><strong>ネットワーク</strong>: TCP ソケットの操作</li>
+    </ol>
+    <hr>
+
+    <nav class="page-nav">
+      <a href="todo-app.html">← Todo アプリ</a>
+      <a href="iot-sensor.html">IoT センサー →</a>
+    </nav>
+  </main>
+
+  <script src="../../js/main.js"></script>
+  <script src="../../js/play-wasm.js"></script>
+</body>
+</html>

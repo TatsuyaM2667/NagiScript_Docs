@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>はじめに - NagiScript</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+</head>
+<body>
+  <div class="sky-decor" aria-hidden="true">
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="cloud c3"></div>
+    <div class="cloud c4"></div>
+  </div>
+  <header class="header">
+    <a href="../index.html" class="header-logo"><span class="logo-text">⚡ NagiScript</span></a>
+    <nav class="header-nav">
+      <a href="../index.html">ホーム</a>
+      <a href="getting-started.html">ドキュメント</a>
+      <a href="tutorial/basics.html">チュートリアル</a>
+      <a href="reference/types.html">リファレンス</a>
+      <button class="theme-toggle" aria-label="テーマ切替">🌓</button>
+    </nav>
+  </header>
+
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">入门</div>
+      <a href="getting-started.html" class="sidebar-link active">はじめに</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">チュートリアル</div>
+      <a href="tutorial/basics.html" class="sidebar-link">基本概念</a>
+      <a href="tutorial/functions.html" class="sidebar-link">関数とモジュール</a>
+      <a href="tutorial/structs-enums.html" class="sidebar-link">構造体と列挙型</a>
+      <a href="tutorial/generics.html" class="sidebar-link">ジェネリクス</a>
+      <a href="tutorial/error-handling.html" class="sidebar-link">エラーハンドリング</a>
+      <a href="tutorial/memory.html" class="sidebar-link">メモリ管理</a>
+      <a href="tutorial/async.html" class="sidebar-link">非同期プログラミング</a>
+      <a href="tutorial/webassembly.html" class="sidebar-link">WebAssembly</a>
+      <a href="tutorial/browser-app.html" class="sidebar-link">ブラウザアプリ</a>
+      <a href="tutorial/tui-app.html" class="sidebar-link">TUI アプリ</a>
+      <a href="tutorial/cli.html" class="sidebar-link">CLI ツール開発</a>
+      <a href="tutorial/microcontroller.html" class="sidebar-link">組み込み開発</a>
+      <a href="tutorial/cinterop.html" class="sidebar-link">C言語との相互運用</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">リファレンス</div>
+      <a href="reference/types.html" class="sidebar-link">型システム</a>
+      <a href="reference/syntax.html" class="sidebar-link">構文リファレンス</a>
+      <a href="reference/operators.html" class="sidebar-link">演算子リファレンス</a>
+      <a href="reference/standard-library.html" class="sidebar-link">標準ライブラリ</a>
+      <a href="reference/standard-c-library.html" class="sidebar-link">C 標準ライブラリ</a>
+      <a href="reference/compiler.html" class="sidebar-link">コンパイラ内部構造</a>
+      <a href="reference/keywords.html" class="sidebar-link">キーワード一覧</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">実践</div>
+      <a href="examples/todo-app.html" class="sidebar-link">Todo アプリ</a>
+      <a href="examples/web-framework.html" class="sidebar-link">Web フレームワーク</a>
+      <a href="examples/iot-sensor.html" class="sidebar-link">IoT センサー</a>
+    </div>
+  </aside>
+
+  <div class="sidebar-overlay"></div>
+
+  <main class="main content">
+    <h1>はじめに</h1>
+    <p>NagiScript のインストールから最初のプログラム実行までを解説します。</p>
+
+    <h2>NagiScript とは</h2>
+    <p>NagiScript は、以下の特性を持つ Systems Programming 言語です：</p>
+    <table>
+      <thead><tr><th>特性</th><th>説明</th></tr></thead>
+      <tbody>
+        <tr><td><strong>型安全性</strong></td><td>実行時エラーを排除する静的型付け</td></tr>
+        <tr><td><strong>C ABI 互換</strong></td><td>既存の C ライブラリをそのまま利用可能</td></tr>
+        <tr><td><strong>高性能</strong></td><td>LLVM IR への直接マッピング</td></tr>
+        <tr><td><strong>安全性</strong></td><td>自動メモリ管理（Rc）と Unsafe 制御</td></tr>
+        <tr><td><strong>軽量</strong></td><td>最小限のランタイム（libc のみ）</td></tr>
+      </tbody>
+    </table>
+
+    <h2>インストール</h2>
+    <h3>npm（推奨）</h3>
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-bash">npm install -g @nagiscript/cli</code></pre>
+
+    <h3>cargo</h3>
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-bash">cargo install ngs_driver</code></pre>
+
+    <h3>検証</h3>
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-bash">nagiscript --version
+# nagiscript 0.2.0</code></pre>
+
+    <h2>最初のプロジェクト</h2>
+    <h3>ステップ 1: プロジェクト作成</h3>
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-bash">nagiscript init my_project</code></pre>
+    <p>これで以下が生成されます：</p>
+    <pre><code>my_project/
+├── main.ngs      ← メインファイル
+└── project.toml  ← プロジェクト設定</code></pre>
+
+    <h3>ステップ 2: コードを確認</h3>
+    <div class="code-header"><span class="code-lang">main.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">import "std:io"
+
+fn main() void {
+    io.println("Hello from my_project!")
+}</code></pre>
+
+    <h3>ステップ 3: 実行</h3>
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-bash">nagiscript run main.ngs
+# Hello from my_project!</code></pre>
+
+    <h2>その他のコマンド</h2>
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-bash"># チェック（コンパイルのみ、実行しない）
+nagiscript check main.ngs
+
+# LLVM IR を出力
+nagiscript ir main.ngs
+
+# バイナリをビルド
+nagiscript build main.ngs -o my_app
+
+# WebAssembly ビルド
+nagiscript wasm main.ngs -o out
+
+# TypeScript 型定義ファイルを生成
+nagiscript dts main.ngs -o main.d.ts</code></pre>
+
+    <h2>プロジェクト設定（project.toml）</h2>
+    <div class="code-header"><span class="code-lang">project.toml</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-toml">[project]
+name = "my_project"
+version = "0.1.0"
+
+[build]
+entry = "main.ngs"
+target = "native"  # "native" or "wasm"
+output = "build/"</code></pre>
+
+    <h2>トラブルシューティング</h2>
+    <h3>インストール失敗</h3>
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-bash"># Cargo のバージョンを確認
+cargo --version  # 1.75 以上が必要
+
+# npm の権限問題
+sudo npm install -g @nagiscript/cli</code></pre>
+
+    <h3>ビルドエラー</h3>
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-bash"># LLVM がインストールされているか確認
+llc --version
+
+# エラーメッセージを詳細に表示
+nagiscript check main.ngs 2>&1</code></pre>
+
+    <div class="nav-links">
+      <span></span>
+      <a href="tutorial/basics.html" class="nav-link">
+        <span class="label">次</span>
+        <span class="title">基本概念 →</span>
+      </a>
+    </div>
+  </main>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/play-wasm.js"></script>
+</body>
+</html>

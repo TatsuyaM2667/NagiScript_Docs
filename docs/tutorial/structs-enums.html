@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>構造体と列挙型 - NagiScript</title>
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <div class="sky-decor" aria-hidden="true">
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="cloud c3"></div>
+    <div class="cloud c4"></div>
+  </div>
+  <header class="header">
+    <a href="../../index.html" class="header-logo"><span class="logo-text">⚡ NagiScript</span></a>
+    <nav class="header-nav">
+      <a href="../../index.html">ホーム</a>
+      <a href="../getting-started.html">ドキュメント</a>
+      <a href="basics.html">チュートリアル</a>
+      <a href="../reference/types.html">リファレンス</a>
+      <button class="theme-toggle" aria-label="テーマ切替">🌓</button>
+    </nav>
+  </header>
+  <div class="sidebar-overlay"></div>
+
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">入门</div>
+      <a href="../getting-started.html" class="sidebar-link">はじめに</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">チュートリアル</div>
+      <a href="basics.html" class="sidebar-link">基本概念</a>
+      <a href="functions.html" class="sidebar-link">関数とモジュール</a>
+      <a href="structs-enums.html" class="sidebar-link active">構造体と列挙型</a>
+      <a href="generics.html" class="sidebar-link">ジェネリクス</a>
+      <a href="error-handling.html" class="sidebar-link">エラーハンドリング</a>
+      <a href="memory.html" class="sidebar-link">メモリ管理</a>
+      <a href="async.html" class="sidebar-link">非同期プログラミング</a>
+      <a href="webassembly.html" class="sidebar-link">WebAssembly</a>
+      <a href="browser-app.html" class="sidebar-link">ブラウザアプリ</a>
+      <a href="tui-app.html" class="sidebar-link">TUI アプリ</a>
+      <a href="cli.html" class="sidebar-link">CLI ツール開発</a>
+      <a href="microcontroller.html" class="sidebar-link">組み込み開発</a>
+      <a href="cinterop.html" class="sidebar-link">C言語との相互運用</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">リファレンス</div>
+      <a href="../reference/types.html" class="sidebar-link">型システム</a>
+      <a href="../reference/syntax.html" class="sidebar-link">構文リファレンス</a>
+      <a href="../reference/operators.html" class="sidebar-link">演算子リファレンス</a>
+      <a href="../reference/standard-library.html" class="sidebar-link">標準ライブラリ</a>
+      <a href="../reference/standard-c-library.html" class="sidebar-link">C 標準ライブラリ</a>
+      <a href="../reference/compiler.html" class="sidebar-link">コンパイラ内部構造</a>
+      <a href="../reference/keywords.html" class="sidebar-link">キーワード一覧</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">実践</div>
+      <a href="../examples/todo-app.html" class="sidebar-link">Todo アプリ</a>
+      <a href="../examples/web-framework.html" class="sidebar-link">Web フレームワーク</a>
+      <a href="../examples/iot-sensor.html" class="sidebar-link">IoT センサー</a>
+    </div>
+  </aside>
+
+  <main class="main content">
+    <h1>構造体と列挙型</h1>
+    <p>独自の型を定義する方法を学びます。</p>
+
+    <hr>
+
+    <h2>構造体 (Struct)</h2>
+
+    <h3>定義</h3>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">struct Point {
+    x: f64
+    y: f64
+}
+
+struct Person {
+    name: str
+    age: i32
+    email: str
+}</code></pre>
+
+    <h3>インスタンス化</h3>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">val p = Point { x: 10.0, y: 20.0 }
+val person = Person { name: "Alice", age: 30, email: "alice@example.com" }</code></pre>
+
+    <h3>フィールドアクセス</h3>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">val x = p.x
+val name = person.name
+
+// フィールドの変更（var のみ）
+var p2 = Point { x: 1.0, y: 2.0 }
+p2.x = 10.0  // OK: p2 は var</code></pre>
+
+    <hr>
+
+    <h2>メソッド</h2>
+
+    <h3>基本的なメソッド</h3>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">struct Point {
+    x: f64
+    y: f64
+}
+
+fn Point.distance_to(self: Point, other: Point) f64 {
+    val dx = self.x - other.x
+    val dy = self.y - other.y
+    math.sqrt(dx * dx + dy * dy)
+}
+
+fn Point.to_string(self: Point) str {
+    "(" + str(self.x) + ", " + str(self.y) + ")"
+}
+
+// 使用例
+val p1 = Point { x: 0.0, y: 0.0 }
+val p2 = Point { x: 3.0, y: 4.0 }
+
+val dist = p1.distance_to(p2)  // 5.0
+val s = p1.to_string()          // "(0, 0)"</code></pre>
+
+    <hr>
+
+    <h2>列挙型 (Enum)</h2>
+
+    <h3>基本的な列挙型</h3>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">enum Color {
+    Red
+    Green
+    Blue
+}
+
+val c = Color.Red</code></pre>
+
+    <h3>データを持つ列挙型</h3>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">enum Shape {
+    Circle(f64)                    // radius
+    Rectangle(f64, f64)            // width, height
+    Triangle(f64, f64, f64)        // side lengths
+}
+
+val area = match shape {
+    Shape.Circle(r) => math.PI * r * r,
+    Shape.Rectangle(w, h) => w * h,
+    Shape.Triangle(a, b, c) => {
+        val s = (a + b + c) / 2.0
+        math.sqrt(s * (s - a) * (s - b) * (s - c))
+    }
+}</code></pre>
+
+    <hr>
+
+    <h2>Result 型</h2>
+
+    <p>エラーハンドリングのための Result 型：</p>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">enum Result&lt;T, E&gt; {
+    Ok(T)
+    Err(E)
+}</code></pre>
+
+    <h3>例</h3>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">fn divide(a: f64, b: f64) Result&lt;f64, str&gt; {
+    if b == 0.0 {
+        Result.Err("ZeroDivision")
+    } else {
+        Result.Ok(a / b)
+    }
+}
+
+fn main() void {
+    val result = divide(10.0, 3.0)
+    
+    match result {
+        Result.Ok(v) => io.println("Result: " + str(v)),
+        Result.Err(e) => io.println("Error: " + e)
+    }
+}</code></pre>
+
+    <h3><code>?</code> 演算子</h3>
+
+    <p>エラーを上位関数に伝播させる：</p>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">fn parse_int(s: str) Result&lt;i32, str&gt; {
+    // 実装は省略
+    Result.Ok(42)
+}
+
+fn process(s: str) Result&lt;i32, str&gt; {
+    val n = parse_int(s)?  // エラーなら即座に return
+    Result.Ok(n * 2)
+}</code></pre>
+
+    <hr>
+
+    <h2>ジェネリクス</h2>
+
+    <h3>構造体のジェネリクス</h3>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">struct Vec2&lt;T&gt; {
+    x: T
+    y: T
+}
+
+val v1 = Vec2&lt;i32&gt; { x: 1, y: 2 }
+val v2 = Vec2&lt;f64&gt; { x: 1.5, y: 2.5 }</code></pre>
+
+    <h3>関数のジェネリクス</h3>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">fn first&lt;T&gt;(arr: List&lt;T&gt;) T {
+    arr[0]
+}
+
+val n = first(List&lt;i32&gt; { 10, 20, 30 })  // 10
+val s = first(List&lt;str&gt; { "a", "b", "c" })  // "a"</code></pre>
+
+    <hr>
+
+    <h2>Option 型</h2>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">enum Option&lt;T&gt; {
+    Some(T)
+    None
+}</code></pre>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">fn find_user(id: i32) Option&lt;User&gt; {
+    if id == 1 {
+        Option.Some(User { name: "Alice" })
+    } else {
+        Option.None
+    }
+}
+
+val user = find_user(1)
+match user {
+    Option.Some(u) => io.println(u.name),
+    Option.None => io.println("Not found")
+}</code></pre>
+
+    <hr>
+
+    <div class="nav-links">
+      <a href="functions.html" class="nav-link prev">← 関数とモジュール</a>
+      <a href="generics.html" class="nav-link next">ジェネリクス →</a>
+    </div>
+  </main>
+
+  <script src="../../js/main.js"></script>
+  <script src="../../js/play-wasm.js"></script>
+</body>
+</html>

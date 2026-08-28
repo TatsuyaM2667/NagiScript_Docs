@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IoT センサー - NagiScript</title>
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <div class="sky-decor" aria-hidden="true">
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="cloud c3"></div>
+    <div class="cloud c4"></div>
+  </div>
+  <header class="header">
+    <a href="../../index.html" class="header-logo"><span class="logo-text">⚡ NagiScript</span></a>
+    <nav class="header-nav">
+      <a href="../../index.html">ホーム</a>
+      <a href="../getting-started.html">ドキュメント</a>
+      <a href="../tutorial/basics.html">チュートリアル</a>
+      <a href="../reference/types.html">リファレンス</a>
+      <button class="theme-toggle" aria-label="テーマ切替">🌓</button>
+    </nav>
+  </header>
+  <div class="sidebar-overlay"></div>
+
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">入门</div>
+      <a href="../getting-started.html" class="sidebar-link">はじめに</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">チュートリアル</div>
+      <a href="../tutorial/basics.html" class="sidebar-link">基本概念</a>
+      <a href="../tutorial/functions.html" class="sidebar-link">関数とモジュール</a>
+      <a href="../tutorial/structs-enums.html" class="sidebar-link">構造体と列挙型</a>
+      <a href="../tutorial/generics.html" class="sidebar-link">ジェネリクス</a>
+      <a href="../tutorial/error-handling.html" class="sidebar-link">エラーハンドリング</a>
+      <a href="../tutorial/memory.html" class="sidebar-link">メモリ管理</a>
+      <a href="../tutorial/async.html" class="sidebar-link">非同期プログラミング</a>
+      <a href="../tutorial/webassembly.html" class="sidebar-link">WebAssembly</a>
+      <a href="../tutorial/browser-app.html" class="sidebar-link">ブラウザアプリ</a>
+      <a href="../tutorial/tui-app.html" class="sidebar-link">TUI アプリ</a>
+      <a href="../tutorial/cli.html" class="sidebar-link">CLI ツール開発</a>
+      <a href="../tutorial/microcontroller.html" class="sidebar-link">組み込み開発</a>
+      <a href="../tutorial/cinterop.html" class="sidebar-link">C言語との相互運用</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">リファレンス</div>
+      <a href="../reference/types.html" class="sidebar-link">型システム</a>
+      <a href="../reference/syntax.html" class="sidebar-link">構文リファレンス</a>
+      <a href="../reference/operators.html" class="sidebar-link">演算子リファレンス</a>
+      <a href="../reference/standard-library.html" class="sidebar-link">標準ライブラリ</a>
+      <a href="../reference/standard-c-library.html" class="sidebar-link">C 標準ライブラリ</a>
+      <a href="../reference/compiler.html" class="sidebar-link">コンパイラ内部構造</a>
+      <a href="../reference/keywords.html" class="sidebar-link">キーワード一覧</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">実践</div>
+      <a href="todo-app.html" class="sidebar-link">Todo アプリ</a>
+      <a href="web-framework.html" class="sidebar-link">Web フレームワーク</a>
+      <a href="iot-sensor.html" class="sidebar-link active">IoT センサー</a>
+    </div>
+  </aside>
+
+  <main class="main content">
+    <h1>IoT センサーデータ収集</h1>
+    <p>NagiScript で IoT センサーデータを収集するシステムを開発するチュートリアルです。</p>
+    <hr>
+
+    <h2>概要</h2>
+    <p>このチュートリアルでは、NagiScript で IoT センサーデータを収集し、クラウドに送信するシステムを作成します。</p>
+    <ul>
+      <li>温度・湿度センサーの読み取り</li>
+      <li>データの保存</li>
+      <li>クラウドへの送信</li>
+    </ul>
+    <hr>
+
+    <h2>プロジェクト構成</h2>
+    <div class="code-header"><span class="code-lang">text</span><button class="copy-btn">Copy</button></div>
+    <pre><code>iot_sensor/
+├── main.ngs
+├── sensor.ngs
+├── storage.ngs
+└── cloud.ngs</code></pre>
+    <hr>
+
+    <h2>実装</h2>
+
+    <h3>sensor.ngs — センサー操作</h3>
+    <div class="code-header"><span class="code-lang">sensor.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">extern fn adc_read(channel: i32) i32
+extern fn gpio_init(pin: i32) void
+extern fn gpio_set(pin: i32, state: bool) void
+extern fn delay(ms: i32) void
+
+struct TemperatureSensor {
+    pin: i32
+}
+
+fn TemperatureSensor.read(self: TemperatureSensor) f64 {
+    val raw = adc_read(self.pin)
+    val voltage = (raw as f64) * 3.3 / 1023.0
+    val temperature = (voltage - 0.5) * 100.0
+    temperature
+}
+
+struct HumiditySensor {
+    pin: i32
+}
+
+fn HumiditySensor.read(self: HumiditySensor) f64 {
+    val raw = adc_read(self.pin)
+    val voltage = (raw as f64) * 3.3 / 1023.0
+    val humidity = voltage * 100.0 / 3.3
+    humidity
+}
+
+struct SensorData {
+    temperature: f64
+    humidity: f64
+    timestamp: i64
+}</code></pre>
+
+    <h3>storage.ngs — データ保存</h3>
+    <div class="code-header"><span class="code-lang">storage.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">import "std:io"
+import "std:fs"
+
+fn save_data(data: SensorData, path: str) Result&lt;void, str&gt; {
+    val line = str(data.timestamp) + "," +
+               str(data.temperature) + "," +
+               str(data.humidity)
+
+    fs.append_to_string(path, line + "\n")
+        .map_err(fn(e: str) str { "Failed to save: " + e })
+}
+
+fn load_data(path: str) Result&lt;List&lt;SensorData&gt;, str&gt; {
+    val content = fs.read_to_string(path)
+        .map_err(fn(e: str) str { "Failed to load: " + e })?
+
+    var data = List&lt;SensorData&gt; {}
+
+    for line in content.split("\n") {
+        if line.len() > 0 {
+            val parts = line.split(",")
+            if parts.len() >= 3 {
+                data.add(SensorData {
+                    timestamp: atoi(parts[0]),
+                    temperature: atof(parts[1]),
+                    humidity: atof(parts[2])
+                })
+            }
+        }
+    }
+
+    Result.Ok(data)
+}</code></pre>
+
+    <h3>cloud.ngs — クラウド送信</h3>
+    <div class="code-header"><span class="code-lang">cloud.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">import "std:http"
+
+struct CloudClient {
+    endpoint: str
+    api_key: str
+}
+
+fn CloudClient.send(self: CloudClient, data: SensorData) Result&lt;void, str&gt; {
+    val payload = "{" +
+        "\"timestamp\":" + str(data.timestamp) + "," +
+        "\"temperature\":" + str(data.temperature) + "," +
+        "\"humidity\":" + str(data.humidity) +
+        "}"
+
+    val response = http.post(self.endpoint, payload)
+        .map_err(fn(e: str) str { "Network error: " + e })?
+
+    if response.status == 200 {
+        Result.Ok(())
+    } else {
+        Result.Err("Server error: " + str(response.status))
+    }
+}</code></pre>
+
+    <h3>main.ngs — メインプログラム</h3>
+    <div class="code-header"><span class="code-lang">main.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">import "std:io"
+import "std:time"
+import "sensor"
+import "storage"
+import "cloud"
+
+fn main() void {
+    val temp_sensor = TemperatureSensor { pin: 0 }
+    val hum_sensor = HumiditySensor { pin: 1 }
+    val cloud = CloudClient {
+        endpoint: "https://api.example.com/sensors",
+        api_key: "your-api-key"
+    }
+
+    io.println("Starting IoT sensor data collection...")
+
+    loop {
+        val data = SensorData {
+            temperature: temp_sensor.read(),
+            humidity: hum_sensor.read(),
+            timestamp: time.now()
+        }
+
+        io.println("Temperature: " + str(data.temperature) + " C")
+        io.println("Humidity: " + str(data.humidity) + " %")
+
+        match save_data(data, "sensor_data.csv") {
+            Result.Ok(_) => io.println("Data saved locally"),
+            Result.Err(e) => io.println("Save error: " + e)
+        }
+
+        match cloud.send(data) {
+            Result.Ok(_) => io.println("Data sent to cloud"),
+            Result.Err(e) => io.println("Cloud error: " + e)
+        }
+
+        delay(5000)  // 5 秒待機
+    }
+}</code></pre>
+    <hr>
+
+    <h2>実行例</h2>
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-bash">nagiscript run main.ngs</code></pre>
+
+    <p>出力例：</p>
+    <div class="code-header"><span class="code-lang">output</span><button class="copy-btn">Copy</button></div>
+    <pre><code>Starting IoT sensor data collection...
+Temperature: 23.5 C
+Humidity: 65.2 %
+Data saved locally
+Data sent to cloud
+Temperature: 23.6 C
+Humidity: 65.1 %
+Data saved locally
+Data sent to cloud</code></pre>
+    <hr>
+
+    <h2>学べること</h2>
+    <ol>
+      <li><strong>ハードウェア操作</strong>: GPIO や ADC の使用</li>
+      <li><strong>データ永続化</strong>: ファイルへのデータ保存</li>
+      <li><strong>ネットワーク通信</strong>: HTTP によるクラウド送信</li>
+      <li><strong>ループ処理</strong>: 定期的なデータ収集</li>
+    </ol>
+    <hr>
+
+    <h2>トラブルシューティング</h2>
+
+    <h3>センサーが読めない</h3>
+    <div class="code-header"><span class="code-lang">debug.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">// デバッグ用
+val raw = adc_read(0)
+io.println("Raw value: " + str(raw))</code></pre>
+
+    <h3>クラウド送信が失敗する</h3>
+    <div class="code-header"><span class="code-lang">debug.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">// ネットワーク接続を確認
+val response = http.get("https://api.example.com/health")
+match response {
+    Result.Ok(res) => io.println("Connected: " + res.body),
+    Result.Err(e) => io.println("Connection failed: " + e)
+}</code></pre>
+    <hr>
+
+    <nav class="page-nav">
+      <a href="web-framework.html">← Web フレームワーク</a>
+      <a href="../index.html">トップへ戻る →</a>
+    </nav>
+  </main>
+
+  <script src="../../js/main.js"></script>
+  <script src="../../js/play-wasm.js"></script>
+</body>
+</html>

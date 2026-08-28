@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TUI アプリの作り方 - NagiScript</title>
+  <meta name="description" content="NagiScript でターミナル UI（TUI）アプリを作るチュートリアル。ANSI エスケープで画面を制御し、ネイティブバイナリとして配布する">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+</head>
+<body>
+  <div class="sky-decor" aria-hidden="true">
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="cloud c3"></div>
+    <div class="cloud c4"></div>
+  </div>
+  <header class="header">
+    <a href="../../index.html" class="header-logo"><span class="logo-text">⚡ NagiScript</span></a>
+    <nav class="header-nav">
+      <a href="../../index.html">ホーム</a>
+      <a href="../getting-started.html">ドキュメント</a>
+      <a href="basics.html">チュートリアル</a>
+      <a href="../reference/types.html">リファレンス</a>
+      <button class="theme-toggle" aria-label="テーマ切替">🌓</button>
+    </nav>
+  </header>
+  <div class="sidebar-overlay"></div>
+
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">入门</div>
+      <a href="../getting-started.html" class="sidebar-link">はじめに</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">チュートリアル</div>
+      <a href="basics.html" class="sidebar-link">基本概念</a>
+      <a href="functions.html" class="sidebar-link">関数とモジュール</a>
+      <a href="structs-enums.html" class="sidebar-link">構造体と列挙型</a>
+      <a href="generics.html" class="sidebar-link">ジェネリクス</a>
+      <a href="error-handling.html" class="sidebar-link">エラーハンドリング</a>
+      <a href="memory.html" class="sidebar-link">メモリ管理</a>
+      <a href="async.html" class="sidebar-link">非同期プログラミング</a>
+      <a href="webassembly.html" class="sidebar-link">WebAssembly</a>
+      <a href="browser-app.html" class="sidebar-link">ブラウザアプリ</a>
+      <a href="tui-app.html" class="sidebar-link active">TUI アプリ</a>
+      <a href="cli.html" class="sidebar-link">CLI ツール開発</a>
+      <a href="microcontroller.html" class="sidebar-link">組み込み開発</a>
+      <a href="cinterop.html" class="sidebar-link">C言語との相互運用</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">リファレンス</div>
+      <a href="../reference/types.html" class="sidebar-link">型システム</a>
+      <a href="../reference/syntax.html" class="sidebar-link">構文リファレンス</a>
+      <a href="../reference/operators.html" class="sidebar-link">演算子リファレンス</a>
+      <a href="../reference/standard-library.html" class="sidebar-link">標準ライブラリ</a>
+      <a href="../reference/standard-c-library.html" class="sidebar-link">C 標準ライブラリ</a>
+      <a href="../reference/compiler.html" class="sidebar-link">コンパイラ内部構造</a>
+      <a href="../reference/keywords.html" class="sidebar-link">キーワード一覧</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">実践</div>
+      <a href="../examples/todo-app.html" class="sidebar-link">Todo アプリ</a>
+      <a href="../examples/web-framework.html" class="sidebar-link">Web フレームワーク</a>
+      <a href="../examples/iot-sensor.html" class="sidebar-link">IoT センサー</a>
+    </div>
+  </aside>
+
+  <main class="main content">
+    <h1>TUI アプリの作り方</h1>
+    <p>ターミナル上でインタラクティブに操作できる「TUI（Text User Interface）」アプリを NagiScript で作ります。ネイティブバイナリとして単体で動く、キーボード操作のツールを作るのがゴールです。</p>
+
+    <hr>
+
+    <h2>TUI の基本構造</h2>
+    <p>TUI アプリの骨組みは「描画 → 入力待ち → 状態更新 → 再描画」のループです。NagiScript ではこのループを <code>while</code> で書き、画面更新は ANSI エスケープシーケンスで行います。</p>
+    <div class="code-header"><span class="code-lang">loop.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">import "std:io"
+
+// ANSI エスケープ定数
+const ESC = "\x1b["
+const CLEAR = ESC + "2J"       // 画面をクリア
+const HOME = ESC + "H"         // カーソルを(1,1)へ
+const HIDE = ESC + "?25l"      // カーソルを非表示
+const SHOW = ESC + "?25h"      // カーソルを表示
+
+fn draw(frame: i32) {
+    var buf = CLEAR + HOME
+    buf = buf + "TUI frame: " + str(frame) + "\n"
+    buf = buf + "Press [q] to quit.\n"
+    io.print(buf)
+}
+
+fn main() {
+    var frame = 0
+    io.print(HIDE)
+    while true {
+        draw(frame)        // 描画
+        // 入力待ちはステップ3で実装
+        frame = frame + 1
+        if frame &gt;= 120 { break }
+    }
+    io.print(SHOW)
+    io.print(HOME)
+}</code></pre>
+
+    <hr>
+
+    <h2>画面の制御（ANSI エスケープ）</h2>
+    <p>よく使う制御コードは以下のとおりです。<code>io.print</code> でそのまま出力できます。</p>
+    <table>
+      <thead><tr><th>コード</th><th>効果</th></tr></thead>
+      <tbody>
+        <tr><td><code>\x1b[2J</code></td><td>画面クリア</td></tr>
+        <tr><td><code>\x1b[H</code></td><td>カーソルを左上へ移動</td></tr>
+        <tr><td><code>\x1b[&lt;行&gt;;&lt;列&gt;H</code></td><td>指定位置へ移動</td></tr>
+        <tr><td><code>\x1b[&lt;n&gt;A/B/C/D</code></td><td>カーソルを n 移動（上/下/右/左）</td></tr>
+        <tr><td><code>\x1b[?25l / ?25h</code></td><td>カーソル非表示 / 表示</td></tr>
+        <tr><td><code>\x1b[0m</code></td><td>装飾リセット</td></tr>
+      </tbody>
+    </table>
+
+    <div class="code-header"><span class="code-lang">progress.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">import "std:io"
+
+fn progress_bar(width: i32, done: i32, total: i32) str {
+    var bar = "["
+    val filled = (done * width) / total
+    var i = 0
+    while i &lt; width {
+        if i &lt; filled { bar = bar + "#" } else { bar = bar + "-" }
+        i = i + 1
+    }
+    bar = bar + "] " + str((done * 100) / total) + "%"
+    return bar
+}
+
+fn main() {
+    var i = 0
+    while i &lt;= 100 {
+        io.print("\r" + progress_bar(30, i, 100))   // \r で行先頭に戻る
+        i = i + 5
+    }
+    io.println("")
+}</code></pre>
+
+    <hr>
+
+    <h2>キーボード入力を受け取る</h2>
+    <p>ユーザーがキーを押した瞬間に反応させるには、端末を raw モードにする必要があります。これは C 標準ライブラリの <code>termios</code> を <code>extern</code> で呼び出すと実現できます。C との相互運用の詳細は <a href="cinterop.html">C言語との相互運用</a> を参照してください。</p>
+    <div class="code-header"><span class="code-lang">rawmode.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">import "std:io"
+
+// termios を extern で宣言（libc にリンク）
+extern fn tcgetattr(fd: i32, termp: *mut u8) i32
+extern fn tcsetattr(fd: i32, actions: i32, termp: *const u8) i32
+extern fn getchar() i32
+
+const TCSANOW = 0
+const STDIN_FILENO = 0
+const ECHO = 8          // ECHO ビットフラグ（OS・アーキテクチャ依存）
+
+// 端末のエコーを無効にして、Enter なしでキーを受ける
+fn raw_mode_enter() {
+    var term: [64]u8 = [0; 64]      // struct termios の配置領域
+    tcgetattr(STDIN_FILENO, &amp;term[0])
+    // ECHO ビットを落として反映（簡略化のため、実際は cc_t/lflag 位置を厳密に）
+    val flags = term[12] as i32
+    val next = (flags &amp; ~ECHO) as u8
+    term[12] = next
+    tcsetattr(STDIN_FILENO, TCSANOW, &amp;term[0])
+}
+
+fn read_key() i32 {
+    return getchar()
+}</code></pre>
+    <p>シンプルな対話アプリであれば、raw モードを使わず「1行の入力で Enter 確定」でも十分動きます。</p>
+    <h3>1行入力で動くバージョン</h3>
+    <div class="code-header"><span class="code-lang">input.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">import "std:io"
+
+extern fn getchar() i32
+
+// プロンプトを表示して1行読み取る（Enter で確定）
+fn read_line_prompt(prompt: str) str {
+    io.print(prompt)
+    var line = ""
+    while true {
+        val c = getchar()
+        if c == 10 || c == 13 {   // LF / CR
+            io.println("")
+            break
+        }
+        line = line + str(c as u8)
+        io.print(str(c as u8))
+    }
+    return line
+}
+
+fn main() {
+    val name = read_line_prompt("Your name: ")
+    io.println("Hello, " + name + "!")
+}</code></pre>
+
+    <hr>
+
+    <h2>タスクマネージャー TUI を作る</h2>
+    <p>実用的な「タスクリスト管理」アプリです。<code>List&lt;T&gt;</code> でタスクを保持し、<code>std:fs</code> で保存・読み込みも行います。</p>
+    <div class="code-header"><span class="code-lang">tasks.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">import "std:io"
+import "std:fs"
+
+struct Task {
+    title: str,
+    done: bool,
+}
+
+var tasks = List&lt;Task&gt; {}
+
+fn add_task(title: str) {
+    tasks.add(Task { title: title, done: false })
+}
+
+fn toggle_task(index: i32) {
+    if index &gt;= 0 &amp;&amp; index &lt; tasks.len() {
+        tasks[index].done = !tasks[index].done
+    }
+}
+
+fn render() str {
+    val ESC = "\x1b["
+    var buf = ESC + "2J" + ESC + "H"
+    buf = buf + "=== Task Manager ===\n\n"
+    var i = 0
+    while i &lt; tasks.len() {
+        val t = tasks[i]
+        val mark = if t.done { "[x]" } else { "[ ]" }
+        buf = buf + " " + mark + " " + str(i + 1) + ". " + t.title + "\n"
+        i = i + 1
+    }
+    buf = buf + "\n  [a]dd  [t]oggle  [q]uit\n"
+    return buf
+}
+
+fn main() {
+    // フォルダ/ファイルから復元（なければ空で開始）
+    val saved = fs.read_to_string("tasks.txt")
+    match saved {
+        Result.Ok(_) =&gt; io.println("loaded saved tasks"),
+        Result.Err(_) =&gt; { /* 初回起動 */ }
+    }
+
+    io.print("\x1b[?25l")
+    while true {
+        io.print(render())       // 描画
+        val key = getchar()      // 入力（raw モードなら Enter なし）
+
+        if key == 113 { break }  // q
+        if key == 97 {           // a → タスク追加
+            val title = read_line_prompt("\ntitle: ")
+            if len(title) &gt; 0 { add_task(title) }
+        }
+        if key == 116 {          // t → 最新タスクをトグル
+            toggle_task(tasks.len() - 1)
+        }
+    }
+    io.print("\x1b[?25h")
+    io.println("bye!")
+}</code></pre>
+
+    <hr>
+
+    <h2>ビルドと実行</h2>
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-bash"># ネイティブバイナリにコンパイル（termios は libc にリンク）
+nagiscript build tasks.ngs -o task-manager
+
+# 実行
+./task-manager</code></pre>
+    <p>単一バイナリで動くので、インストーラーやコンテナなしでそのまま配布できます。</p>
+
+    <hr>
+
+    <h2>発展させるときのヒント</h2>
+    <ol>
+      <li><strong>ウィンドウ描画を抽象化</strong> — 位置指定（<code>\x1b[行;列H</code>）を使うと、複数ペインをHTTPレスに作れます</li>
+      <li><strong>状態は struct でまとめる</strong> — <code>AppState</code> を1つの構造体にすると再描画・永続化が楽になります</li>
+      <li><strong>帳票のような出力は <code>std:fs</code> で CSV に吐く</strong> — TUI は「見る」だけで「結果」はファイルに出す運用が扱いやすい</li>
+      <li><strong>色を使う</strong> — <code>\x1b[31m</code>（赤）等を組み合わせて選択中カーソルや完了タスクを強調できます</li>
+    </ol>
+
+    <hr>
+
+    <div class="nav-links">
+      <a href="browser-app.html" class="nav-link">
+        <span class="label">前</span>
+        <span class="title">← ブラウザアプリ</span>
+      </a>
+      <a href="cli.html" class="nav-link">
+        <span class="label">次</span>
+        <span class="title">CLI ツール開発 →</span>
+      </a>
+    </div>
+  </main>
+
+  <script src="../../js/main.js"></script>
+  <script src="../../js/play-wasm.js"></script>
+</body>
+</html>
