@@ -736,3 +736,110 @@ pre {
   .search-box { display: none; }
   .content h2 { font-size: 1.4rem; }
 }
+/* ---------- New Elements (Lucide, Hero, Badges, Mobile) ---------- */
+.hero-logo-wrap {
+  margin-bottom: 24px;
+}
+.hero-logo {
+  width: 120px;
+  height: 120px;
+  border-radius: 24px;
+  box-shadow: 0 12px 36px rgba(47, 155, 255, 0.3);
+  background: var(--glass-bg);
+  padding: 8px;
+}
+
+.hero-badges {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 36px;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--glass-bg-strong);
+  border: 1px solid var(--glass-border);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink-2);
+  box-shadow: var(--shadow);
+}
+.badge i { width: 14px; height: 14px; }
+
+.feature-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+  color: #fff;
+  margin-bottom: 16px;
+  box-shadow: 0 6px 16px rgba(47, 155, 255, 0.4);
+}
+.feature-icon i { width: 22px; height: 22px; }
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.status-ok {
+  background: rgba(56, 193, 114, 0.15);
+  color: #2aa65f;
+  border: 1px solid rgba(56, 193, 114, 0.3);
+}
+[data-theme="dark"] .status-ok { color: #4ade80; }
+.status-wip {
+  background: rgba(255, 184, 108, 0.15);
+  color: #e69022;
+  border: 1px solid rgba(255, 184, 108, 0.3);
+}
+[data-theme="dark"] .status-wip { color: #ffb86c; }
+
+.spin-icon {
+  animation: spin 2s linear infinite;
+}
+@keyframes spin { 100% { transform: rotate(360deg); } }
+
+.lucide {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+}
+
+.copy-btn i { width: 14px; height: 14px; }
+.run-btn i { width: 14px; height: 14px; }
+
+/* Mobile enhancements */
+@media (max-width: 900px) {
+  .header-nav {
+    display: none;
+    position: absolute;
+    top: var(--header-height);
+    left: 0;
+    right: 0;
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    flex-direction: column;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+  }
+  .header-nav.open {
+    display: flex;
+  }
+  .search-box { width: 100%; margin: 12px 0; }
+  .search-box input { width: 100% !important; }
+}

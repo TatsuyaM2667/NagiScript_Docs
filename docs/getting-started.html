@@ -5,7 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>はじめに - NagiScript</title>
   <link rel="stylesheet" href="../css/style.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  <link rel="icon" href="../assets/logo.png">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
 </head>
 <body>
   <div class="sky-decor" aria-hidden="true">
@@ -15,14 +18,21 @@
     <div class="cloud c4"></div>
   </div>
   <header class="header">
-    <a href="../index.html" class="header-logo"><span class="logo-text">⚡ NagiScript</span></a>
-    <nav class="header-nav">
+    <a href="../index.html" class="header-logo"><img src="../assets/logo.png" alt="NagiScript Logo"><span class="logo-text">NagiScript</span></a>
+    <nav class="header-nav" id="header-nav">
       <a href="../index.html">ホーム</a>
       <a href="getting-started.html">ドキュメント</a>
       <a href="tutorial/basics.html">チュートリアル</a>
       <a href="reference/types.html">リファレンス</a>
-      <button class="theme-toggle" aria-label="テーマ切替">🌓</button>
+      <a href="https://github.com/TatsuyaM2667/nagiscript_lang" class="nav-github">
+        <i data-lucide="github"></i><span>GitHub</span>
+      </a>
+      <button class="theme-toggle" aria-label="テーマ切替">
+        <i data-lucide="moon" class="icon-moon"></i>
+        <i data-lucide="sun" class="icon-sun"></i>
+      </button>
     </nav>
+    <button class="menu-toggle" id="menu-toggle" aria-label="メニュー"><i data-lucide="menu"></i></button>
   </header>
 
   <aside class="sidebar">
@@ -90,21 +100,21 @@
 
     <h2>インストール</h2>
     <h3>npm（推奨）</h3>
-    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-bash">npm install -g @nagiscript/cli</code></pre>
 
     <h3>cargo</h3>
-    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-bash">cargo install ngs_driver</code></pre>
 
     <h3>検証</h3>
-    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-bash">nagiscript --version
 # nagiscript 0.2.0</code></pre>
 
     <h2>最初のプロジェクト</h2>
     <h3>ステップ 1: プロジェクト作成</h3>
-    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-bash">nagiscript init my_project</code></pre>
     <p>これで以下が生成されます：</p>
     <pre><code>my_project/
@@ -117,18 +127,18 @@
       <span class="ct">現行仕様（v0.2.0）</span>
       <p>動作する型は <code>bool</code> / <code>string</code> / <code>i8</code>〜<code>i64</code> / <code>u8</code>〜<code>u64</code> / <code>usize</code> / <code>isize</code> / <code>f32</code> / <code>f64</code> などです（<code>str</code> という型名はありません）。</p>
     </div>
-    <div class="code-header"><span class="code-lang">main.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">main.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">fn main() {
     println("Hello from my_project!")
 }</code></pre>
 
     <h3>ステップ 3: 実行</h3>
-    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-bash">nagiscript run main.ngs
 # Hello from my_project!</code></pre>
 
     <h2>その他のコマンド</h2>
-    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-bash"># チェック（コンパイルのみ、実行しない）
 nagiscript check main.ngs
 
@@ -145,7 +155,7 @@ nagiscript wasm main.ngs -o out
 nagiscript dts main.ngs -o main.d.ts</code></pre>
 
     <h2>プロジェクト設定（project.toml）</h2>
-    <div class="code-header"><span class="code-lang">project.toml</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">project.toml</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-toml">[project]
 name = "my_project"
 version = "0.1.0"
@@ -157,7 +167,7 @@ output = "build/"</code></pre>
 
     <h2>トラブルシューティング</h2>
     <h3>インストール失敗</h3>
-    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-bash"># Cargo のバージョンを確認
 cargo --version  # 1.75 以上が必要
 
@@ -165,7 +175,7 @@ cargo --version  # 1.75 以上が必要
 sudo npm install -g @nagiscript/cli</code></pre>
 
     <h3>ビルドエラー</h3>
-    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-bash"># LLVM がインストールされているか確認
 llc --version
 
@@ -183,5 +193,11 @@ nagiscript check main.ngs 2>&1</code></pre>
 
   <script src="../js/main.js"></script>
   <script src="../js/play-wasm.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.lucide) lucide.createIcons();
+    });
+  </script>
 </body>
 </html>

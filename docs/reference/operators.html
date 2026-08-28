@@ -5,7 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>演算子リファレンス - NagiScript</title>
   <link rel="stylesheet" href="../../css/style.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  <link rel="icon" href="../../assets/logo.png">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
 </head>
 <body>
   <div class="sky-decor" aria-hidden="true">
@@ -15,14 +18,21 @@
     <div class="cloud c4"></div>
   </div>
   <header class="header">
-    <a href="../../index.html" class="header-logo"><span class="logo-text">⚡ NagiScript</span></a>
-    <nav class="header-nav">
+    <a href="../../index.html" class="header-logo"><img src="../../assets/logo.png" alt="NagiScript Logo"><span class="logo-text">NagiScript</span></a>
+    <nav class="header-nav" id="header-nav">
       <a href="../../index.html">ホーム</a>
       <a href="../getting-started.html">ドキュメント</a>
       <a href="../tutorial/basics.html">チュートリアル</a>
-      <a href="types.html">リファレンス</a>
-      <button class="theme-toggle" aria-label="テーマ切替">🌓</button>
+      <a href="../reference/types.html">リファレンス</a>
+      <a href="https://github.com/TatsuyaM2667/nagiscript_lang" class="nav-github">
+        <i data-lucide="github"></i><span>GitHub</span>
+      </a>
+      <button class="theme-toggle" aria-label="テーマ切替">
+        <i data-lucide="moon" class="icon-moon"></i>
+        <i data-lucide="sun" class="icon-sun"></i>
+      </button>
     </nav>
+    <button class="menu-toggle" id="menu-toggle" aria-label="メニュー"><i data-lucide="menu"></i></button>
   </header>
   <div class="sidebar-overlay"></div>
 
@@ -89,7 +99,7 @@
     </table>
 
     <h3>浮動小数点の除算</h3>
-    <div class="code-header"><span class="code-lang">main.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">main.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">val a: f64 = 5.0
 val b: f64 = 3.0
 val result = a / b  // 1.66666...</code></pre>
@@ -131,7 +141,7 @@ val result = a / b  // 1.66666...</code></pre>
       <p>論理演算には <code>&amp;&amp;</code> / <code>||</code> / <code>!</code> を使用します。<code>and</code> / <code>or</code> / <code>not</code> のキーワードは<b>未実装</b>で、<code>true and false</code> のような書き方はコンパイルできません。</p>
     </div>
 
-    <div class="code-header"><span class="code-lang">main.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">main.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">val a = true &amp;&amp; (5 &gt; 3)
 val b = !false
 println(a)
@@ -169,7 +179,7 @@ println(b)</code></pre>
       <p>ポインタは <code>*T</code> 形式、アドレス取得は <code>&amp;&amp;x as *T</code>、参照外しは <code>unsafe { *ptr }</code> を使います。<code>.offset(n)</code> や <code>ptr-&gt;</code>（ポインタ経由のメンバアクセス）は<b>未対応</b>で、<code>*ptr</code> と整数演算で代替してください。</p>
     </div>
 
-    <div class="code-header"><span class="code-lang">main.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">main.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">fn read(ptr: *i32) -&gt; i32 {
     unsafe { return *ptr }
 }
@@ -240,7 +250,7 @@ println(read(p))</code></pre>
       <p>文字列の <code>+</code> 連結は<b>使えません</b>。<code>"Hello" + " World"</code> はコンパイルエラーになります。文字列は <code>print</code> / <code>println</code> でそのまま表示し、複数の値を並べたい場合は個別に <code>println</code> を呼び出してください。</p>
     </div>
 
-    <div class="code-header"><span class="code-lang">main.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">main.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">println("Hello")
 println(" World")</code></pre>
 
@@ -284,5 +294,11 @@ println(" World")</code></pre>
 
   <script src="../../js/main.js"></script>
   <script src="../../js/play-wasm.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.lucide) lucide.createIcons();
+    });
+  </script>
 </body>
 </html>

@@ -9,7 +9,10 @@
             rel="icon"
             href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>"
         />
-    </head>
+    
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+</head>
     <body>
   <div class="sky-decor" aria-hidden="true">
     <div class="cloud c1"></div>
@@ -19,15 +22,22 @@
   </div>
         <header class="header">
             <a href="../../index.html" class="header-logo"
-                ><span class="logo-text">⚡ NagiScript</span></a
+                ><img src="../../assets/logo.png" alt="NagiScript Logo"><span class="logo-text">NagiScript</span></a
             >
-            <nav class="header-nav">
-                <a href="../../index.html">ホーム</a>
-                <a href="../getting-started.html">ドキュメント</a>
-                <a href="../tutorial/basics.html">チュートリアル</a>
-                <a href="types.html">リファレンス</a>
-                <button class="theme-toggle" aria-label="テーマ切替">🌓</button>
-            </nav>
+            <nav class="header-nav" id="header-nav">
+      <a href="../../index.html">ホーム</a>
+      <a href="../getting-started.html">ドキュメント</a>
+      <a href="../tutorial/basics.html">チュートリアル</a>
+      <a href="../reference/types.html">リファレンス</a>
+      <a href="https://github.com/TatsuyaM2667/nagiscript_lang" class="nav-github">
+        <i data-lucide="github"></i><span>GitHub</span>
+      </a>
+      <button class="theme-toggle" aria-label="テーマ切替">
+        <i data-lucide="moon" class="icon-moon"></i>
+        <i data-lucide="sun" class="icon-sun"></i>
+      </button>
+    </nav>
+    <button class="menu-toggle" id="menu-toggle" aria-label="メニュー"><i data-lucide="menu"></i></button>
         </header>
         <div class="sidebar-overlay"></div>
 
@@ -126,7 +136,7 @@
 
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">fn main() {
     println("Hello, World!")
@@ -140,7 +150,7 @@
 
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">fn main() {
     panic("something went wrong")
@@ -157,7 +167,7 @@
 
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">// なお、List は現行ビルドでリンクに失敗する既知バグがあるため、
 // 当面は構造体 + 値渡しでの実装を推奨します
@@ -174,7 +184,7 @@ struct IntList {
 
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">// Rc の .get() の戻り値は要検証のため、当面は構造体 + 値渡しで実装します
 struct Data {
@@ -213,5 +223,11 @@ fn main() {
 
         <script src="../../js/main.js"></script>
   <script src="../../js/play-wasm.js"></script>
-    </body>
+    
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.lucide) lucide.createIcons();
+    });
+  </script>
+</body>
 </html>

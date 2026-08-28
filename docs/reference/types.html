@@ -9,7 +9,10 @@
             rel="icon"
             href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>"
         />
-    </head>
+    
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+</head>
     <body>
   <div class="sky-decor" aria-hidden="true">
     <div class="cloud c1"></div>
@@ -19,15 +22,22 @@
   </div>
         <header class="header">
             <a href="../../index.html" class="header-logo"
-                ><span class="logo-text">⚡ NagiScript</span></a
+                ><img src="../../assets/logo.png" alt="NagiScript Logo"><span class="logo-text">NagiScript</span></a
             >
-            <nav class="header-nav">
-                <a href="../../index.html">ホーム</a>
-                <a href="../getting-started.html">ドキュメント</a>
-                <a href="../tutorial/basics.html">チュートリアル</a>
-                <a href="types.html">リファレンス</a>
-                <button class="theme-toggle" aria-label="テーマ切替">🌓</button>
-            </nav>
+            <nav class="header-nav" id="header-nav">
+      <a href="../../index.html">ホーム</a>
+      <a href="../getting-started.html">ドキュメント</a>
+      <a href="../tutorial/basics.html">チュートリアル</a>
+      <a href="../reference/types.html">リファレンス</a>
+      <a href="https://github.com/TatsuyaM2667/nagiscript_lang" class="nav-github">
+        <i data-lucide="github"></i><span>GitHub</span>
+      </a>
+      <button class="theme-toggle" aria-label="テーマ切替">
+        <i data-lucide="moon" class="icon-moon"></i>
+        <i data-lucide="sun" class="icon-sun"></i>
+      </button>
+    </nav>
+    <button class="menu-toggle" id="menu-toggle" aria-label="メニュー"><i data-lucide="menu"></i></button>
         </header>
         <div class="sidebar-overlay"></div>
 
@@ -242,7 +252,7 @@
             <div class="callout warn"><span class="ct">現行仕様（v0.2.0）</span><p><code>str</code> と書くと <code>unknown type `str`</code> エラーになるため、<code>string</code> を使ってください。単型 <code>void</code> は存在しません。戻り値がない関数は <code>-&gt;</code> を書かず、戻り値を返す場合は <code>fn name(...) -&gt; 型</code> の <code>-&gt;</code> 構文を使い、ブロック末尾の暗黙 return ではなく必ず <code>return</code> を明示してください。</p></div>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">fn greet(name: string) -&gt; string {
     return name
@@ -261,7 +271,7 @@ fn main() {
             <h3>構造体 (Struct)</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">struct Point {
     x: f32
@@ -281,7 +291,7 @@ println(p.x)</code></pre>
             <h3>列挙型 (Enum)</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">enum Status { Ok NotFound }
 
@@ -302,7 +312,7 @@ fn main() {
             <div class="callout roadmap"><span class="ct">ロードマップ（未実装）</span><p><code>(i32, str)</code> のようなタプルや <code>val (a, b) = ...</code> のデストラクチャリングは未実装 / 未検証です。複数の値をまとめる場合は構造体を使ってください。</p></div>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">struct Pair {
     first: i32
@@ -318,7 +328,7 @@ println(p.second)</code></pre>
             <div class="callout roadmap"><span class="ct">ロードマップ（未実装）</span><p><code>Vec2&lt;T&gt;</code> のような型パラメータ付き構造体や <code>Gen&lt;T&gt;</code> は未実装 / 未検証です。型パラメータが使えるのは <code>List&lt;i32&gt;</code> など限定的です。通常は型パラメータなしの構造体を使い、具象型で定義してください。</p></div>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">struct Vec2 {
     x: f32
@@ -339,7 +349,7 @@ println(v.y)</code></pre>
             <div class="callout roadmap"><span class="ct">ロードマップ（未実装）</span><p>組み込みの <code>Option&lt;T&gt;</code> / <code>Result&lt;T, E&gt;</code> は存在しません。<code>?</code> 演算子も未実装です。成否を表す型は <code>enum</code> で自作し、<code>match</code> で分岐してください。</p></div>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">enum Status { Ok NotFound }
 
@@ -363,7 +373,7 @@ fn main() {
             <div class="callout warn"><span class="ct">現行仕様（v0.2.0）</span><p><code>List&lt;T&gt;</code> は <code>List.new()</code> / <code>push</code> / <code>len</code> / <code>get</code> / <code>set</code> の API が存在しますが、LLVM コード生成で <code>zext i64 to i64</code> エラーが発生してリンクに失敗する既知バグがあります。また <code>Rc&lt;T&gt;</code> は使用可能な型の一つですが、<code>Rc.new(値)</code> / <code>.get()</code> の <code>.get()</code> 戻り値は要検証です。当面は構造体 + 値渡しを推奨します。</p></div>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">struct Item {
     value: i32
@@ -387,7 +397,7 @@ fn main() {
             <h3>明示的なキャスト</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">val x: i32 = 42
 val y: f64 = x as f64  // 明示的な型変換
@@ -402,7 +412,7 @@ val n: i64 = x as i64</code></pre>
             <h3>基本的なポインタ</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">fn read(ptr: *i32) -&gt; i32 {
     unsafe { return *ptr }
@@ -417,7 +427,7 @@ fn main() {
             <h3>配列ポインタ</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">var arr: [i32; 3] = [1, 2, 3]
 val ptr: *i32 = &amp;&amp;arr[0]
@@ -431,7 +441,7 @@ unsafe {
             <div class="callout roadmap"><span class="ct">ロードマップ（未実装）</span><p>関数型フィールド（<code>handler: fn(Request) Response</code> 等）や高階関数は現行では不安定なため非推奨です。関数ポインタの代わりに、<code>id</code>（<code>i32</code>）フィールドと <code>if</code> 分岐で処理を切り替えてください。</p></div>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">struct Handler {
     id: i32
@@ -461,7 +471,7 @@ fn main() {
             <h3>コンパイル時チェック</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">val x: i32 = 42
 val y: string = "hello"
@@ -488,5 +498,11 @@ val y: string = "hello"
 
         <script src="../../js/main.js"></script>
   <script src="../../js/play-wasm.js"></script>
-    </body>
+    
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.lucide) lucide.createIcons();
+    });
+  </script>
+</body>
 </html>

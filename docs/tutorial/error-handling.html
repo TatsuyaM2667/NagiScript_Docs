@@ -5,7 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>エラーハンドリング - NagiScript</title>
   <link rel="stylesheet" href="../../css/style.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  <link rel="icon" href="../../assets/logo.png">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
 </head>
 <body>
   <div class="sky-decor" aria-hidden="true">
@@ -15,14 +18,21 @@
     <div class="cloud c4"></div>
   </div>
   <header class="header">
-    <a href="../../index.html" class="header-logo"><span class="logo-text">⚡ NagiScript</span></a>
-    <nav class="header-nav">
+    <a href="../../index.html" class="header-logo"><img src="../../assets/logo.png" alt="NagiScript Logo"><span class="logo-text">NagiScript</span></a>
+    <nav class="header-nav" id="header-nav">
       <a href="../../index.html">ホーム</a>
       <a href="../getting-started.html">ドキュメント</a>
-      <a href="basics.html">チュートリアル</a>
+      <a href="../tutorial/basics.html">チュートリアル</a>
       <a href="../reference/types.html">リファレンス</a>
-      <button class="theme-toggle" aria-label="テーマ切替">🌓</button>
+      <a href="https://github.com/TatsuyaM2667/nagiscript_lang" class="nav-github">
+        <i data-lucide="github"></i><span>GitHub</span>
+      </a>
+      <button class="theme-toggle" aria-label="テーマ切替">
+        <i data-lucide="moon" class="icon-moon"></i>
+        <i data-lucide="sun" class="icon-sun"></i>
+      </button>
     </nav>
+    <button class="menu-toggle" id="menu-toggle" aria-label="メニュー"><i data-lucide="menu"></i></button>
   </header>
   <div class="sidebar-overlay"></div>
 
@@ -78,7 +88,7 @@
 
     <h2>Result を enum で自作する</h2>
     <p>まず <code>enum</code> で成功・失敗の状態を定義します。値の生成は <code>Result.Ok()</code> のように<b>括弧</b>が必要です。</p>
-    <div class="code-header"><span class="code-lang">result.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">result.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">enum Result {
     Ok
     NotFound
@@ -102,7 +112,7 @@ fn main() {
 
     <h3>match のパターン</h3>
     <p><code>match</code> のパターンには<b>裸のバリアント名</b>（<code>Ok</code> / <code>NotFound</code>）を使います。どのバリアントにも一致するワイルドカードは <code>_</code> です。</p>
-    <div class="code-header"><span class="code-lang">strict.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">strict.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">enum Result {
     Ok
     NotFound
@@ -127,7 +137,7 @@ fn main() {
 
     <h2>エラー回避は if / else 分岐</h2>
     <p><code>?</code> 演算子は<b>未実装</b>なので、エラーの判定・回避は <b>if / else</b> と <b>明示的な <code>return</code></b> で行います。</p>
-    <div class="code-header"><span class="code-lang">guard.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">guard.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">fn divide(a: i32, b: i32) -&gt; i32 {
     if b == 0 {
         println("zero division")
@@ -141,7 +151,7 @@ fn main() {
     println(x)
 }</code></pre>
 
-    <div class="code-header"><span class="code-lang">status.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">status.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">enum DivResult {
     Ok
     Error
@@ -166,7 +176,7 @@ fn main() {
 
     <h2>明示 return の規約</h2>
     <p>ブロック末尾の暗黙 return（式ブロック）は<b>非対応</b>です。戻り値のある関数は必ず <code>return</code> を書き、戻り値を返さない関数は <code>-&gt;</code> を付けません。</p>
-    <div class="code-header"><span class="code-lang">return.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">return.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">fn read_config(name: string) -&gt; string {
     if name == "main" {
         return "module:main"
@@ -182,7 +192,7 @@ fn main() {
 
     <h2>panic</h2>
     <p>回復不能なエラーには組み込みの <code>panic</code> を使います。引数は 1 個で、プログラムを停止します。</p>
-    <div class="code-header"><span class="code-lang">panic.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">panic.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">fn divide_or_panic(a: i32, b: i32) -&gt; i32 {
     if b == 0 {
         panic("Division by zero")
@@ -221,5 +231,11 @@ match でバリアントを分岐
 
   <script src="../../js/main.js"></script>
   <script src="../../js/play-wasm.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.lucide) lucide.createIcons();
+    });
+  </script>
 </body>
 </html>

@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>組み込み・マイコン開発 - NagiScript</title>
   <link rel="stylesheet" href="../../css/style.css">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
 </head>
 <body>
   <div class="sky-decor" aria-hidden="true">
@@ -14,14 +17,21 @@
     <div class="cloud c4"></div>
   </div>
   <header class="header">
-    <a href="../../index.html" class="header-logo"><span class="logo-text">⚡ NagiScript</span></a>
-    <nav class="header-nav">
+    <a href="../../index.html" class="header-logo"><img src="../../assets/logo.png" alt="NagiScript Logo"><span class="logo-text">NagiScript</span></a>
+    <nav class="header-nav" id="header-nav">
       <a href="../../index.html">ホーム</a>
       <a href="../getting-started.html">ドキュメント</a>
-      <a href="basics.html">チュートリアル</a>
+      <a href="../tutorial/basics.html">チュートリアル</a>
       <a href="../reference/types.html">リファレンス</a>
-      <button class="theme-toggle" aria-label="テーマ切替">🌓</button>
+      <a href="https://github.com/TatsuyaM2667/nagiscript_lang" class="nav-github">
+        <i data-lucide="github"></i><span>GitHub</span>
+      </a>
+      <button class="theme-toggle" aria-label="テーマ切替">
+        <i data-lucide="moon" class="icon-moon"></i>
+        <i data-lucide="sun" class="icon-sun"></i>
+      </button>
     </nav>
+    <button class="menu-toggle" id="menu-toggle" aria-label="メニュー"><i data-lucide="menu"></i></button>
   </header>
   <div class="sidebar-overlay"></div>
 
@@ -106,7 +116,7 @@
 
     <h3>C言語との連携（基本形）</h3>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">// ハードウェア定義（C言語で記述）→ 現行では extern "C" fn で宣言
 extern "C" fn gpio_init(pin: i32)
 extern "C" fn gpio_set(pin: i32, state: bool)
@@ -138,7 +148,7 @@ fn main() {
 
     <h3>ピン定義</h3>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">extern "C" fn gpio_init(pin: i32)
 extern "C" fn gpio_set(pin: i32, state: bool)
 extern "C" fn gpio_read(pin: i32) -&gt; bool
@@ -166,7 +176,7 @@ fn pin_read(pin: i32) -&gt; bool {
 
     <h3>温度センサーの例</h3>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">extern "C" fn adc_read(channel: i32) -&gt; i32
 extern "C" fn delay(ms: i32)
 
@@ -190,7 +200,7 @@ fn main() {
 
     <h2>UART 通信</h2>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">extern "C" fn uart_init(baud_rate: i32)
 extern "C" fn uart_send(data: *u8, len: i32)
 extern "C" fn uart_receive(buffer: *u8, len: i32) -&gt; i32
@@ -208,7 +218,7 @@ fn receive_bytes(buffer: *u8, buffer_size: i32) -&gt; i32 {
 
     <h2>I2C デバイス</h2>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">extern "C" fn i2c_init(sda: i32, scl: i32, freq: i32)
 extern "C" fn i2c_write(addr: u8, data: *u8, len: i32)
 extern "C" fn i2c_read(addr: u8, buffer: *u8, len: i32)
@@ -228,7 +238,7 @@ impl I2cDevice {
 
     <h2>SPI 通信</h2>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">extern "C" fn spi_init(mosi: i32, miso: i32, sck: i32, cs: i32)
 extern "C" fn spi_transfer(data: u8) -&gt; u8
 
@@ -246,7 +256,7 @@ fn spi_write(buffer: *u8, len: i32) {
 
     <h2>割り込み</h2>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">extern "C" fn interrupt_enable(irq: i32, handler_id: i32)
 extern "C" fn interrupt_disable(irq: i32)
 extern "C" fn delay(ms: i32)
@@ -272,7 +282,7 @@ fn main() {
 
     <h2>パワーマネジメント</h2>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">extern "C" fn sleep_enter()
 extern "C" fn sleep_exit()
 extern "C" fn deep_sleep(ms: i32)
@@ -293,7 +303,7 @@ fn power_save(seconds: i32) {
 
     <div class="callout warn"><span class="ct">ロードマップ</span><p>この例はハードウェア制御（GPIO / ADC / UART）を前提としており、現行では利用できません。文法のみ現行構文に合わせてあります。<code>loop</code> は現行では使えないため <code>while true</code> に、文字列連結 <code>+</code> は使わない形に直しています。</p></div>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">extern "C" fn gpio_init(pin: i32)
 extern "C" fn gpio_set(pin: i32, state: bool)
 extern "C" fn adc_read(channel: i32) -&gt; i32
@@ -350,7 +360,7 @@ fn main() {
 
     <div class="callout warn"><span class="ct">ロードマップ</span><p>クロスコンパイル（組み込み向けターゲット）は現行では未対応です。下記は将来仕様です。</p></div>
 
-    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-bash"># アーム Cortex-M の場合（将来仕様）
 nagiscript build main.ngs --target arm-cortex-m4 -o firmware.bin
 
@@ -379,5 +389,11 @@ openocd -f interface/stlink.cfg -f target/stm32f4x.cfg \
 
   <script src="../../js/main.js"></script>
   <script src="../../js/play-wasm.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.lucide) lucide.createIcons();
+    });
+  </script>
 </body>
 </html>

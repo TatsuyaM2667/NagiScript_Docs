@@ -5,7 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WebAssembly 対応 - NagiScript</title>
   <link rel="stylesheet" href="../../css/style.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  <link rel="icon" href="../../assets/logo.png">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
 </head>
 <body>
   <div class="sky-decor" aria-hidden="true">
@@ -15,14 +18,21 @@
     <div class="cloud c4"></div>
   </div>
   <header class="header">
-    <a href="../../index.html" class="header-logo"><span class="logo-text">⚡ NagiScript</span></a>
-    <nav class="header-nav">
+    <a href="../../index.html" class="header-logo"><img src="../../assets/logo.png" alt="NagiScript Logo"><span class="logo-text">NagiScript</span></a>
+    <nav class="header-nav" id="header-nav">
       <a href="../../index.html">ホーム</a>
       <a href="../getting-started.html">ドキュメント</a>
-      <a href="basics.html">チュートリアル</a>
+      <a href="../tutorial/basics.html">チュートリアル</a>
       <a href="../reference/types.html">リファレンス</a>
-      <button class="theme-toggle" aria-label="テーマ切替">🌓</button>
+      <a href="https://github.com/TatsuyaM2667/nagiscript_lang" class="nav-github">
+        <i data-lucide="github"></i><span>GitHub</span>
+      </a>
+      <button class="theme-toggle" aria-label="テーマ切替">
+        <i data-lucide="moon" class="icon-moon"></i>
+        <i data-lucide="sun" class="icon-sun"></i>
+      </button>
     </nav>
+    <button class="menu-toggle" id="menu-toggle" aria-label="メニュー"><i data-lucide="menu"></i></button>
   </header>
   <div class="sidebar-overlay"></div>
 
@@ -76,7 +86,7 @@
       <span class="ct">現行仕様（v0.2.0）</span>
       <p>Wasm 出力のコマンドは <code>nagiscript wasm main.ngs [-o PATH]</code> です（<code>-o PATH</code> は省略可能）。出力は <code>.wat</code>（可能であれば <code>.wasm</code> + <code>.d.ts</code>）です。</p>
     </div>
-    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-bash"># 実行例: main.ngs を Wasm へ
 nagiscript wasm main.ngs -o output.wasm</code></pre>
     <p>生成されるファイル：</p>
@@ -89,7 +99,7 @@ nagiscript wasm main.ngs -o output.wasm</code></pre>
 
     <h2>エクスポートする関数</h2>
     <p>Wasm / C へ公開する関数は <code>export "C" fn</code> で宣言し、<code>-&gt; 型</code> と<b>明示的な <code>return</code></b> を使います（<code>export fn ...</code> は誤りです）。</p>
-    <div class="code-header"><span class="code-lang">main.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">main.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">export "C" fn add(a: i32, b: i32) -&gt; i32 {
     return a + b
 }
@@ -102,7 +112,7 @@ export "C" fn process(n: i32) -&gt; i32 {
 
     <h2>ブラウザでの利用</h2>
     <h3>HTML ファイル</h3>
-    <div class="code-header"><span class="code-lang">index.html</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">index.html</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-html">&lt;!DOCTYPE html&gt;
 &lt;html&gt;
 &lt;head&gt;
@@ -138,7 +148,7 @@ export "C" fn process(n: i32) -&gt; i32 {
       <p>JSX（<code>.ngsx</code>）用のランタイムには props 基盤が存在しますが、<b>ドキュメント化は保留</b>です。以下の React 側サンプル（TypeScript の JSX）は参考用です。</p>
     </div>
     <h3>コンポーネント例</h3>
-    <div class="code-header"><span class="code-lang">WasmComponent.tsx</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">WasmComponent.tsx</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ts">import React, { useEffect, useState } from 'react';
 
 function WasmComponent() {
@@ -170,7 +180,7 @@ export default WasmComponent;</code></pre>
 
     <h2>型定義ファイル (.d.ts)</h2>
     <p>コンパイル時に自動生成される型定義：</p>
-    <div class="code-header"><span class="code-lang">output.d.ts</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">output.d.ts</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ts">// output.d.ts
 export function add(a: number, b: number): number;
 export function process(input: string): string;</code></pre>
@@ -179,7 +189,7 @@ export function process(input: string): string;</code></pre>
 
     <h2>メモリ操作</h2>
     <h3>JS 側からのメモリアクセス</h3>
-    <div class="code-header"><span class="code-lang">memory.js</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">memory.js</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-js">const memory = new WebAssembly.Memory({ initial: 256 });
 const { instance } = await WebAssembly.instantiate(bytes, {
     env: { memory }
@@ -202,7 +212,7 @@ instance.exports.process_string(ptr, str.length);</code></pre>
       <p>プロジェクト設定ファイル（<code>project.toml</code>）によるビルド設定は<b>将来仕様</b>です。現行は <code>nagiscript wasm main.ngs [-o PATH]</code> の CLI で出力先を指定します。</p>
     </div>
     <h3>project.toml</h3>
-    <div class="code-header"><span class="code-lang">project.toml</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">project.toml</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-toml">[build]
 target = "wasm"
 output = "dist/"
@@ -236,5 +246,11 @@ memory_maximum = 512</code></pre>
 
   <script src="../../js/main.js"></script>
   <script src="../../js/play-wasm.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.lucide) lucide.createIcons();
+    });
+  </script>
 </body>
 </html>

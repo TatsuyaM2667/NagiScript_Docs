@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>C言語との相互運用 - NagiScript</title>
   <link rel="stylesheet" href="../../css/style.css">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
 </head>
 <body>
   <div class="sky-decor" aria-hidden="true">
@@ -14,14 +17,21 @@
     <div class="cloud c4"></div>
   </div>
   <header class="header">
-    <a href="../../index.html" class="header-logo"><span class="logo-text">⚡ NagiScript</span></a>
-    <nav class="header-nav">
+    <a href="../../index.html" class="header-logo"><img src="../../assets/logo.png" alt="NagiScript Logo"><span class="logo-text">NagiScript</span></a>
+    <nav class="header-nav" id="header-nav">
       <a href="../../index.html">ホーム</a>
       <a href="../getting-started.html">ドキュメント</a>
-      <a href="basics.html">チュートリアル</a>
+      <a href="../tutorial/basics.html">チュートリアル</a>
       <a href="../reference/types.html">リファレンス</a>
-      <button class="theme-toggle" aria-label="テーマ切替">🌓</button>
+      <a href="https://github.com/TatsuyaM2667/nagiscript_lang" class="nav-github">
+        <i data-lucide="github"></i><span>GitHub</span>
+      </a>
+      <button class="theme-toggle" aria-label="テーマ切替">
+        <i data-lucide="moon" class="icon-moon"></i>
+        <i data-lucide="sun" class="icon-sun"></i>
+      </button>
     </nav>
+    <button class="menu-toggle" id="menu-toggle" aria-label="メニュー"><i data-lucide="menu"></i></button>
   </header>
   <div class="sidebar-overlay"></div>
 
@@ -76,14 +86,14 @@
 
     <h3>extern "C" fn 宣言</h3>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">// C 関数の宣言（現行の正しい形式は extern "C" fn）
 extern "C" fn strlen(s: *u8) -&gt; i32
 extern "C" fn putchar(c: i32) -&gt; i32</code></pre>
 
     <h3>使用例</h3>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">extern "C" fn strlen(s: *u8) -&gt; i32
 
 fn main() {
@@ -98,7 +108,7 @@ fn main() {
 
     <h3>math.h</h3>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">extern "C" fn sqrt(x: f64) -&gt; f64
 extern "C" fn pow(base: f64, exp: f64) -&gt; f64
 extern "C" fn sin(x: f64) -&gt; f64
@@ -112,7 +122,7 @@ fn main() {
 
     <h3>stdio.h</h3>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">// 現行では FILE 型は *u8 で扱う（構造体定義は実装依存）
 extern "C" fn fopen(path: *u8, mode: *u8) -&gt; *u8
 extern "C" fn fclose(stream: *u8) -&gt; i32
@@ -129,7 +139,7 @@ fn main() {
 
     <h3>構造体の定義</h3>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">// C 側の構造体
 // struct Point { double x; double y; };
 
@@ -155,7 +165,7 @@ fn main() {
 
     <h3>エクスポート関数</h3>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">// NagiScript 関数を C/Wasm から呼び出せるようにエクスポート（export "C" fn 形式が正）
 export "C" fn add(a: i32, b: i32) -&gt; i32 {
     return a + b
@@ -167,7 +177,7 @@ export "C" fn double(x: i32) -&gt; i32 {
 
     <h3>C 側の宣言</h3>
 
-    <div class="code-header"><span class="code-lang">header.h</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">header.h</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-c">// header.h
 extern int add(int a, int b);
 extern int double_(int x);</code></pre>
@@ -178,7 +188,7 @@ extern int double_(int x);</code></pre>
 
     <h3>アドレス取得</h3>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">fn main() {
     var x = 42
     val ptr = &amp;&amp;x as *i32  // アドレスを取得
@@ -191,7 +201,7 @@ extern int double_(int x);</code></pre>
 
     <h3>ポインタ演算</h3>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">fn sum_array(arr: *i32, len: i32) -&gt; i32 {
     var total = 0
     var i = 0
@@ -217,7 +227,7 @@ fn main() {
 
     <div class="callout note"><span class="ct">現行仕様（v0.2.0）</span><p><code>dlopen</code> / <code>dlsym</code> 等を <code>extern "C" fn</code> で宣言すれば利用できます。空ポインタは <code>*u8</code>（または <code>*i32</code>）で扱います。</p></div>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">extern "C" fn dlopen(path: *u8, flags: i32) -&gt; *u8
 extern "C" fn dlsym(handle: *u8, symbol: *u8) -&gt; *u8
 extern "C" fn dlclose(handle: *u8) -&gt; i32
@@ -236,7 +246,7 @@ fn get_function(handle: *u8, name: *u8) -&gt; *u8 {
 
     <div class="callout warn"><span class="ct">ロードマップ</span><p>元の例は関数型フィールド / Result 型 / 文字列連結 / <code>io.println</code> を利用しており、現行ではそのまま動きません。ここでは現行構文で書ける簡略版を示します（<code>Result</code> 型は組み込みでは存在しないため、この例では使っていません）。</p></div>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">// libcurl のラッパー（簡略版・現行構文）
 extern "C" fn curl_easy_init() -&gt; *u8
 extern "C" fn curl_easy_cleanup(curl: *u8)
@@ -283,5 +293,11 @@ fn main() {
 
   <script src="../../js/main.js"></script>
   <script src="../../js/play-wasm.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.lucide) lucide.createIcons();
+    });
+  </script>
 </body>
 </html>

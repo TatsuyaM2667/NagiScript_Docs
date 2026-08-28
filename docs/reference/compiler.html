@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>コンパイラ内部構造 - NagiScript</title>
   <link rel="stylesheet" href="../../css/style.css">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
 </head>
 <body>
   <div class="sky-decor" aria-hidden="true">
@@ -14,14 +17,21 @@
     <div class="cloud c4"></div>
   </div>
   <header class="header">
-    <a href="../../index.html" class="header-logo"><span class="logo-text">⚡ NagiScript</span></a>
-    <nav class="header-nav">
+    <a href="../../index.html" class="header-logo"><img src="../../assets/logo.png" alt="NagiScript Logo"><span class="logo-text">NagiScript</span></a>
+    <nav class="header-nav" id="header-nav">
       <a href="../../index.html">ホーム</a>
       <a href="../getting-started.html">ドキュメント</a>
       <a href="../tutorial/basics.html">チュートリアル</a>
-      <a href="types.html">リファレンス</a>
-      <button class="theme-toggle" aria-label="テーマ切替">🌓</button>
+      <a href="../reference/types.html">リファレンス</a>
+      <a href="https://github.com/TatsuyaM2667/nagiscript_lang" class="nav-github">
+        <i data-lucide="github"></i><span>GitHub</span>
+      </a>
+      <button class="theme-toggle" aria-label="テーマ切替">
+        <i data-lucide="moon" class="icon-moon"></i>
+        <i data-lucide="sun" class="icon-sun"></i>
+      </button>
     </nav>
+    <button class="menu-toggle" id="menu-toggle" aria-label="メニュー"><i data-lucide="menu"></i></button>
   </header>
   <div class="sidebar-overlay"></div>
 
@@ -71,7 +81,7 @@
     <hr>
 
     <h2>アーキテクチャ</h2>
-    <div class="code-header"><span class="code-lang">plaintext</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">plaintext</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code>┌─────────────────────────────────────────────────────┐
 │                    Source Code                       │
 │                  (main.ngs)                          │
@@ -125,7 +135,7 @@
     </ol>
 
     <h3>トークンタイプ</h3>
-    <div class="code-header"><span class="code-lang">rust</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">rust</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-c">enum Token {
     // キーワード
     Fn, Val, Var, Struct, Enum, If, Else, For, While, Match,
@@ -163,7 +173,7 @@
     </ol>
 
     <h3>AST ノード</h3>
-    <div class="code-header"><span class="code-lang">rust</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">rust</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-c">enum Expr {
     IntLit(i64),
     FloatLit(f64),
@@ -200,7 +210,7 @@ enum Stmt {
     <div class="callout warn"><span class="ct">現行仕様（v0.2.0）</span><p>名前解決は同一ファイル内の識別子解決のみです。<code>import</code> によるモジュール解決は未実装のため、現行では複数のファイルに分割できず、1 つの <code>main.ngs</code> で完結させます。</p></div>
 
     <h3>型チェック</h3>
-    <div class="code-header"><span class="code-lang">rust</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">rust</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-c">fn check_expr(expr: &amp;Expr, env: &amp;mut Env) -&gt; Result&lt;Type, Error&gt; {
     match expr {
         Expr::IntLit(_) =&gt; Ok(Type::I32),
@@ -220,7 +230,7 @@ enum Stmt {
 }</code></pre>
 
     <h3>借用チェック</h3>
-    <div class="code-header"><span class="code-lang">rust</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">rust</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-c">fn check_borrow(expr: &amp;Expr, env: &amp;mut Env) -&gt; Result&lt;(), Error&gt; {
     // 不変借用のチェック
     // 可変借用のチェック
@@ -240,7 +250,7 @@ enum Stmt {
     </ol>
 
     <h3>単型化の例</h3>
-    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">// 元のコード
 fn add&lt;T: Numeric&gt;(a: T, b: T) T {
     a + b
@@ -249,7 +259,7 @@ fn add&lt;T: Numeric&gt;(a: T, b: T) T {
 val x = add(10, 20)      // T = i32
 val y = add(1.5, 2.5)    // T = f64</code></pre>
 
-    <div class="code-header"><span class="code-lang">rust</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">rust</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-c">// 展開後
 fn add_i32(a: i32, b: i32) i32 {
     a + b
@@ -271,7 +281,7 @@ fn add_f64(a: f64, b: f64) f64 {
     </ol>
 
     <h3>LLVM IR 生成</h3>
-    <div class="code-header"><span class="code-lang">rust</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">rust</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-c">fn codegen_expr(expr: &amp;Expr, builder: &amp;Builder) -&gt; IntValue {
     match expr {
         Expr::IntLit(n) =&gt; builder.const_int(*n),
@@ -303,7 +313,7 @@ fn add_f64(a: f64, b: f64) f64 {
     </ol>
 
     <h3>WAT 生成</h3>
-    <div class="code-header"><span class="code-lang">wat</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">wat</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code>(module
   (func $add (param i32 i32) (result i32)
     local.get 0
@@ -313,7 +323,7 @@ fn add_f64(a: f64, b: f64) f64 {
   (export "add" (func $add))
 )</code></pre>
     <div class="callout warn"><span class="ct">現行仕様（v0.2.0）</span><p>Wasm 出力は <code>nagiscript wasm main.ngs [-o PATH]</code> で行います（<code>.wat</code>、可能なら <code>.wasm</code> + 型定義ファイル <code>.d.ts</code>）。Wasm / C へのエクスポートは <code>export "C" fn</code> 形式が正しい書き方です（<code>export fn</code> とは書けません）。</p></div>
-      <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
+      <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
       <pre><code class="lang-ngs">export "C" fn add(a: i32, b: i32) -&gt; i32 {
     return a + b
 }</code></pre>
@@ -322,7 +332,7 @@ fn add_f64(a: f64, b: f64) f64 {
 
     <h2>エラーハンドリング</h2>
     <h3>エラータイプ</h3>
-    <div class="code-header"><span class="code-lang">rust</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">rust</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-c">enum Error {
     LexError { line: usize, col: usize, msg: String },
     ParseError { line: usize, col: usize, msg: String },
@@ -333,7 +343,7 @@ fn add_f64(a: f64, b: f64) f64 {
 }</code></pre>
 
     <h3>エラーメッセージの生成</h3>
-    <div class="code-header"><span class="code-lang">plaintext</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">plaintext</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code>Error[E001]: Type mismatch
   --&gt; main.ngs:5:10
    |
@@ -355,7 +365,7 @@ fn add_f64(a: f64, b: f64) f64 {
 
     <h3>コンパイル時の最適化レベル</h3>
     <div class="callout warn"><span class="ct">現行仕様（v0.2.0）</span><p>現行 CLI の出力コマンドは次のとおりです。<code>--opt</code> 等の最適化レベル指定は現行では提供されません。</p></div>
-    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-bash">nagiscript wasm main.ngs          # .wat を出力
 nagiscript wasm main.ngs -o out   # out.wat / out.wasm + out.d.ts を出力</code></pre>
 
@@ -388,5 +398,11 @@ nagiscript wasm main.ngs -o out   # out.wat / out.wasm + out.d.ts を出力</cod
 
   <script src="../../js/main.js"></script>
   <script src="../../js/play-wasm.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.lucide) lucide.createIcons();
+    });
+  </script>
 </body>
 </html>

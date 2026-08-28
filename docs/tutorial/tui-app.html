@@ -6,7 +6,10 @@
   <title>TUI アプリの作り方 - NagiScript</title>
   <meta name="description" content="NagiScript でターミナル UI（TUI）アプリを作るチュートリアル。ANSI エスケープで画面を制御し、ネイティブバイナリとして配布する">
   <link rel="stylesheet" href="../../css/style.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  <link rel="icon" href="../../assets/logo.png">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
 </head>
 <body>
   <div class="sky-decor" aria-hidden="true">
@@ -16,14 +19,21 @@
     <div class="cloud c4"></div>
   </div>
   <header class="header">
-    <a href="../../index.html" class="header-logo"><span class="logo-text">⚡ NagiScript</span></a>
-    <nav class="header-nav">
+    <a href="../../index.html" class="header-logo"><img src="../../assets/logo.png" alt="NagiScript Logo"><span class="logo-text">NagiScript</span></a>
+    <nav class="header-nav" id="header-nav">
       <a href="../../index.html">ホーム</a>
       <a href="../getting-started.html">ドキュメント</a>
-      <a href="basics.html">チュートリアル</a>
+      <a href="../tutorial/basics.html">チュートリアル</a>
       <a href="../reference/types.html">リファレンス</a>
-      <button class="theme-toggle" aria-label="テーマ切替">🌓</button>
+      <a href="https://github.com/TatsuyaM2667/nagiscript_lang" class="nav-github">
+        <i data-lucide="github"></i><span>GitHub</span>
+      </a>
+      <button class="theme-toggle" aria-label="テーマ切替">
+        <i data-lucide="moon" class="icon-moon"></i>
+        <i data-lucide="sun" class="icon-sun"></i>
+      </button>
     </nav>
+    <button class="menu-toggle" id="menu-toggle" aria-label="メニュー"><i data-lucide="menu"></i></button>
   </header>
   <div class="sidebar-overlay"></div>
 
@@ -75,7 +85,7 @@
     <h2>TUI の基本構造</h2>
     <p>TUI アプリの骨組みは「描画 → 入力待ち → 状態更新 → 再描画」のループです。NagiScript ではこのループを <code>while</code> で書き、画面更新は ANSI エスケープシーケンスの <code>print</code> 出力で行います。</p>
     <div class="callout note"><span class="ct">現行仕様（v0.2.0)</span><p>文字列の <code>+</code> 連結や数値の文字列化（<code>str()</code>）は<b>未実装</b>です。ANSI シーケンスは <code>"\x1b["</code> のような文字列リテラルを <code>print(...)</code> で出力し、数値は <code>println(n)</code> でそのまま表示します。<code>const</code> も存在しないため、定数は <code>val</code> を使います。</p></div>
-    <div class="code-header"><span class="code-lang">loop.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">loop.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">fn main() {
     var frame = 0
     print("\x1b[?25l")     // カーソル非表示
@@ -108,7 +118,7 @@
       </tbody>
     </table>
 
-    <div class="code-header"><span class="code-lang">progress.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">progress.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">fn main() {
     var i = 0
     while i &lt;= 100 {
@@ -136,7 +146,7 @@
 
     <h2>キーボード入力を受け取る</h2>
     <p>ユーザーがキーを押した瞬間に反応させるには、端末を raw モードにする必要があります。これは C 標準ライブラリの <code>termios</code> を <code>extern</code> で呼び出すと実現できます。C との相互運用の詳細は <a href="cinterop.html">C言語との相互運用</a> を参照してください。</p>
-    <div class="code-header"><span class="code-lang">rawmode.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">rawmode.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">// termios を extern "C" で宣言（libc にリンク）
 extern "C" fn tcgetattr(fd: i32, termp: *u8) -&gt; i32
 extern "C" fn tcsetattr(fd: i32, actions: i32, termp: *u8) -&gt; i32
@@ -158,7 +168,7 @@ fn read_key() -&gt; i32 {
     <p>シンプルな対話アプリであれば、raw モードを使わず「1行の入力で Enter 確定」でも十分動きます。</p>
     <h3>1行入力で動くバージョン</h3>
     <div class="callout note"><span class="ct">現行仕様（v0.2.0)</span><p>行組み立てには文字列の <code>+</code> 連結が必要なため、現行では <code>getchar()</code> で押されたキーの<i>コード値</i>をそのまま表示するバージョンを示します。Enter（10 か 13）で終了します。</p></div>
-    <div class="code-header"><span class="code-lang">input.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">input.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">extern "C" fn getchar() -&gt; i32
 
 fn read_key() -&gt; i32 {
@@ -183,7 +193,7 @@ fn main() {
 
     <h2>タスクマネージャー TUI を作る</h2>
     <div class="callout note"><span class="ct">現行仕様（v0.2.0)</span><p><code>List&lt;T&gt;</code> は LLVM リンクに失敗する既知バグ、<code>Rc</code> は <code>.get()</code> の戻り値が不確実、<code>std:fs</code> / <code>Result</code> 型は未実装です。そのため実用的な「タスクリスト管理」アプリは固定配列 <code>[Task; 16]</code> + 件数カウンターで状態を持ち、保存・読み込みは行わないメモリ内版として示します。</p></div>
-    <div class="code-header"><span class="code-lang">tasks.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">tasks.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">extern "C" fn getchar() -&gt; i32
 
 struct Task {
@@ -246,7 +256,7 @@ fn read_key() -&gt; i32 {
     <hr>
 
     <h2>ビルドと実行</h2>
-    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-bash"># ネイティブバイナリにコンパイル（termios は libc にリンク）
 nagiscript build tasks.ngs -o task-manager
 
@@ -280,5 +290,11 @@ nagiscript build tasks.ngs -o task-manager
 
   <script src="../../js/main.js"></script>
   <script src="../../js/play-wasm.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.lucide) lucide.createIcons();
+    });
+  </script>
 </body>
 </html>

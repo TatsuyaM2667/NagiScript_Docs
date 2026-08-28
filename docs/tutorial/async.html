@@ -5,7 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>非同期プログラミング - NagiScript</title>
   <link rel="stylesheet" href="../../css/style.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  <link rel="icon" href="../../assets/logo.png">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
 </head>
 <body>
   <div class="sky-decor" aria-hidden="true">
@@ -15,14 +18,21 @@
     <div class="cloud c4"></div>
   </div>
   <header class="header">
-    <a href="../../index.html" class="header-logo"><span class="logo-text">⚡ NagiScript</span></a>
-    <nav class="header-nav">
+    <a href="../../index.html" class="header-logo"><img src="../../assets/logo.png" alt="NagiScript Logo"><span class="logo-text">NagiScript</span></a>
+    <nav class="header-nav" id="header-nav">
       <a href="../../index.html">ホーム</a>
       <a href="../getting-started.html">ドキュメント</a>
-      <a href="basics.html">チュートリアル</a>
+      <a href="../tutorial/basics.html">チュートリアル</a>
       <a href="../reference/types.html">リファレンス</a>
-      <button class="theme-toggle" aria-label="テーマ切替">🌓</button>
+      <a href="https://github.com/TatsuyaM2667/nagiscript_lang" class="nav-github">
+        <i data-lucide="github"></i><span>GitHub</span>
+      </a>
+      <button class="theme-toggle" aria-label="テーマ切替">
+        <i data-lucide="moon" class="icon-moon"></i>
+        <i data-lucide="sun" class="icon-sun"></i>
+      </button>
     </nav>
+    <button class="menu-toggle" id="menu-toggle" aria-label="メニュー"><i data-lucide="menu"></i></button>
   </header>
   <div class="sidebar-overlay"></div>
 
@@ -78,7 +88,7 @@
 
     <h2>現行仕様: 同期処理のみ</h2>
     <p>現行では非同期構文は使えず、関数はすべて同期的に実行されます。複雑な制御は並列化せず、<code>if</code> / <code>while</code> で順に処理します。</p>
-    <div class="code-header"><span class="code-lang">sync.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">sync.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">fn fetch_sync() -&gt; string {
     return "data"
 }
@@ -95,7 +105,7 @@ fn main() {
       <span class="ct">将来仕様</span>
       <p>以下は <code>async</code> / <code>await</code> が実装された後に動く予定のコードです（現行の v0.2.0 では動きません）。</p>
     </div>
-    <div class="code-header"><span class="code-lang">async_fetch.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">async_fetch.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">async fn fetch_data(url: string) -&gt; string {
     val response = await http.get(url)
     return response.body
@@ -110,7 +120,7 @@ fn main() {
 
     <h2>await（ロードマップ）</h2>
     <p><code>await</code> は非同期操作の完了を待ちます（将来仕様）：</p>
-    <div class="code-header"><span class="code-lang">await.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">await.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">async fn process() {
     val a = await heavy_computation()
     val b = await another_computation()
@@ -120,7 +130,7 @@ fn main() {
     <hr>
 
     <h2>async ブロック（ロードマップ）</h2>
-    <div class="code-header"><span class="code-lang">async_block.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">async_block.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">async fn parallel() {
     val result = async {
         val a = await fetch("url1")
@@ -135,7 +145,7 @@ fn main() {
 
     <h2>非同期とエラー処理（ロードマップ）</h2>
     <p>将来的には非同期 API も <code>enum</code> で自作した <code>Result</code> と組み合わせて使う予定です。組み込みの <code>Result</code> は現行では存在しないため、自作してください。</p>
-    <div class="code-header"><span class="code-lang">safe_fetch.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">safe_fetch.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">enum Result {
     Ok
     Error
@@ -165,5 +175,11 @@ async fn safe_fetch(url: string) -&gt; Result {
 
   <script src="../../js/main.js"></script>
   <script src="../../js/play-wasm.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.lucide) lucide.createIcons();
+    });
+  </script>
 </body>
 </html>

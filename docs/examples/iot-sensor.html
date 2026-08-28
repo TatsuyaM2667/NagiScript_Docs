@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IoT センサー - NagiScript</title>
   <link rel="stylesheet" href="../../css/style.css">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
 </head>
 <body>
   <div class="sky-decor" aria-hidden="true">
@@ -14,14 +17,21 @@
     <div class="cloud c4"></div>
   </div>
   <header class="header">
-    <a href="../../index.html" class="header-logo"><span class="logo-text">⚡ NagiScript</span></a>
-    <nav class="header-nav">
+    <a href="../../index.html" class="header-logo"><img src="../../assets/logo.png" alt="NagiScript Logo"><span class="logo-text">NagiScript</span></a>
+    <nav class="header-nav" id="header-nav">
       <a href="../../index.html">ホーム</a>
       <a href="../getting-started.html">ドキュメント</a>
       <a href="../tutorial/basics.html">チュートリアル</a>
       <a href="../reference/types.html">リファレンス</a>
-      <button class="theme-toggle" aria-label="テーマ切替">🌓</button>
+      <a href="https://github.com/TatsuyaM2667/nagiscript_lang" class="nav-github">
+        <i data-lucide="github"></i><span>GitHub</span>
+      </a>
+      <button class="theme-toggle" aria-label="テーマ切替">
+        <i data-lucide="moon" class="icon-moon"></i>
+        <i data-lucide="sun" class="icon-sun"></i>
+      </button>
     </nav>
+    <button class="menu-toggle" id="menu-toggle" aria-label="メニュー"><i data-lucide="menu"></i></button>
   </header>
   <div class="sidebar-overlay"></div>
 
@@ -83,7 +93,7 @@
 
     <h2>実装（単一ファイル）</h2>
 
-    <div class="code-header"><span class="code-lang">main.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">main.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">// ハードウェア制御は C 関数を extern "C" fn で宣言
 extern "C" fn adc_read(channel: i32) -&gt; i32
 extern "C" fn delay(ms: i32)
@@ -124,7 +134,7 @@ fn main() {
     <hr>
 
     <h2>実行例</h2>
-    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-bash"># ビルドと実行（サンプル値）
 nagiscript build main.ngs -o iot
 ./iot
@@ -146,7 +156,7 @@ nagiscript build main.ngs -o iot
     <h2>トラブルシューティング</h2>
 
     <h3>文法（現行）での確認</h3>
-    <div class="code-header"><span class="code-lang">debug.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">debug.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">extern "C" fn adc_read(channel: i32) -&gt; i32
 
 fn main() {
@@ -156,7 +166,7 @@ fn main() {
 
     <h3>クラウド送信（ロードマップ）</h3>
     <div class="callout warn"><span class="ct">ロードマップ</span><p>HTTP 送信は <code>std:http</code>（未実装）の API です。現行では利用できません。下記は将来仕様です。</p></div>
-    <div class="code-header"><span class="code-lang">debug.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">debug.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">// ロードマップ: std:http は未実装
 fn send_cloud(data: SensorData) {
     println("sending...")
@@ -171,5 +181,11 @@ fn send_cloud(data: SensorData) {
 
   <script src="../../js/main.js"></script>
   <script src="../../js/play-wasm.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.lucide) lucide.createIcons();
+    });
+  </script>
 </body>
 </html>

@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>関数とモジュール - NagiScript</title>
   <link rel="stylesheet" href="../../css/style.css">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
 </head>
 <body>
   <div class="sky-decor" aria-hidden="true">
@@ -14,14 +17,21 @@
     <div class="cloud c4"></div>
   </div>
   <header class="header">
-    <a href="../../index.html" class="header-logo"><span class="logo-text">⚡ NagiScript</span></a>
-    <nav class="header-nav">
+    <a href="../../index.html" class="header-logo"><img src="../../assets/logo.png" alt="NagiScript Logo"><span class="logo-text">NagiScript</span></a>
+    <nav class="header-nav" id="header-nav">
       <a href="../../index.html">ホーム</a>
       <a href="../getting-started.html">ドキュメント</a>
-      <a href="basics.html">チュートリアル</a>
+      <a href="../tutorial/basics.html">チュートリアル</a>
       <a href="../reference/types.html">リファレンス</a>
-      <button class="theme-toggle" aria-label="テーマ切替">🌓</button>
+      <a href="https://github.com/TatsuyaM2667/nagiscript_lang" class="nav-github">
+        <i data-lucide="github"></i><span>GitHub</span>
+      </a>
+      <button class="theme-toggle" aria-label="テーマ切替">
+        <i data-lucide="moon" class="icon-moon"></i>
+        <i data-lucide="sun" class="icon-sun"></i>
+      </button>
     </nav>
+    <button class="menu-toggle" id="menu-toggle" aria-label="メニュー"><i data-lucide="menu"></i></button>
   </header>
   <div class="sidebar-overlay"></div>
 
@@ -79,7 +89,7 @@
 
     <h3>戻り値あり</h3>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">fn add(a: i32, b: i32) -&gt; i32 {
     return a + b
 }</code></pre>
@@ -87,21 +97,21 @@
     <h3>戻り値なし</h3>
 
     <p>戻り値がない場合は <code>-&gt;</code> を書きません（<code>-&gt; void</code> は不可）。</p>
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">fn greet(name: string) {
     println(name)
 }</code></pre>
 
     <h3>引数なし・文字列を返す</h3>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">fn get_version() -&gt; string {
     return "1.0.0"
 }</code></pre>
 
     <h3>関数の呼び出し</h3>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">val result = add(10, 20)   // 30
 greet("Alice")              // Alice
 val ver = get_version()     // "1.0.0"
@@ -111,7 +121,7 @@ println(result)</code></pre>
 
     <h2>再帰関数</h2>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">fn factorial(n: i32) -&gt; i32 {
     if n &lt;= 1 {
         return 1
@@ -130,7 +140,7 @@ println(result)</code></pre>
       <span class="ct">現行仕様（v0.2.0）</span>
       <p><code>export</code> は<b>関数宣言の前置</b>にのみ使えます。<code>export "C" fn ...</code> の形を書き、Wasm や C ABI から呼び出せるようにします。変数を export する「export 文」は<b>使えません</b>（<code>export fn ...</code> は誤り）。</p>
     </div>
-    <div class="code-header"><span class="code-lang">utils.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">utils.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">// utils.ngs
 export "C" fn add(a: i32, b: i32) -&gt; i32 {
     return a + b
@@ -140,7 +150,7 @@ export "C" fn multiply(a: i32, b: i32) -&gt; i32 {
     return a * b
 }</code></pre>
 
-    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-bash"># WebAssembly 向けにビルド（外部から add / multiply を呼べる）
 nagiscript wasm utils.ngs -o utils.wasm</code></pre>
 
@@ -153,7 +163,7 @@ nagiscript wasm utils.ngs -o utils.wasm</code></pre>
       <p>関数を値として扱う「関数式」（<code>val f = fn(x) { ... }</code>）、関数型フィールド（<code>handler: fn(...)</code>）、高階関数、クロージャは<b>現行ではサポートされていません</b>（不安定）。関数の動的切り替えが必要な場合は、enum のバリアントを <code>match</code> + <code>if</code> で分岐して実装してください。</p>
     </div>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">enum Op { Add Sub }
 
 fn apply(op: Op, a: i32, b: i32) -&gt; i32 {
@@ -183,7 +193,7 @@ println(result)</code></pre>
       <span class="ct">現行仕様（v0.2.0）</span>
       <p>メソッドは <code>impl</code> ブロックで定義します。文字列組み込みの <code>s.len()</code> / <code>s.to_upper()</code> のようなメソッドは現行では<b>定義されていません</b>。※ <code>impl</code> と <code>self</code> の詳細は「構造体と列挙型」を参照してください。</p>
     </div>
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">struct Counter {
     n: i32,
 }
@@ -210,5 +220,11 @@ fn main() {
 
   <script src="../../js/main.js"></script>
   <script src="../../js/play-wasm.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.lucide) lucide.createIcons();
+    });
+  </script>
 </body>
 </html>

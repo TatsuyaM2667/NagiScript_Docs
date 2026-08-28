@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>C 標準ライブラリ - NagiScript</title>
   <link rel="stylesheet" href="../../css/style.css">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
 </head>
 <body>
   <div class="sky-decor" aria-hidden="true">
@@ -14,14 +17,21 @@
     <div class="cloud c4"></div>
   </div>
   <header class="header">
-    <a href="../../index.html" class="header-logo"><span class="logo-text">⚡ NagiScript</span></a>
-    <nav class="header-nav">
+    <a href="../../index.html" class="header-logo"><img src="../../assets/logo.png" alt="NagiScript Logo"><span class="logo-text">NagiScript</span></a>
+    <nav class="header-nav" id="header-nav">
       <a href="../../index.html">ホーム</a>
       <a href="../getting-started.html">ドキュメント</a>
       <a href="../tutorial/basics.html">チュートリアル</a>
-      <a href="types.html">リファレンス</a>
-      <button class="theme-toggle" aria-label="テーマ切替">🌓</button>
+      <a href="../reference/types.html">リファレンス</a>
+      <a href="https://github.com/TatsuyaM2667/nagiscript_lang" class="nav-github">
+        <i data-lucide="github"></i><span>GitHub</span>
+      </a>
+      <button class="theme-toggle" aria-label="テーマ切替">
+        <i data-lucide="moon" class="icon-moon"></i>
+        <i data-lucide="sun" class="icon-sun"></i>
+      </button>
     </nav>
+    <button class="menu-toggle" id="menu-toggle" aria-label="メニュー"><i data-lucide="menu"></i></button>
   </header>
   <div class="sidebar-overlay"></div>
 
@@ -84,14 +94,14 @@
 
     <h2>stdio.h</h2>
     <h3>基本的な入出力</h3>
-    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">extern "C" fn printf(format: *u8) i32
 extern "C" fn scanf(format: *u8) i32
 extern "C" fn fprintf(stream: *i32, format: *u8) i32
 extern "C" fn fscanf(stream: *i32, format: *u8) i32</code></pre>
 
     <h3>使用例</h3>
-    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">fn main() {
     unsafe {
         printf("Hello, World!\n")
@@ -102,14 +112,14 @@ extern "C" fn fscanf(stream: *i32, format: *u8) i32</code></pre>
 
     <h2>stdlib.h</h2>
     <h3>メモリ管理</h3>
-    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">extern "C" fn malloc(size: i32) *u8
 extern "C" fn calloc(num: i32, size: i32) *u8
 extern "C" fn realloc(ptr: *u8, size: i32) *u8
 extern "C" fn free(ptr: *u8)</code></pre>
 
     <h3>使用例</h3>
-    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">fn main() {
     unsafe {
         val ptr = malloc(100)
@@ -123,7 +133,7 @@ extern "C" fn free(ptr: *u8)</code></pre>
 }</code></pre>
 
     <h3>文字列変換</h3>
-    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">extern "C" fn atoi(s: *u8) i32
 extern "C" fn atof(s: *u8) f64
 extern "C" fn atol(s: *u8) i32</code></pre>
@@ -132,7 +142,7 @@ extern "C" fn atol(s: *u8) i32</code></pre>
 
     <h2>string.h</h2>
     <h3>文字列操作</h3>
-    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">extern "C" fn strlen(s: *u8) i32
 extern "C" fn strcpy(dest: *u8, src: *u8) *u8
 extern "C" fn strncpy(dest: *u8, src: *u8, n: i32) *u8
@@ -144,7 +154,7 @@ extern "C" fn strrchr(s: *u8, c: i32) *u8
 extern "C" fn strstr(haystack: *u8, needle: *u8) *u8</code></pre>
 
     <h3>使用例</h3>
-    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">extern "C" fn strlen(s: *u8) i32
 
 fn main() {
@@ -158,7 +168,7 @@ fn main() {
 
     <h2>math.h</h2>
     <h3>三角関数</h3>
-    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">extern "C" fn sin(x: f64) f64
 extern "C" fn cos(x: f64) f64
 extern "C" fn tan(x: f64) f64
@@ -168,7 +178,7 @@ extern "C" fn atan(x: f64) f64
 extern "C" fn atan2(y: f64, x: f64) f64</code></pre>
 
     <h3>べき乗・対数</h3>
-    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">extern "C" fn pow(base: f64, exp: f64) f64
 extern "C" fn sqrt(x: f64) f64
 extern "C" fn cbrt(x: f64) f64
@@ -178,14 +188,14 @@ extern "C" fn log2(x: f64) f64
 extern "C" fn exp(x: f64) f64</code></pre>
 
     <h3>丸め関数</h3>
-    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">extern "C" fn ceil(x: f64) f64
 extern "C" fn floor(x: f64) f64
 extern "C" fn round(x: f64) f64
 extern "C" fn trunc(x: f64) f64</code></pre>
 
     <h3>使用例</h3>
-    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">extern "C" fn pow(base: f64, exp: f64) f64
 extern "C" fn sqrt(x: f64) f64
 
@@ -200,13 +210,13 @@ fn main() {
 
     <h2>time.h</h2>
     <h3>時間操作</h3>
-    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">extern "C" fn time(timer: *i32) i32
 extern "C" fn difftime(time1: f64, time2: f64) f64
 extern "C" fn clock() i32</code></pre>
 
     <h3>使用例</h3>
-    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">extern "C" fn time(timer: *i32) i32
 
 fn main() {
@@ -220,7 +230,7 @@ fn main() {
 
     <h2>ctype.h</h2>
     <h3>文字判定</h3>
-    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">extern "C" fn isalpha(c: i32) i32
 extern "C" fn isdigit(c: i32) i32
 extern "C" fn isalnum(c: i32) i32
@@ -229,7 +239,7 @@ extern "C" fn isupper(c: i32) i32
 extern "C" fn islower(c: i32) i32</code></pre>
 
     <h3>文字変換</h3>
-    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">extern "C" fn toupper(c: i32) i32
 extern "C" fn tolower(c: i32) i32</code></pre>
 
@@ -237,14 +247,14 @@ extern "C" fn tolower(c: i32) i32</code></pre>
 
     <h2>stdint.h</h2>
     <h3>固定幅整数型</h3>
-    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">// int8_t, int16_t, int32_t, int64_t
 // uint8_t, uint16_t, uint32_t, uint64_t
 // intmax_t, uintmax_t
 // intmin_t, uintmin_t</code></pre>
 
     <h3>使用例</h3>
-    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">fn main() {
     val a: i32 = 42
     val b: u8 = 255
@@ -254,7 +264,7 @@ extern "C" fn tolower(c: i32) i32</code></pre>
     <hr>
 
     <h2>実践的な例: C ライブラリのラッパー</h2>
-    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">// libcurl のラッパー
 
 extern "C" fn curl_easy_init() *u8
@@ -306,5 +316,11 @@ fn main() {
 
   <script src="../../js/main.js"></script>
   <script src="../../js/play-wasm.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.lucide) lucide.createIcons();
+    });
+  </script>
 </body>
 </html>

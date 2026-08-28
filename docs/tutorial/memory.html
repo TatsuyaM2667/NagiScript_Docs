@@ -5,7 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>メモリ管理 - NagiScript</title>
   <link rel="stylesheet" href="../../css/style.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  <link rel="icon" href="../../assets/logo.png">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
 </head>
 <body>
   <div class="sky-decor" aria-hidden="true">
@@ -15,14 +18,21 @@
     <div class="cloud c4"></div>
   </div>
   <header class="header">
-    <a href="../../index.html" class="header-logo"><span class="logo-text">⚡ NagiScript</span></a>
-    <nav class="header-nav">
+    <a href="../../index.html" class="header-logo"><img src="../../assets/logo.png" alt="NagiScript Logo"><span class="logo-text">NagiScript</span></a>
+    <nav class="header-nav" id="header-nav">
       <a href="../../index.html">ホーム</a>
       <a href="../getting-started.html">ドキュメント</a>
-      <a href="basics.html">チュートリアル</a>
+      <a href="../tutorial/basics.html">チュートリアル</a>
       <a href="../reference/types.html">リファレンス</a>
-      <button class="theme-toggle" aria-label="テーマ切替">🌓</button>
+      <a href="https://github.com/TatsuyaM2667/nagiscript_lang" class="nav-github">
+        <i data-lucide="github"></i><span>GitHub</span>
+      </a>
+      <button class="theme-toggle" aria-label="テーマ切替">
+        <i data-lucide="moon" class="icon-moon"></i>
+        <i data-lucide="sun" class="icon-sun"></i>
+      </button>
     </nav>
+    <button class="menu-toggle" id="menu-toggle" aria-label="メニュー"><i data-lucide="menu"></i></button>
   </header>
   <div class="sidebar-overlay"></div>
 
@@ -90,7 +100,7 @@
 
     <h2>スタック確保</h2>
     <p>基本型と小さな構造体はスタックに確保されます：</p>
-    <div class="code-header"><span class="code-lang">stack.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">stack.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">val x = 42
 val p = Point { x: 1.0, y: 2.0 }
 
@@ -106,13 +116,13 @@ fn add(a: i32, b: i32) -&gt; i32 {
       <p><code>Rc.new(値)</code> / <code>.get()</code> はありますが、<code>.get()</code> の<b>戻り値が意図と異なる場合があります</b>（要検証 / pending）。大きなデータには現行で安定している「構造体 + 値渡し」を推奨します。</p>
     </div>
     <p>大きなオブジェクトや動的サイズのオブジェクトには Rc を使用する設計です：</p>
-    <div class="code-header"><span class="code-lang">rc_basic.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">rc_basic.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">val a = Rc.new(42)
 val b = a  // 参照カウント: 2
 println(b.get())</code></pre>
 
     <h3>参照カウントの動作</h3>
-    <div class="code-header"><span class="code-lang">rc_count.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">rc_count.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">struct Data { x: i32 }
 
 val a = Rc.new(Data { x: 10 })  // 参照カウント: 1
@@ -128,7 +138,7 @@ val c = a                        // 参照カウント: 3
       <p><code>List&lt;T&gt;</code> は <code>List.new()</code> / <code>push</code> / <code>len</code> / <code>get</code> / <code>set</code> という API はありますが、LLVM コード生成で <code>zext i64 to i64</code> になり<b>リンクに失敗</b>する既知バグがあります。当面は使用を避けてください。</p>
     </div>
     <p>動的配列はヒープに確保される設計です。以下は現行ビルドではリンクに失敗するため、参考として記載します。</p>
-    <div class="code-header"><span class="code-lang">list.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">list.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">// 現行はリンク失敗バグがあるため使用不可
 var numbers = List.new()
 push(numbers, 10)
@@ -140,7 +150,7 @@ println(len(numbers))</code></pre>
       <span class="ct">推奨（v0.2.0）</span>
       <p>現行で最も安定するのは、<code>List</code> や <code>Rc</code> に頼らず、<b>構造体 + 値渡し</b>でデータを引き回す方法です。構造体はスタックに確保され、コピーも値で渡るため予期しない挙動がありません。</p>
     </div>
-    <div class="code-header"><span class="code-lang">by_value.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">by_value.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">struct Data {
     a: i32
     b: i32
@@ -159,7 +169,7 @@ fn main() {
 
     <h2>Unsafe ブロックとポインタ</h2>
     <p>ポインタは <code>*T</code> 型で表し、<code>&amp;&amp;x as *T</code> でアドレスを取得します。取り回しは <code>unsafe</code> ブロックにまとめます：</p>
-    <div class="code-header"><span class="code-lang">unsafe.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">unsafe.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">fn read(ptr: *i32) -&gt; i32 {
     unsafe {
         return *ptr
@@ -180,7 +190,7 @@ fn main() {
 
     <h2>C言語とのメモリ共有</h2>
     <p>C 標準関数は <code>extern "C" fn</code> で宣言して利用できます：</p>
-    <div class="code-header"><span class="code-lang">c_memory.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">c_memory.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">extern "C" fn malloc(size: i32) -&gt; *u8
 extern "C" fn free(ptr: *u8)
 
@@ -206,5 +216,11 @@ fn process_c_buffer() {
 
   <script src="../../js/main.js"></script>
   <script src="../../js/play-wasm.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.lucide) lucide.createIcons();
+    });
+  </script>
 </body>
 </html>

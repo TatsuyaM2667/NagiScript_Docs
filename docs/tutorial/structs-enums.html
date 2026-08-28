@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>構造体と列挙型 - NagiScript</title>
   <link rel="stylesheet" href="../../css/style.css">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
 </head>
 <body>
   <div class="sky-decor" aria-hidden="true">
@@ -14,14 +17,21 @@
     <div class="cloud c4"></div>
   </div>
   <header class="header">
-    <a href="../../index.html" class="header-logo"><span class="logo-text">⚡ NagiScript</span></a>
-    <nav class="header-nav">
+    <a href="../../index.html" class="header-logo"><img src="../../assets/logo.png" alt="NagiScript Logo"><span class="logo-text">NagiScript</span></a>
+    <nav class="header-nav" id="header-nav">
       <a href="../../index.html">ホーム</a>
       <a href="../getting-started.html">ドキュメント</a>
-      <a href="basics.html">チュートリアル</a>
+      <a href="../tutorial/basics.html">チュートリアル</a>
       <a href="../reference/types.html">リファレンス</a>
-      <button class="theme-toggle" aria-label="テーマ切替">🌓</button>
+      <a href="https://github.com/TatsuyaM2667/nagiscript_lang" class="nav-github">
+        <i data-lucide="github"></i><span>GitHub</span>
+      </a>
+      <button class="theme-toggle" aria-label="テーマ切替">
+        <i data-lucide="moon" class="icon-moon"></i>
+        <i data-lucide="sun" class="icon-sun"></i>
+      </button>
     </nav>
+    <button class="menu-toggle" id="menu-toggle" aria-label="メニュー"><i data-lucide="menu"></i></button>
   </header>
   <div class="sidebar-overlay"></div>
 
@@ -74,7 +84,7 @@
 
     <h3>定義</h3>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">struct Point {
     x: f64
     y: f64
@@ -88,13 +98,13 @@ struct Person {
 
     <h3>インスタンス化</h3>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">val p = Point { x: 10.0, y: 20.0 }
 val person = Person { name: "Alice", age: 30, email: "alice@example.com" }</code></pre>
 
     <h3>フィールドアクセス</h3>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">val x = p.x
 val name = person.name
 
@@ -110,7 +120,7 @@ p2.x = 10.0  // OK: p2 は var</code></pre>
 
     <div class="callout note"><span class="ct">現行仕様（v0.2.0）</span><p>メソッドは <code>impl 型名 { ... }</code> ブロック内に <code>fn</code> として定義し、第一引数に <code>self: 型名</code> の注釈を必須とします。戻り値は <code>-&gt;</code> 構文と明示的な <code>return</code> で返します。整数・浮動小数の文字列化（<code>str(x)</code>）や文字列 <code>+</code> 連結は現行では使えないため、<code>math</code> モジュールに依存する例は避けてください。</p></div>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">struct Point {
     x: f64
     y: f64
@@ -135,7 +145,7 @@ fn main() {
 
     <div class="callout note"><span class="ct">現行仕様（v0.2.0)</span><p>enum の定義は裸のバリアント名 <code>Red</code> / <code>Green</code> を列挙します。値を生成するときは <code>Color.Red()</code> のように必ず <code>()</code> を付けます（<code>Color.Red</code> と書くとエラーになります）。</p></div>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">enum Color {
     Red
     Green
@@ -146,7 +156,7 @@ val c = Color.Red()</code></pre>
 
     <h3>データを持つ列挙型</h3>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">enum Shape {
     Circle(f64)                    // radius
     Rect(f64, f64)                 // width, height
@@ -175,7 +185,7 @@ fn main() {
 
     <p>エラーハンドリングのための Result 型は現行では<b>組み込みとして存在しません</b>。enum で自作します。</p>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">enum MathResult {
     Value(f64)
     DivByZero
@@ -211,7 +221,7 @@ fn main() {
 
     <div class="callout note"><span class="ct">現行仕様（v0.2.0)</span><p>Option 型も組み込みでは存在しないため enum で自作します。データを持つバリアント（<code>Found(User)</code>）はパターン <code>Found(u)</code> で取り出せます。find_user は失敗時に <code>Lookup.NotFound()</code>（括弧付き）で戻します。</p></div>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">struct User {
     name: string
 }
@@ -246,5 +256,11 @@ fn main() {
 
   <script src="../../js/main.js"></script>
   <script src="../../js/play-wasm.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.lucide) lucide.createIcons();
+    });
+  </script>
 </body>
 </html>

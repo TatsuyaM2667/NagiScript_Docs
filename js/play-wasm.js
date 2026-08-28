@@ -220,7 +220,7 @@
 
       const runBtn = document.createElement('button');
       runBtn.className = 'run-btn';
-      runBtn.innerHTML = '▶ Run';
+      runBtn.innerHTML = '<i data-lucide="play"></i> <span>Run</span>';
       runBtn.title = 'NagiScript WASM で実行';
 
       const runBar = document.createElement('div');
@@ -228,7 +228,7 @@
 
       const status = document.createElement('span');
       status.className = 'run-status';
-      status.textContent = 'WASM 連携準備中…';
+      status.innerHTML = '<i data-lucide="loader" class="spin-icon"></i> WASM 連携準備中…';
 
       runBar.appendChild(runBtn);
       runBar.appendChild(status);
@@ -240,6 +240,9 @@
 
       // header にステータスを差し込む（右寄せ）
       header.appendChild(runBtn);
+      
+      // 初回アイコン生成
+      if (window.lucide) window.lucide.createIcons();
 
       // 実行
       runBtn.addEventListener('click', function () {
@@ -247,8 +250,10 @@
           load();
         }
         runBtn.disabled = true;
-        const oldText = runBtn.textContent;
-        runBtn.textContent = '実行中…';
+        const oldHtml = runBtn.innerHTML;
+        runBtn.innerHTML = '<i data-lucide="loader" class="spin-icon"></i> <span>実行中…</span>';
+        if (window.lucide) window.lucide.createIcons();
+        
         const started = Date.now();
         load().then(function () {
           return Promise.resolve().then(function () {
@@ -257,10 +262,11 @@
               return new Promise(function (r) { setTimeout(r, 500 - elapsed); });
             }
           }).then(function () {
-            runBtn.textContent = oldText;
+            runBtn.innerHTML = oldHtml;
             runBtn.disabled = false;
-            status.textContent = '✅ WASM 実行 0ms';
+            status.innerHTML = '<i data-lucide="check-circle"></i> ✅ WASM 実行 0ms';
             status.classList.add('wasm-badge');
+            if (window.lucide) window.lucide.createIcons();
 
             // 実行
             const text = code.textContent;
@@ -284,10 +290,11 @@
           });
         }).catch(function (err) {
           runBtn.disabled = false;
-          runBtn.textContent = oldText;
-          status.textContent = '⚠ 実行失敗';
+          runBtn.innerHTML = oldHtml;
+          status.innerHTML = '<i data-lucide="alert-triangle"></i> ⚠ 実行失敗';
           status.classList.remove('wasm-badge');
           status.classList.add('error');
+          if (window.lucide) window.lucide.createIcons();
           output.style.display = 'block';
           output.textContent = 'WASM ロードに失敗しました: ' + err.message;
         });

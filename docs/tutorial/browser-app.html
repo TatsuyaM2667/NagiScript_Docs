@@ -6,7 +6,10 @@
   <title>ブラウザアプリの作り方 - NagiScript</title>
   <meta name="description" content="NagiScript を WebAssembly にコンパイルして、簡単なブラウザアプリをゼロから作るチュートリアル">
   <link rel="stylesheet" href="../../css/style.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  <link rel="icon" href="../../assets/logo.png">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
 </head>
 <body>
   <div class="sky-decor" aria-hidden="true">
@@ -16,14 +19,21 @@
     <div class="cloud c4"></div>
   </div>
   <header class="header">
-    <a href="../../index.html" class="header-logo"><span class="logo-text">⚡ NagiScript</span></a>
-    <nav class="header-nav">
+    <a href="../../index.html" class="header-logo"><img src="../../assets/logo.png" alt="NagiScript Logo"><span class="logo-text">NagiScript</span></a>
+    <nav class="header-nav" id="header-nav">
       <a href="../../index.html">ホーム</a>
       <a href="../getting-started.html">ドキュメント</a>
-      <a href="basics.html">チュートリアル</a>
+      <a href="../tutorial/basics.html">チュートリアル</a>
       <a href="../reference/types.html">リファレンス</a>
-      <button class="theme-toggle" aria-label="テーマ切替">🌓</button>
+      <a href="https://github.com/TatsuyaM2667/nagiscript_lang" class="nav-github">
+        <i data-lucide="github"></i><span>GitHub</span>
+      </a>
+      <button class="theme-toggle" aria-label="テーマ切替">
+        <i data-lucide="moon" class="icon-moon"></i>
+        <i data-lucide="sun" class="icon-sun"></i>
+      </button>
     </nav>
+    <button class="menu-toggle" id="menu-toggle" aria-label="メニュー"><i data-lucide="menu"></i></button>
   </header>
   <div class="sidebar-overlay"></div>
 
@@ -85,7 +95,7 @@
 
     <h2>ステップ 1: ロジックを NagiScript で書く</h2>
     <p>ブラウザから呼び出す関数は <code>export "C"</code> でエクスポートします。WASM の関数は数値や真偽値、ポインタを引数・戻り値に取れるので、まずは単純なカウンター計算から始めます。</p>
-    <div class="code-header"><span class="code-lang">counter.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">counter.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">// counter.ngs — ブラウザから呼び出すビジネスロジック
 
 export "C" fn increment(n: i32) -&gt; i32 {
@@ -111,7 +121,7 @@ export "C" fn label_for(n: i32) -&gt; i32 {
     <hr>
 
     <h2>ステップ 2: WASM にコンパイル</h2>
-    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-bash">nagiscript wasm counter.ngs -o counter.wasm
 # counter.wasm が生成される</code></pre>
 
@@ -119,7 +129,7 @@ export "C" fn label_for(n: i32) -&gt; i32 {
 
     <h2>ステップ 3: HTML と JavaScript で組み込む</h2>
     <p>生成した <code>counter.wasm</code> を <code>fetch</code> で読み込み、<code>WebAssembly.instantiate</code> で初期化します。ヘルパー関数を使って DOM に組み込みます。</p>
-    <div class="code-header"><span class="code-lang">index.html</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">index.html</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-html">&lt;!DOCTYPE html&gt;
 &lt;html lang="ja"&gt;
 &lt;head&gt;
@@ -178,11 +188,11 @@ export "C" fn label_for(n: i32) -&gt; i32 {
 
     <h2>文字列をやり取りする</h2>
     <p>NagiScript の <code>string</code> はメモリ上で <code>{ data, len }</code> のセルとして渡ります。JS 側からは <code>TextEncoder</code> でバイト列を WASM メモリに書き込み、ポインタと長さを渡します。</p>
-    <div class="code-header"><span class="code-lang">greet.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">greet.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">export "C" fn char_count(data: i32, len: i32) -&gt; i32 {
     return len
 }</code></pre>
-    <div class="code-header"><span class="code-lang">main.js</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">main.js</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-js">let memory;
 
 async function load() {
@@ -218,7 +228,7 @@ console.log(ngs.char_count(ptr, 5)); // =&gt; 5</code></pre>
     <h2>.ngsx による UI 構文（ロードマップ）</h2>
     <div class="callout warn"><span class="ct">ロードマップ</span><p>.ngsx（JSX 風 UI 構文）はランタイムに props 基盤が存在するものの、ドキュメント化は保留されています。以下は予定されている構文です。</p></div>
     <p>NagiScript は JSX 風のマークアップ構文 <code>.ngsx</code> を予定しています。React コンポーネントと統合し、NagiScript だけで UI まで記述できるようになる予定です。</p>
-    <div class="code-header"><span class="code-lang">Counter.ngsx</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">Counter.ngsx</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">component Counter(ref count, onPlus, onMinus) {
     return (
         &lt;div class="counter"&gt;
@@ -233,7 +243,7 @@ console.log(ngs.char_count(ptr, 5)); // =&gt; 5</code></pre>
 
     <h2>状態管理のパターン</h2>
     <p>今回のように「計算は NagiScript、状態は JS」が最もシンプルです。規模が大きくなったら、状態も NagiScript 側に置いて <code>export "C"</code> で読み書きする設計にできます。</p>
-    <div class="code-header"><span class="code-lang">store.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">store.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-ngs">var counter: i32 = 0
 
 export "C" fn get_counter() -&gt; i32 { return counter }
@@ -243,7 +253,7 @@ export "C" fn inc() -&gt; i32 {
     counter = counter + 1
     return counter
 }</code></pre>
-    <div class="code-header"><span class="code-lang">main.js</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">main.js</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
     <pre><code class="lang-js">plusBtn.addEventListener('click', () =&gt; {
   const v = exports.inc();          // 状態は WASM 内で保持
   document.getElementById('count').textContent = v;
@@ -280,5 +290,11 @@ document.getElementById('reset').addEventListener('click', () =&gt; {
 
   <script src="../../js/main.js"></script>
   <script src="../../js/play-wasm.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.lucide) lucide.createIcons();
+    });
+  </script>
 </body>
 </html>

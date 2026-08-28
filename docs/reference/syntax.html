@@ -9,7 +9,10 @@
             rel="icon"
             href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>"
         />
-    </head>
+    
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+</head>
     <body>
   <div class="sky-decor" aria-hidden="true">
     <div class="cloud c1"></div>
@@ -19,15 +22,22 @@
   </div>
         <header class="header">
             <a href="../../index.html" class="header-logo"
-                ><span class="logo-text">⚡ NagiScript</span></a
+                ><img src="../../assets/logo.png" alt="NagiScript Logo"><span class="logo-text">NagiScript</span></a
             >
-            <nav class="header-nav">
-                <a href="../../index.html">ホーム</a>
-                <a href="../getting-started.html">ドキュメント</a>
-                <a href="../tutorial/basics.html">チュートリアル</a>
-                <a href="types.html">リファレンス</a>
-                <button class="theme-toggle" aria-label="テーマ切替">🌓</button>
-            </nav>
+            <nav class="header-nav" id="header-nav">
+      <a href="../../index.html">ホーム</a>
+      <a href="../getting-started.html">ドキュメント</a>
+      <a href="../tutorial/basics.html">チュートリアル</a>
+      <a href="../reference/types.html">リファレンス</a>
+      <a href="https://github.com/TatsuyaM2667/nagiscript_lang" class="nav-github">
+        <i data-lucide="github"></i><span>GitHub</span>
+      </a>
+      <button class="theme-toggle" aria-label="テーマ切替">
+        <i data-lucide="moon" class="icon-moon"></i>
+        <i data-lucide="sun" class="icon-sun"></i>
+      </button>
+    </nav>
+    <button class="menu-toggle" id="menu-toggle" aria-label="メニュー"><i data-lucide="menu"></i></button>
         </header>
         <div class="sidebar-overlay"></div>
 
@@ -130,7 +140,7 @@
             <h3>基本構造</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">// 出力は print / println（argc はちょうど 1 個）
 fn main() {
@@ -150,7 +160,7 @@ fn main() {
             <h3>不変変数</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">val x: i32 = 42
 val name = "NagiScript"  // 型推論</code></pre>
@@ -158,7 +168,7 @@ val name = "NagiScript"  // 型推論</code></pre>
             <h3>可変変数</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">var counter: i32 = 0
 counter = 10  // OK
@@ -176,7 +186,7 @@ counter = counter + 1  // OK</code></pre>
             <h3>基本構文</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">fn add(a: i32, b: i32) -&gt; i32 {
     return a + b
@@ -190,7 +200,7 @@ counter = counter + 1  // OK</code></pre>
             <h3>ジェネリクス関数</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">fn first(list: List&lt;i32&gt;) -&gt; i32 {
     return list[0]
@@ -206,7 +216,7 @@ counter = counter + 1  // OK</code></pre>
             <h2>出力</h2>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">fn main() {
     println("Hello, World!")  // 改行付き
@@ -226,7 +236,7 @@ counter = counter + 1  // OK</code></pre>
             <h3>if 文</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">if x &gt; 5 {
     println("大きい")
@@ -242,7 +252,7 @@ counter = counter + 1  // OK</code></pre>
             <h3>while ループ</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">var i = 0
 while i &lt; 5 {
@@ -253,7 +263,7 @@ while i &lt; 5 {
             <h3>for ループ（既知バグあり）</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">for i in 0..5 {
     println(i)
@@ -267,7 +277,7 @@ while i &lt; 5 {
             <h3>loop（未実装）</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">// loop は存在しない。while true を使う
 while true {
@@ -283,7 +293,7 @@ while true {
             <h3>match 式</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">enum Status { Ok NotFound }
 
@@ -307,7 +317,7 @@ fn show(s: Status) {
             <h3>構造体</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">struct Point { x: f32 y: f32 }
 val p = Point { x: 3.0, y: 4.0 }
@@ -316,7 +326,7 @@ println(p.x)</code></pre>
             <h3>impl ブロック（メソッド）</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">struct Point { x: f32 y: f32 }
 
@@ -339,7 +349,7 @@ fn main() {
             <h3>列挙型</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">enum Color {
     Red
@@ -350,7 +360,7 @@ fn main() {
             <h3>ジェネリクス型</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">struct Vec2 {
     x: f32
@@ -369,7 +379,7 @@ fn main() {
             <h3>Result 型（enum で自作）</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">enum Result { Ok Err }
 
@@ -392,7 +402,7 @@ fn divide(a: f64, b: f64) -&gt; Result {
             <h3>ポインタと unsafe ブロック</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">fn read(ptr: *i32) -&gt; i32 {
     unsafe { return *ptr }
@@ -409,7 +419,7 @@ println(read(p))</code></pre>
             <h3>Rc (参照カウント)</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">val data = Rc.new(Data { x: 10 })
 val data2 = data  // 参照の共有</code></pre>
@@ -426,7 +436,7 @@ val data2 = data  // 参照の共有</code></pre>
             <h3>import（未実装）</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">// import は未実装（ロードマップ）
 // 複数ファイルへの分割はできない</code></pre>
@@ -439,7 +449,7 @@ val data2 = data  // 参照の共有</code></pre>
             <h3>エクスポート（Wasm / C 向け）</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">export "C" fn add(a: i32, b: i32) -&gt; i32 {
     return a + b
@@ -453,7 +463,7 @@ val data2 = data  // 参照の共有</code></pre>
             <h3>extern（C 関数の宣言）</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">extern "C" fn strlen(s: *u8) -&gt; i32</code></pre>
 
@@ -467,7 +477,7 @@ val data2 = data  // 参照の共有</code></pre>
             <h2>コメント</h2>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
+                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
             </div>
             <pre><code class="lang-ngs">// 単一行コメント
 
@@ -656,5 +666,11 @@ fn greet(name: string) -&gt; string {
 
         <script src="../../js/main.js"></script>
   <script src="../../js/play-wasm.js"></script>
-    </body>
+    
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.lucide) lucide.createIcons();
+    });
+  </script>
+</body>
 </html>

@@ -251,19 +251,39 @@
         const code = pre.querySelector('code');
         const text = code ? code.textContent : pre.textContent;
         navigator.clipboard.writeText(text).then(() => {
-          btn.textContent = 'Copied!';
-          setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+          const span = btn.querySelector('span');
+          if (span) {
+            span.textContent = 'Copied!';
+            setTimeout(() => { span.textContent = 'Copy'; }, 2000);
+          } else {
+            btn.textContent = 'Copied!';
+            setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+          }
         });
       });
     });
   }
 
-  // ---------- Theme ----------
+  function updateThemeIcon(theme) {
+    const moon = document.querySelector('.theme-toggle .icon-moon');
+    const sun = document.querySelector('.theme-toggle .icon-sun');
+    if (moon && sun) {
+      if (theme === 'dark') {
+        moon.style.display = 'none';
+        sun.style.display = 'inline-block';
+      } else {
+        moon.style.display = 'inline-block';
+        sun.style.display = 'none';
+      }
+    }
+  }
+
   function initTheme() {
     const saved = localStorage.getItem('nagiscript-theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     const theme = saved || (prefersDark ? 'dark' : 'light');
     document.documentElement.setAttribute('data-theme', theme);
+    updateThemeIcon(theme);
     return theme;
   }
 
@@ -272,21 +292,27 @@
     const next = current === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', next);
     localStorage.setItem('nagiscript-theme', next);
+    updateThemeIcon(next);
   }
 
-  // ---------- Sidebar ----------
+  // ---------- Sidebar & Mobile Menu ----------
   function initSidebar() {
     const toggle = document.querySelector('.menu-toggle');
     const sidebar = document.querySelector('.sidebar');
     const overlay = document.querySelector('.sidebar-overlay');
+    const headerNav = document.querySelector('.header-nav');
 
-    if (toggle && sidebar) {
+    if (toggle) {
       toggle.addEventListener('click', () => {
-        sidebar.classList.toggle('open');
-        overlay?.classList.toggle('active');
+        if (sidebar) sidebar.classList.toggle('open');
+        if (overlay) overlay.classList.toggle('active');
+        if (headerNav && !sidebar) headerNav.classList.toggle('open'); // Home用
       });
-      overlay?.addEventListener('click', () => {
-        sidebar.classList.remove('open');
+    }
+    
+    if (overlay) {
+      overlay.addEventListener('click', () => {
+        if (sidebar) sidebar.classList.remove('open');
         overlay.classList.remove('active');
       });
     }
