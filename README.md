@@ -5,7 +5,6 @@
 ## 特徴
 
 - **静的サイト** — HTML / CSS / JS のみ。ビルド不要で Cloudflare Pages にデプロイできます
-- **Orangestar 風テーマ** — 青空 × ガラスモーフィズムのライトテーマと、夜空のダークテーマ
 - **シンタックスハイライト** — NagiScript / bash / TOML のトークナイザー方式ハイライト（生成HTMLを再処理しない安全な実装）
 - **Inline WASM Playground** — `nagiscript/playground.wasm` をブラウザ上で実行するデモ（fibonacci / factorial / gcd / is_prime / type_size）
 - **検索機能** — ドキュメントページのジャンプ検索

@@ -1,152 +1,257 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>基本概念 - NagiScript</title>
-  <link rel="stylesheet" href="../../css/style.css">
-</head>
-<body>
-  <div class="sky-decor" aria-hidden="true">
-    <div class="cloud c1"></div>
-    <div class="cloud c2"></div>
-    <div class="cloud c3"></div>
-    <div class="cloud c4"></div>
-  </div>
-  <header class="header">
-    <a href="../../index.html" class="header-logo"><span class="logo-text">⚡ NagiScript</span></a>
-    <nav class="header-nav">
-      <a href="../../index.html">ホーム</a>
-      <a href="../getting-started.html">ドキュメント</a>
-      <a href="basics.html">チュートリアル</a>
-      <a href="../reference/types.html">リファレンス</a>
-      <button class="theme-toggle" aria-label="テーマ切替">🌓</button>
-    </nav>
-  </header>
-  <div class="sidebar-overlay"></div>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>基本概念 - NagiScript</title>
+        <link rel="stylesheet" href="../../css/style.css" />
+    </head>
+    <body>
+        <div class="sky-decor" aria-hidden="true">
+            <div class="cloud c1"></div>
+            <div class="cloud c2"></div>
+            <div class="cloud c3"></div>
+            <div class="cloud c4"></div>
+        </div>
+        <header class="header">
+            <a href="../../index.html" class="header-logo"
+                ><span class="logo-text">⚡ NagiScript</span></a
+            >
+            <nav class="header-nav">
+                <a href="../../index.html">ホーム</a>
+                <a href="../getting-started.html">ドキュメント</a>
+                <a href="basics.html">チュートリアル</a>
+                <a href="../reference/types.html">リファレンス</a>
+                <button class="theme-toggle" aria-label="テーマ切替">🌓</button>
+            </nav>
+        </header>
+        <div class="sidebar-overlay"></div>
 
-  <aside class="sidebar">
-    <div class="sidebar-section">
-      <div class="sidebar-title">入门</div>
-      <a href="../getting-started.html" class="sidebar-link">はじめに</a>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-title">チュートリアル</div>
-      <a href="basics.html" class="sidebar-link active">基本概念</a>
-      <a href="functions.html" class="sidebar-link">関数とモジュール</a>
-      <a href="structs-enums.html" class="sidebar-link">構造体と列挙型</a>
-      <a href="generics.html" class="sidebar-link">ジェネリクス</a>
-      <a href="error-handling.html" class="sidebar-link">エラーハンドリング</a>
-      <a href="memory.html" class="sidebar-link">メモリ管理</a>
-      <a href="async.html" class="sidebar-link">非同期プログラミング</a>
-      <a href="webassembly.html" class="sidebar-link">WebAssembly</a>
-      <a href="browser-app.html" class="sidebar-link">ブラウザアプリ</a>
-      <a href="tui-app.html" class="sidebar-link">TUI アプリ</a>
-      <a href="cli.html" class="sidebar-link">CLI ツール開発</a>
-      <a href="microcontroller.html" class="sidebar-link">組み込み開発</a>
-      <a href="cinterop.html" class="sidebar-link">C言語との相互運用</a>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-title">リファレンス</div>
-      <a href="../reference/types.html" class="sidebar-link">型システム</a>
-      <a href="../reference/syntax.html" class="sidebar-link">構文リファレンス</a>
-      <a href="../reference/operators.html" class="sidebar-link">演算子リファレンス</a>
-      <a href="../reference/standard-library.html" class="sidebar-link">標準ライブラリ</a>
-      <a href="../reference/standard-c-library.html" class="sidebar-link">C 標準ライブラリ</a>
-      <a href="../reference/compiler.html" class="sidebar-link">コンパイラ内部構造</a>
-      <a href="../reference/keywords.html" class="sidebar-link">キーワード一覧</a>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-title">実践</div>
-      <a href="../examples/todo-app.html" class="sidebar-link">Todo アプリ</a>
-      <a href="../examples/web-framework.html" class="sidebar-link">Web フレームワーク</a>
-      <a href="../examples/iot-sensor.html" class="sidebar-link">IoT センサー</a>
-    </div>
-  </aside>
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">入门</div>
+                <a href="../getting-started.html" class="sidebar-link"
+                    >はじめに</a
+                >
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">チュートリアル</div>
+                <a href="basics.html" class="sidebar-link active">基本概念</a>
+                <a href="functions.html" class="sidebar-link"
+                    >関数とモジュール</a
+                >
+                <a href="structs-enums.html" class="sidebar-link"
+                    >構造体と列挙型</a
+                >
+                <a href="generics.html" class="sidebar-link">ジェネリクス</a>
+                <a href="error-handling.html" class="sidebar-link"
+                    >エラーハンドリング</a
+                >
+                <a href="memory.html" class="sidebar-link">メモリ管理</a>
+                <a href="async.html" class="sidebar-link"
+                    >非同期プログラミング</a
+                >
+                <a href="webassembly.html" class="sidebar-link">WebAssembly</a>
+                <a href="browser-app.html" class="sidebar-link"
+                    >ブラウザアプリ</a
+                >
+                <a href="tui-app.html" class="sidebar-link">TUI アプリ</a>
+                <a href="cli.html" class="sidebar-link">CLI ツール開発</a>
+                <a href="microcontroller.html" class="sidebar-link"
+                    >組み込み開発</a
+                >
+                <a href="cinterop.html" class="sidebar-link"
+                    >C言語との相互運用</a
+                >
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">リファレンス</div>
+                <a href="../reference/types.html" class="sidebar-link"
+                    >型システム</a
+                >
+                <a href="../reference/syntax.html" class="sidebar-link"
+                    >構文リファレンス</a
+                >
+                <a href="../reference/operators.html" class="sidebar-link"
+                    >演算子リファレンス</a
+                >
+                <a
+                    href="../reference/standard-library.html"
+                    class="sidebar-link"
+                    >標準ライブラリ</a
+                >
+                <a
+                    href="../reference/standard-c-library.html"
+                    class="sidebar-link"
+                    >C 標準ライブラリ</a
+                >
+                <a href="../reference/compiler.html" class="sidebar-link"
+                    >コンパイラ内部構造</a
+                >
+                <a href="../reference/keywords.html" class="sidebar-link"
+                    >キーワード一覧</a
+                >
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">実践</div>
+                <a href="../examples/todo-app.html" class="sidebar-link"
+                    >Todo アプリ</a
+                >
+                <a href="../examples/web-framework.html" class="sidebar-link"
+                    >Web フレームワーク</a
+                >
+                <a href="../examples/iot-sensor.html" class="sidebar-link"
+                    >IoT センサー</a
+                >
+            </div>
+        </aside>
 
-  <main class="main content">
-    <h1>基本概念</h1>
-    <p>変数、型、制御構文の基礎を学びます。</p>
+        <main class="main content">
+            <h1>基本概念</h1>
+            <p>変数、型、制御構文の基礎を学びます。</p>
 
-    <hr>
+            <hr />
 
-    <h2>変数と定数</h2>
+            <h2>変数と定数</h2>
 
-    <h3>不変変数 (<code>val</code>)</h3>
+            <h3>不変変数 (<code>val</code>)</h3>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">val x: i32 = 10
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="lang-ngs">val x: i32 = 10
 val name: string = "NagiScript"
 val pi: f64 = 3.14159</code></pre>
 
-    <p><code>val</code> で宣言された変数は再代入できません。</p>
+            <p><code>val</code> で宣言された変数は再代入できません。</p>
 
-    <h3>可変変数 (<code>var</code>)</h3>
+            <h3>可変変数 (<code>var</code>)</h3>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">var counter: i32 = 0
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span>
+                <button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="lang-ngs">var counter: i32 = 0
 counter = 10  // OK
 counter += 1  // OK</code></pre>
 
-    <h3>型推論</h3>
+            <h3>型推論</h3>
 
-    <p>型を省略すると自動推論されます：</p>
+            <p>型を省略すると自動推論されます：</p>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">val x = 10        // i32 と推論
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="lang-ngs">val x = 10        // i32 と推論
 val name = "Hello" // string と推論
 val flag = true    // bool と推論</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>基本型</h2>
+            <h2>基本型</h2>
 
-    <h3>整数型</h3>
+            <h3>整数型</h3>
 
-    <table>
-      <thead>
-        <tr><th>型</th><th>ビット幅</th><th>範囲</th></tr>
-      </thead>
-      <tbody>
-        <tr><td><code>i8</code></td><td>8</td><td>-128 〜 127</td></tr>
-        <tr><td><code>i16</code></td><td>16</td><td>-32,768 〜 32,767</td></tr>
-        <tr><td><code>i32</code></td><td>32</td><td>約 ±21 億</td></tr>
-        <tr><td><code>i64</code></td><td>64</td><td>約 ±922京</td></tr>
-        <tr><td><code>u8</code></td><td>8</td><td>0 〜 255</td></tr>
-        <tr><td><code>u16</code></td><td>16</td><td>0 〜 65,535</td></tr>
-        <tr><td><code>u32</code></td><td>32</td><td>0 〜 約42億</td></tr>
-        <tr><td><code>u64</code></td><td>64</td><td>0 〜 約1844京</td></tr>
-      </tbody>
-    </table>
+            <table>
+                <thead>
+                    <tr>
+                        <th>型</th>
+                        <th>ビット幅</th>
+                        <th>範囲</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>i8</code></td>
+                        <td>8</td>
+                        <td>-128 〜 127</td>
+                    </tr>
+                    <tr>
+                        <td><code>i16</code></td>
+                        <td>16</td>
+                        <td>-32,768 〜 32,767</td>
+                    </tr>
+                    <tr>
+                        <td><code>i32</code></td>
+                        <td>32</td>
+                        <td>約 ±21 億</td>
+                    </tr>
+                    <tr>
+                        <td><code>i64</code></td>
+                        <td>64</td>
+                        <td>約 ±922京</td>
+                    </tr>
+                    <tr>
+                        <td><code>u8</code></td>
+                        <td>8</td>
+                        <td>0 〜 255</td>
+                    </tr>
+                    <tr>
+                        <td><code>u16</code></td>
+                        <td>16</td>
+                        <td>0 〜 65,535</td>
+                    </tr>
+                    <tr>
+                        <td><code>u32</code></td>
+                        <td>32</td>
+                        <td>0 〜 約42億</td>
+                    </tr>
+                    <tr>
+                        <td><code>u64</code></td>
+                        <td>64</td>
+                        <td>0 〜 約1844京</td>
+                    </tr>
+                </tbody>
+            </table>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">val a: i32 = 42
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="lang-ngs">val a: i32 = 42
 val b: u8 = 255
 val c: i64 = 999999999999</code></pre>
 
-    <h3>浮動小数点型</h3>
+            <h3>浮動小数点型</h3>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">val f1: f32 = 3.14
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="lang-ngs">val f1: f32 = 3.14
 val f2: f64 = 2.71828182845</code></pre>
 
-    <h3>文字列型</h3>
+            <h3>文字列型</h3>
 
-    <div class="callout note">
-      <span class="ct">現行仕様（v0.2.0）</span>
-      <p>型名は <code>str</code> ではなく <code>string</code> です。<b>文字列の <code>+</code> による連結は未実装</b>なので、<code>"Hello, " + "World!"</code> はコンパイルエラーになります。</p>
-    </div>
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">val s1: string = "Hello, World!"
+            <div class="callout note">
+                <span class="ct">現行仕様（v0.2.0）</span>
+                <p>
+                    型名は <code>str</code> ではなく
+                    <code>string</code> です。<b
+                        >文字列の <code>+</code> による連結は未実装</b
+                    >なので、<code>"Hello, " + "World!"</code>
+                    はコンパイルエラーになります。
+                </p>
+            </div>
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="lang-ngs">val s1: string = "Hello, World!"
 val s2 = "型推論でもOK"
 
 // 文字列同士は比較できる
 val eq = s1 == s2  // false</code></pre>
 
-    <h3>真偽値型</h3>
+            <h3>真偽値型</h3>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">val flag1: bool = true
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="lang-ngs">val flag1: bool = true
 val flag2 = false
 
 // 論理演算は && / || / !（キーワード and / or / not は使えない）
@@ -154,39 +259,64 @@ if flag1 && !flag2 {
     println("ok")
 }</code></pre>
 
-    <h3>Unit 型について</h3>
+            <h3>Unit 型について</h3>
 
-    <div class="callout note">
-      <span class="ct">現行仕様（v0.2.0）</span>
-      <p>式としての単型 <code>void</code>（<code>val x: void = void</code> のような書き方）は<b>現行では使用できません</b>。戻り値のない関数は <code>fn name() { ... }</code> と書き、<code>-> void</code> は付けません。</p>
-    </div>
+            <div class="callout note">
+                <span class="ct">現行仕様（v0.2.0）</span>
+                <p>
+                    式としての単型 <code>void</code>（<code
+                        >val x: void = void</code
+                    >
+                    のような書き方）は<b>現行では使用できません</b>。戻り値のない関数は
+                    <code>fn name() { ... }</code> と書き、<code>-> void</code>
+                    は付けません。
+                </p>
+            </div>
 
-    <hr>
+            <hr />
 
-    <h2>制御構文</h2>
+            <h2>制御構文</h2>
 
-    <h3>if 文</h3>
+            <h3>if 文</h3>
 
-    <div class="callout note">
-      <span class="ct">現行仕様（v0.2.0）</span>
-      <p><code>if</code> は<b>文</b>として使うのが確実です。式として値を返す <code>val x = if ... { } else { }</code> のような使い方は現行ではサポートされていません（ブロック末尾の暗黙 return も不可）。</p>
-    </div>
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">var result = ""
+            <div class="callout note">
+                <span class="ct">現行仕様（v0.2.0）</span>
+                <p>
+                    <code>if</code>
+                    は<b>文</b>として使うのが確実です。式として値を返す
+                    <code>val x = if ... { } else { }</code>
+                    のような使い方は現行ではサポートされていません（ブロック末尾の暗黙
+                    return も不可）。
+                </p>
+            </div>
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="lang-ngs">var result = ""
 if x &gt; 5 {
     result = "大きい"
 } else {
     result = "小さい"
 }</code></pre>
 
-    <h3>for ループ（既知バグあり）</h3>
+            <h3>for ループ（既知バグあり）</h3>
 
-    <div class="callout warn">
-      <span class="ct">現行仕様（v0.2.0）</span>
-      <p><code>for i in 0..5 { }</code> は<b>ループ本体が IR から落ちて何も実行されない</b>既知バグがあります。また <code>step</code> は未実装です。当面は <b><code>while</code></b> を使用してください。</p>
-    </div>
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">// 既知バグのため推奨しない（body が実行されない）
+            <div class="callout warn">
+                <span class="ct">現行仕様（v0.2.0）</span>
+                <p>
+                    <code>for i in 0..5 { }</code> は<b
+                        >ループ本体が IR から落ちて何も実行されない</b
+                    >既知バグがあります。また
+                    <code>step</code> は未実装です。当面は
+                    <b><code>while</code></b> を使用してください。
+                </p>
+            </div>
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="lang-ngs">// 既知バグのため推奨しない（body が実行されない）
 // for i in 0..5 { println(i) }
 
 // 代わりに while を使う
@@ -197,10 +327,13 @@ while i &lt; 5 {
 }
 // 出力: 0, 1, 2, 3, 4</code></pre>
 
-    <h3>while ループ</h3>
+            <h3>while ループ</h3>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">var i = 0
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="lang-ngs">var i = 0
 while i &lt; 5 {
     println(i)
     i = i + 1
@@ -211,14 +344,22 @@ while true {
     // ...
 }</code></pre>
 
-    <h3>match（パターンマッチング）</h3>
+            <h3>match（パターンマッチング）</h3>
 
-    <div class="callout note">
-      <span class="ct">現行仕様（v0.2.0）</span>
-      <p>パターンは<b>裸の列挙バリアント名</b>（例 <code>Ok</code>, <code>NotFound</code>）と、ワイルドカード <code>_</code> です。enum の値を生成するときは <code>Status.Ok()</code> のように括弧が必要です。</p>
-    </div>
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">enum Status { Ok NotFound }
+            <div class="callout note">
+                <span class="ct">現行仕様（v0.2.0）</span>
+                <p>
+                    パターンは<b>裸の列挙バリアント名</b>（例 <code>Ok</code>,
+                    <code>NotFound</code>）と、ワイルドカード
+                    <code>_</code> です。enum の値を生成するときは
+                    <code>Status.Ok()</code> のように括弧が必要です。
+                </p>
+            </div>
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="lang-ngs">enum Status { Ok NotFound }
 
 fn show(s: Status) {
     val st = match s {
@@ -232,46 +373,69 @@ fn main() {
     show(Status.Ok())
 }</code></pre>
 
-    <h3>ブロック</h3>
+            <h3>ブロック</h3>
 
-    <div class="callout note">
-      <span class="ct">現行仕様（v0.2.0）</span>
-      <p>ブロック末尾の式を値として返す「式ブロック」（<code>val x = { ... a + b }</code>）は<b>サポートされていません</b>。文としてのみ使用できます。</p>
-    </div>
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">// 文ブロック（スコープを区切る目的で使用）
+            <div class="callout note">
+                <span class="ct">現行仕様（v0.2.0）</span>
+                <p>
+                    ブロック末尾の式を値として返す「式ブロック」（<code
+                        >val x = { ... a + b }</code
+                    >）は<b>サポートされていません</b>。文としてのみ使用できます。
+                </p>
+            </div>
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="lang-ngs">// 文ブロック（スコープを区切る目的で使用）
 {
     val a = 10
     val b = 20
     val c = a * b
 }</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>型変換</h2>
+            <h2>型変換</h2>
 
-    <h3>隠示的変換 (i64 → i32)</h3>
+            <h3>隠示的変換 (i64 → i32)</h3>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">val a: i64 = 100
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="lang-ngs">val a: i64 = 100
 val b: i32 = a  // OK: i64 から i32 へ安全な縮小</code></pre>
 
-    <h3>型注釈による変換</h3>
+            <h3>型注釈による変換</h3>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">val x: i32 = 42
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="lang-ngs">val x: i32 = 42
 val y: f64 = x  // OK: i32 から f64 への拡張</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>文字列操作</h2>
+            <h2>文字列操作</h2>
 
-    <div class="callout note">
-      <span class="ct">現行仕様（v0.2.0）</span>
-      <p>文字列の連結 <code>s + "..."</code> は<b>未実装</b>ですし、<code>s.len()</code> のようなメソッドも現行では定義されていません。文字列は <code>==</code> / <code>!=</code> での比較が可能です。</p>
-    </div>
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">val s = "Hello"
+            <div class="callout note">
+                <span class="ct">現行仕様（v0.2.0）</span>
+                <p>
+                    文字列の連結
+                    <code>s + "..."</code> は<b>未実装</b>ですし、<code
+                        >s.len()</code
+                    >
+                    のようなメソッドも現行では定義されていません。文字列は
+                    <code>==</code> / <code>!=</code> での比較が可能です。
+                </p>
+            </div>
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="lang-ngs">val s = "Hello"
 
 // 比較
 val eq = s == "Hello"  // true
@@ -280,12 +444,15 @@ val ne = s != "World"  // true
 // 表示
 println(s)</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>コメント</h2>
+            <h2>コメント</h2>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">// これは単一行コメント
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="lang-ngs">// これは単一行コメント
 
 /*
    これは
@@ -296,15 +463,19 @@ fn greet(name: string) {
     println(name)
 }</code></pre>
 
-    <hr>
+            <hr />
 
-    <div class="nav-links">
-      <a href="../getting-started.html" class="nav-link prev">← はじめに</a>
-      <a href="functions.html" class="nav-link next">関数とモジュール →</a>
-    </div>
-  </main>
+            <div class="nav-links">
+                <a href="../getting-started.html" class="nav-link prev"
+                    >← はじめに</a
+                >
+                <a href="functions.html" class="nav-link next"
+                    >関数とモジュール →</a
+                >
+            </div>
+        </main>
 
-  <script src="../../js/main.js"></script>
-  <script src="../../js/play-wasm.js"></script>
-</body>
+        <script src="../../js/main.js"></script>
+        <script src="../../js/play-wasm.js"></script>
+    </body>
 </html>
