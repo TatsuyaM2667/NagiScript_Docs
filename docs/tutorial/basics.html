@@ -76,7 +76,7 @@
 
     <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
     <pre><code class="lang-ngs">val x: i32 = 10
-val name: str = "NagiScript"
+val name: string = "NagiScript"
 val pi: f64 = 3.14159</code></pre>
 
     <p><code>val</code> で宣言された変数は再代入できません。</p>
@@ -94,7 +94,7 @@ counter += 1  // OK</code></pre>
 
     <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
     <pre><code class="lang-ngs">val x = 10        // i32 と推論
-val name = "Hello" // str と推論
+val name = "Hello" // string と推論
 val flag = true    // bool と推論</code></pre>
 
     <hr>
@@ -132,93 +132,119 @@ val f2: f64 = 2.71828182845</code></pre>
 
     <h3>文字列型</h3>
 
+    <div class="callout note">
+      <span class="ct">現行仕様（v0.2.0）</span>
+      <p>型名は <code>str</code> ではなく <code>string</code> です。<b>文字列の <code>+</code> による連結は未実装</b>なので、<code>"Hello, " + "World!"</code> はコンパイルエラーになります。</p>
+    </div>
     <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">val s1: str = "Hello, World!"
+    <pre><code class="lang-ngs">val s1: string = "Hello, World!"
 val s2 = "型推論でもOK"
 
-// 文字列連結
-val greeting = "Hello, " + "World!"
-
-// 文字列の長さ
-val len = greeting.len()</code></pre>
+// 文字列同士は比較できる
+val eq = s1 == s2  // false</code></pre>
 
     <h3>真偽値型</h3>
 
     <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
     <pre><code class="lang-ngs">val flag1: bool = true
-val flag2 = false</code></pre>
+val flag2 = false
 
-    <h3>単型 (Unit)</h3>
+// 論理演算は && / || / !（キーワード and / or / not は使えない）
+if flag1 && !flag2 {
+    println("ok")
+}</code></pre>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">val nothing: void = void</code></pre>
+    <h3>Unit 型について</h3>
+
+    <div class="callout note">
+      <span class="ct">現行仕様（v0.2.0）</span>
+      <p>式としての単型 <code>void</code>（<code>val x: void = void</code> のような書き方）は<b>現行では使用できません</b>。戻り値のない関数は <code>fn name() { ... }</code> と書き、<code>-> void</code> は付けません。</p>
+    </div>
 
     <hr>
 
     <h2>制御構文</h2>
 
-    <h3>if 式</h3>
+    <h3>if 文</h3>
 
-    <p>NagiScript の <code>if</code> は<strong>式</strong>です。戻り値を持ちます。</p>
-
+    <div class="callout note">
+      <span class="ct">現行仕様（v0.2.0）</span>
+      <p><code>if</code> は<b>文</b>として使うのが確実です。式として値を返す <code>val x = if ... { } else { }</code> のような使い方は現行ではサポートされていません（ブロック末尾の暗黙 return も不可）。</p>
+    </div>
     <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">val x = 10
-
-val result = if x &gt; 5 {
-    "大きい"
+    <pre><code class="lang-ngs">var result = ""
+if x &gt; 5 {
+    result = "大きい"
 } else {
-    "小さい"
-}
-// result = "大きい"</code></pre>
+    result = "小さい"
+}</code></pre>
 
-    <h3>for ループ</h3>
+    <h3>for ループ（既知バグあり）</h3>
 
-    <p><code>for</code> ループは<strong>範囲構文</strong>のみ対応しています：</p>
-
+    <div class="callout warn">
+      <span class="ct">現行仕様（v0.2.0）</span>
+      <p><code>for i in 0..5 { }</code> は<b>ループ本体が IR から落ちて何も実行されない</b>既知バグがあります。また <code>step</code> は未実装です。当面は <b><code>while</code></b> を使用してください。</p>
+    </div>
     <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">// 基本構文
-for i in 0..5 {
-    io.println(i)
-}
-// 出力: 0, 1, 2, 3, 4
+    <pre><code class="lang-ngs">// 既知バグのため推奨しない（body が実行されない）
+// for i in 0..5 { println(i) }
 
-// step を指定
-for i in 0..10 step 2 {
-    io.println(i)
+// 代わりに while を使う
+var i = 0
+while i &lt; 5 {
+    println(i)
+    i = i + 1
 }
-// 出力: 0, 2, 4, 6, 8</code></pre>
+// 出力: 0, 1, 2, 3, 4</code></pre>
 
     <h3>while ループ</h3>
 
     <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
     <pre><code class="lang-ngs">var i = 0
 while i &lt; 5 {
-    io.println(i)
-    i += 1
+    println(i)
+    i = i + 1
+}
+
+// 無限ループ（loop キーワードは無い）
+while true {
+    // ...
 }</code></pre>
 
-    <h3>match 式（パターンマッチング）</h3>
+    <h3>match（パターンマッチング）</h3>
 
+    <div class="callout note">
+      <span class="ct">現行仕様（v0.2.0）</span>
+      <p>パターンは<b>裸の列挙バリアント名</b>（例 <code>Ok</code>, <code>NotFound</code>）と、ワイルドカード <code>_</code> です。enum の値を生成するときは <code>Status.Ok()</code> のように括弧が必要です。</p>
+    </div>
     <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">val x = 2
+    <pre><code class="lang-ngs">enum Status { Ok NotFound }
 
-val result = match x {
-    1 => "one",
-    2 => "two",
-    3 => "three",
-    _ => "other"
+fn show(s: Status) {
+    val st = match s {
+        Ok =&gt; "200",
+        _ =&gt; "404",
+    }
+    println(st)
 }
-// result = "two"</code></pre>
+
+fn main() {
+    show(Status.Ok())
+}</code></pre>
 
     <h3>ブロック</h3>
 
+    <div class="callout note">
+      <span class="ct">現行仕様（v0.2.0）</span>
+      <p>ブロック末尾の式を値として返す「式ブロック」（<code>val x = { ... a + b }</code>）は<b>サポートされていません</b>。文としてのみ使用できます。</p>
+    </div>
     <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">val result = {
+    <pre><code class="lang-ngs">// 文ブロック（スコープを区切る目的で使用）
+{
     val a = 10
     val b = 20
-    a + b
-}
-// result = 30</code></pre>
+    val c = a * b
+}</code></pre>
 
     <hr>
 
@@ -240,17 +266,19 @@ val y: f64 = x  // OK: i32 から f64 への拡張</code></pre>
 
     <h2>文字列操作</h2>
 
+    <div class="callout note">
+      <span class="ct">現行仕様（v0.2.0）</span>
+      <p>文字列の連結 <code>s + "..."</code> は<b>未実装</b>ですし、<code>s.len()</code> のようなメソッドも現行では定義されていません。文字列は <code>==</code> / <code>!=</code> での比較が可能です。</p>
+    </div>
     <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
     <pre><code class="lang-ngs">val s = "Hello"
 
-// 長さ
-val len = s.len()  // 5
-
-// 接続
-val greeting = s + ", World!"
-
 // 比較
-val eq = s == "Hello"  // true</code></pre>
+val eq = s == "Hello"  // true
+val ne = s != "World"  // true
+
+// 表示
+println(s)</code></pre>
 
     <hr>
 
@@ -264,11 +292,8 @@ val eq = s == "Hello"  // true</code></pre>
    複数行コメント
 */
 
-@doc {
-    doc = "この関数は挨拶を表示します"
-}
-fn greet(name: str) void {
-    io.println("Hello, " + name + "!")
+fn greet(name: string) {
+    println(name)
 }</code></pre>
 
     <hr>

@@ -70,248 +70,82 @@
 
     <hr>
 
-    <h2>基本概念</h2>
+    <h2>現行の対応状況（v0.2.0）</h2>
 
-    <p>NagiScript のジェネリクスは<strong>コンパイル時に単型化（monomorphization）</strong>されます。 Zig や Odin と同様に、 使用時には具体的な型に展開されます。</p>
+    <div class="callout warn"><span class="ct">現行仕様（v0.2.0)</span><p><code>Vec2&lt;T&gt;</code> のようなジェネリクス構造体、<code>fn identity&lt;T&gt;(...) -&gt; T</code> のようなジェネリック関数、<code>(A, B)</code> のようなタプルは<b>未実装/未検証</b>です。型パラメータは <code>List&lt;i32&gt;</code> など一部の組み込みで限定的にしか使えません。実際の開発では具体的な型で定義してください。</p></div>
+
+    <h2>実際に推奨される書き方</h2>
+
+    <p>構造体は具体的な型で定義し、複数の型に対応したい場合は型ごとに構造体を分けます。</p>
 
     <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">// この関数は T が i32 なら fn(i32) i32 に、
-// T が str なら fn(str) str に展開されます
-fn identity&lt;T&gt;(x: T) T {
-    x
+    <pre><code class="lang-ngs">struct Vec2i {
+    x: i32
+    y: i32
 }
 
-val n = identity&lt;i32&gt;(42)    // 42
-val s = identity&lt;str&gt;("hi")  // "hi"</code></pre>
-
-    <hr>
-
-    <h2>型推論</h2>
-
-    <p>型パラメータを省略すると推論されます：</p>
-
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">val n = identity(42)      // T = i32 と推論
-val s = identity("hi")    // T = str と推論</code></pre>
-
-    <hr>
-
-    <h2>複数の型パラメータ</h2>
-
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">fn pair&lt;A, B&gt;(first: A, second: B) (A, B) {
-    (first, second)
+struct Vec2f {
+    x: f64
+    y: f64
 }
 
-val p = pair&lt;i32, str&gt;(42, "hello")
-// p = (42, "hello")</code></pre>
-
-    <hr>
-
-    <h2>制約 (Constraints)</h2>
-
-    <h3>型クラス風の制約</h3>
-
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">// Printable 型クラス（仮想的）
-fn print_all&lt;T: Printable&gt;(items: List&lt;T&gt;) void {
-    for item in items {
-        item.print()
+impl Vec2i {
+    fn sum(self: Vec2i) -&gt; i32 {
+        return self.x + self.y
     }
+}
+
+fn main() {
+    val a = Vec2i { x: 1, y: 2 }
+    println(a.sum())  // 3
 }</code></pre>
 
-    <h3>構造的制約</h3>
+    <hr>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">// T が .len() メソッドを持つことを要求（構造的制約）
-fn length_of&lt;T&gt;(x: T) i32 {
-    x.len()
-}
+    <h2>List / Rc の既知バグ</h2>
 
-val s_len = length_of("hello")  // 5
-val v_len = length_of(List&lt;i32&gt; { 1, 2, 3 })  // 3</code></pre>
+    <div class="callout warn"><span class="ct">既知バグ（v0.2.0）</span><p><code>List&lt;T&gt;</code> は <code>List.new()</code> / <code>push</code> / <code>len</code> / <code>get</code> / <code>set</code> という API はありますが、LLVM コード生成時に <code>zext i64 to i64</code> エラーが発生しリンクに失敗する既知バグがあります。<code>Rc.new(値)</code> / <code>.get()</code> も API としては存在しますが、<code>.get()</code> の戻り値が意図と異なる場合があります。当面は構造体 + 値渡しを推奨します。</p></div>
 
     <hr>
 
-    <h2>ジェネリクス構造体</h2>
+    <h2>Result / Option の代用</h2>
+
+    <p>ジェネリクスではなく具体的な enum で自作します。</p>
 
     <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">struct Stack&lt;T&gt; {
-    items: List&lt;T&gt;
+    <pre><code class="lang-ngs">enum MathResult {
+    Value(f64)
+    DivByZero
 }
 
-fn Stack&lt;T&gt;.push(self: Stack&lt;T&gt;, item: T) void {
-    self.items.add(item)
-}
-
-fn Stack&lt;T&gt;.pop(self: Stack&lt;T&gt;) Option&lt;T&gt; {
-    if self.items.is_empty() {
-        Option.None
-    } else {
-        val last = self.items[self.items.len() - 1]
-        self.items.remove(self.items.len() - 1)
-        Option.Some(last)
+fn divide(a: f64, b: f64) -&gt; MathResult {
+    if b == 0.0 {
+        return MathResult.DivByZero()
     }
+    return MathResult.Value(a / b)
 }
 
-fn Stack&lt;T&gt;.peek(self: Stack&lt;T&gt;) Option&lt;T&gt; {
-    if self.items.is_empty() {
-        Option.None
-    } else {
-        Option.Some(self.items[self.items.len() - 1])
-    }
-}
-
-// 使用例
-var stack = Stack&lt;i32&gt; { items: List&lt;i32&gt; {} }
-stack.push(10)
-stack.push(20)
-stack.push(30)
-
-val top = stack.pop()  // Option.Some(30)</code></pre>
-
-    <hr>
-
-    <h2>ジェネリクス列挙型</h2>
-
-    <h3>Result 型</h3>
-
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">enum Result&lt;T, E&gt; {
-    Ok(T)
-    Err(E)
-}
-
-fn Result&lt;T, E&gt;.is_ok(self: Result&lt;T, E&gt;) bool {
-    match self {
-        Result.Ok(_) => true,
-        Result.Err(_) => false
-    }
-}
-
-fn Result&lt;T, E&gt;.unwrap(self: Result&lt;T, E&gt;) T {
-    match self {
-        Result.Ok(v) => v,
-        Result.Err(_) => panic("unwrap on Err")
-    }
-}</code></pre>
-
-    <h3>Option 型</h3>
-
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">enum Option&lt;T&gt; {
-    Some(T)
-    None
-}
-
-fn Option&lt;T&gt;.is_some(self: Option&lt;T&gt;) bool {
-    match self {
-        Option.Some(_) => true,
-        Option.None => false
-    }
-}
-
-fn Option&lt;T&gt;.unwrap_or(self: Option&lt;T&gt;, default: T) T {
-    match self {
-        Option.Some(v) => v,
-        Option.None => default
+fn main() {
+    val r = divide(10.0, 3.0)
+    match r {
+        Value(v) =&gt; println("ok"),
+        DivByZero =&gt; println("error"),
     }
 }</code></pre>
 
     <hr>
 
-    <h2>関数型のジェネリクス</h2>
+    <h2>ロードマップ</h2>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">fn map&lt;T, U&gt;(list: List&lt;T&gt;, f: fn(T) U) List&lt;U&gt; {
-    var result = List&lt;U&gt; {}
-    for item in list {
-        result.add(f(item))
-    }
-    result
-}
+    <p>以下の機能は将来のバージョンで予定されているものです。</p>
 
-val doubled = map(List&lt;i32&gt; { 1, 2, 3 }, fn(x: i32) i32 { x * 2 })
-// doubled = [2, 4, 6]
-
-val lengths = map(List&lt;str&gt; { "hello", "world" }, fn(s: str) i32 { s.len() })
-// lengths = [5, 5]</code></pre>
-
-    <hr>
-
-    <h2>型推論の仕組み</h2>
-
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">// 型パラメータが明示的
-val v1 = Vec2&lt;i32&gt; { x: 1, y: 2 }
-
-// 型推論による省略
-val v2 = Vec2 { x: 1, y: 2 }  // Vec2&lt;i32&gt; と推論
-
-// 複数の型パラメータでは推論が難しい場合
-val p = pair&lt;i32, str&gt;(42, "hello")  // 明示的に指定</code></pre>
-
-    <hr>
-
-    <h2>モノモーフィゼーションの例</h2>
-
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">// このコードは以下のように展開されます
-
-// 元のコード
-fn add&lt;T: Numeric&gt;(a: T, b: T) T {
-    a + b
-}
-
-val x = add(10, 20)      // T = i32
-val y = add(1.5, 2.5)    // T = f64
-
-// 展開後（コンパイル時に生成される）
-fn add_i32(a: i32, b: i32) i32 {
-    a + b
-}
-
-fn add_f64(a: f64, b: f64) f64 {
-    a + b
-}</code></pre>
-
-    <hr>
-
-    <h2>実践的な例: 汎用リスト</h2>
-
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">struct List&lt;T&gt; {
-    data: Rc&lt;ListData&lt;T&gt;&gt;
-}
-
-struct ListData&lt;T&gt; {
-    items: RawSlice&lt;T&gt;
-    len: i32
-}
-
-fn List&lt;T&gt;.push(self: List&lt;T&gt;, item: T) void {
-    // Rc を fork してコピー-on-write を実現
-    val new_data = self.data.fork()
-    new_data.items.add(item)
-    self.data = new_data
-}
-
-fn List&lt;T&gt;.get(self: List&lt;T&gt;, index: i32) T {
-    self.data.items[index]
-}
-
-fn List&lt;T&gt;.len(self: List&lt;T&gt;) i32 {
-    self.data.len
-}
-
-// 使用例
-val numbers = List&lt;i32&gt; {}
-numbers.push(10)
-numbers.push(20)
-numbers.push(30)
-
-io.println(numbers.get(0))  // 10
-io.println(numbers.len())   // 3</code></pre>
+    <ul>
+      <li>ジェネリック関数 <code>fn identity&lt;T&gt;(x: T) -&gt; T</code></li>
+      <li>ジェネリクス構造体 <code>struct Vec2&lt;T&gt;</code></li>
+      <li>タプル <code>(A, B)</code></li>
+      <li>型制約 / 型クラス（<code>T: Printable</code> など）</li>
+      <li><code>List&lt;T&gt;</code> のリンクバグ修正と標準的なコレクション API</li>
+    </ul>
 
     <hr>
 

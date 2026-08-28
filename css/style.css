@@ -630,6 +630,40 @@ pre {
   border-radius: 0 0 var(--radius) var(--radius);
 }
 
+/* ---------- Callouts (memo/roadmap/warning) ---------- */
+.callout {
+  position: relative;
+  margin: 18px 0;
+  padding: 16px 18px 16px 20px;
+  border-radius: 14px;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg-strong);
+  backdrop-filter: blur(12px);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+.callout::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 12px; bottom: 12px;
+  width: 4px;
+  border-radius: 999px;
+}
+.callout p { margin: 0 0 8px; }
+.callout p:last-child { margin-bottom: 0; }
+.callout strong { color: var(--ink-1); }
+.callout .ct:first-child { display: block; margin-bottom: 6px; font-weight: 800; }
+.callout.roadmap::before { background: linear-gradient(180deg, #ffb86c, var(--accent)); }
+.callout.roadmap .ct { color: var(--accent-deep); }
+[data-theme="dark"] .callout.roadmap .ct { color: var(--accent); }
+.callout.warn::before { background: linear-gradient(180deg, #ff7b6b, #ffb86c); }
+.callout.warn .ct { color: #e2574b; }
+[data-theme="dark"] .callout.warn .ct { color: #ff8a7d; }
+.callout.note::before { background: linear-gradient(180deg, var(--accent), #59b6ff); }
+.callout.note .ct { color: var(--accent-deep); }
+[data-theme="dark"] .callout.note .ct { color: var(--accent); }
+.callout code { font-size: 0.85em; }
+
 /* ---------- Nav links ---------- */
 .nav-links { display: flex; justify-content: space-between; margin-top: 60px; padding-top: 22px; border-top: 1px solid var(--glass-border); gap: 16px; }
 .nav-link {

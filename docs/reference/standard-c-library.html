@@ -68,13 +68,15 @@
     <h1>C 標準ライブラリ</h1>
     <p>NagiScript から利用可能な C 標準ライブラリを解説します。</p>
 
+    <div class="callout note"><span class="ct">現行仕様（v0.2.0）</span><p>C 標準関数は <code>extern "C" fn</code> で宣言して利用します。</p></div>
+
     <hr>
 
     <h2>概要</h2>
-    <p>NagiScript は C ABI と完全互換のため、C 標準ライブラリの関数をそのまま利用できます。 ただし、以下の点に注意してください：</p>
+    <p>NagiScript は C ABI と互換のため、C 標準ライブラリの関数を <code>extern "C" fn</code> で宣言してそのまま利用できます。 ただし、以下の点に注意してください：</p>
     <ul>
       <li><strong>文字列</strong>: C の文字列は null 終端、NagiScript は長さ付き</li>
-      <li><strong>ポインタ</strong>: unsafe ブロック内で操作が必要</li>
+      <li><strong>ポインタ</strong>: ポインタは <code>*T</code> 記法で宣言し、unsafe ブロック内で操作が必要</li>
       <li><strong>メモリ管理</strong>: C で確保したメモリは C で解放する</li>
     </ul>
 
@@ -83,16 +85,16 @@
     <h2>stdio.h</h2>
     <h3>基本的な入出力</h3>
     <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">extern fn printf(format: *const u8, ...) i32
-extern fn scanf(format: *const u8, ...) i32
-extern fn fprintf(stream: *mut FILE, format: *const u8, ...) i32
-extern fn fscanf(stream: *mut FILE, format: *const u8, ...) i32</code></pre>
+    <pre><code class="lang-ngs">extern "C" fn printf(format: *u8) i32
+extern "C" fn scanf(format: *u8) i32
+extern "C" fn fprintf(stream: *i32, format: *u8) i32
+extern "C" fn fscanf(stream: *i32, format: *u8) i32</code></pre>
 
     <h3>使用例</h3>
     <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">fn main() void {
+    <pre><code class="lang-ngs">fn main() {
     unsafe {
-        printf("Hello, %s!\n", "World")
+        printf("Hello, World!\n")
     }
 }</code></pre>
 
@@ -101,20 +103,20 @@ extern fn fscanf(stream: *mut FILE, format: *const u8, ...) i32</code></pre>
     <h2>stdlib.h</h2>
     <h3>メモリ管理</h3>
     <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">extern fn malloc(size: i32) *mut u8
-extern fn calloc(num: i32, size: i32) *mut u8
-extern fn realloc(ptr: *mut u8, size: i32) *mut u8
-extern fn free(ptr: *mut u8) void</code></pre>
+    <pre><code class="lang-ngs">extern "C" fn malloc(size: i32) *u8
+extern "C" fn calloc(num: i32, size: i32) *u8
+extern "C" fn realloc(ptr: *u8, size: i32) *u8
+extern "C" fn free(ptr: *u8)</code></pre>
 
     <h3>使用例</h3>
     <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">fn main() void {
+    <pre><code class="lang-ngs">fn main() {
     unsafe {
         val ptr = malloc(100)
-        
+
         // メモリを使用
         *ptr = 42
-        
+
         // メモリを解放
         free(ptr)
     }
@@ -122,33 +124,33 @@ extern fn free(ptr: *mut u8) void</code></pre>
 
     <h3>文字列変換</h3>
     <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">extern fn atoi(s: *const u8) i32
-extern fn atof(s: *const u8) f64
-extern fn atol(s: *const u8) i64</code></pre>
+    <pre><code class="lang-ngs">extern "C" fn atoi(s: *u8) i32
+extern "C" fn atof(s: *u8) f64
+extern "C" fn atol(s: *u8) i32</code></pre>
 
     <hr>
 
     <h2>string.h</h2>
     <h3>文字列操作</h3>
     <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">extern fn strlen(s: *const u8) i32
-extern fn strcpy(dest: *mut u8, src: *const u8) *mut u8
-extern fn strncpy(dest: *mut u8, src: *const u8, n: i32) *mut u8
-extern fn strcat(dest: *mut u8, src: *const u8) *mut u8
-extern fn strcmp(s1: *const u8, s2: *const u8) i32
-extern fn strncmp(s1: *const u8, s2: *const u8, n: i32) i32
-extern fn strchr(s: *const u8, c: i32) *mut u8
-extern fn strrchr(s: *const u8, c: i32) *mut u8
-extern fn strstr(haystack: *const u8, needle: *const u8) *mut u8</code></pre>
+    <pre><code class="lang-ngs">extern "C" fn strlen(s: *u8) i32
+extern "C" fn strcpy(dest: *u8, src: *u8) *u8
+extern "C" fn strncpy(dest: *u8, src: *u8, n: i32) *u8
+extern "C" fn strcat(dest: *u8, src: *u8) *u8
+extern "C" fn strcmp(s1: *u8, s2: *u8) i32
+extern "C" fn strncmp(s1: *u8, s2: *u8, n: i32) i32
+extern "C" fn strchr(s: *u8, c: i32) *u8
+extern "C" fn strrchr(s: *u8, c: i32) *u8
+extern "C" fn strstr(haystack: *u8, needle: *u8) *u8</code></pre>
 
     <h3>使用例</h3>
     <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">fn main() void {
+    <pre><code class="lang-ngs">extern "C" fn strlen(s: *u8) i32
+
+fn main() {
     unsafe {
-        val s = "Hello, World!"
-        val len = strlen(s)
-        
-        io.println("Length: " + str(len))
+        val len = strlen("Hello, World!")
+        println(len)
     }
 }</code></pre>
 
@@ -157,40 +159,41 @@ extern fn strstr(haystack: *const u8, needle: *const u8) *mut u8</code></pre>
     <h2>math.h</h2>
     <h3>三角関数</h3>
     <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">extern fn sin(x: f64) f64
-extern fn cos(x: f64) f64
-extern fn tan(x: f64) f64
-extern fn asin(x: f64) f64
-extern fn acos(x: f64) f64
-extern fn atan(x: f64) f64
-extern fn atan2(y: f64, x: f64) f64</code></pre>
+    <pre><code class="lang-ngs">extern "C" fn sin(x: f64) f64
+extern "C" fn cos(x: f64) f64
+extern "C" fn tan(x: f64) f64
+extern "C" fn asin(x: f64) f64
+extern "C" fn acos(x: f64) f64
+extern "C" fn atan(x: f64) f64
+extern "C" fn atan2(y: f64, x: f64) f64</code></pre>
 
     <h3>べき乗・対数</h3>
     <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">extern fn pow(base: f64, exp: f64) f64
-extern fn sqrt(x: f64) f64
-extern fn cbrt(x: f64) f64
-extern fn log(x: f64) f64
-extern fn log10(x: f64) f64
-extern fn log2(x: f64) f64
-extern fn exp(x: f64) f64</code></pre>
+    <pre><code class="lang-ngs">extern "C" fn pow(base: f64, exp: f64) f64
+extern "C" fn sqrt(x: f64) f64
+extern "C" fn cbrt(x: f64) f64
+extern "C" fn log(x: f64) f64
+extern "C" fn log10(x: f64) f64
+extern "C" fn log2(x: f64) f64
+extern "C" fn exp(x: f64) f64</code></pre>
 
     <h3>丸め関数</h3>
     <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">extern fn ceil(x: f64) f64
-extern fn floor(x: f64) f64
-extern fn round(x: f64) f64
-extern fn trunc(x: f64) f64</code></pre>
+    <pre><code class="lang-ngs">extern "C" fn ceil(x: f64) f64
+extern "C" fn floor(x: f64) f64
+extern "C" fn round(x: f64) f64
+extern "C" fn trunc(x: f64) f64</code></pre>
 
     <h3>使用例</h3>
     <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">fn main() void {
-    val x = 2.0
-    val y = pow(x, 3.0)  // 8.0
-    val z = sqrt(y)       // 2.8284271247461903
-    
-    io.println("y = " + str(y))
-    io.println("z = " + str(z))
+    <pre><code class="lang-ngs">extern "C" fn pow(base: f64, exp: f64) f64
+extern "C" fn sqrt(x: f64) f64
+
+fn main() {
+    val y = pow(2.0, 3.0)  // 8.0
+    val z = sqrt(y)        // 2.8284271247461903
+
+    println(z)
 }</code></pre>
 
     <hr>
@@ -198,16 +201,18 @@ extern fn trunc(x: f64) f64</code></pre>
     <h2>time.h</h2>
     <h3>時間操作</h3>
     <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">extern fn time(timer: *mut i64) i64
-extern fn difftime(time1: i64, time2: i64) f64
-extern fn clock() i64</code></pre>
+    <pre><code class="lang-ngs">extern "C" fn time(timer: *i32) i32
+extern "C" fn difftime(time1: f64, time2: f64) f64
+extern "C" fn clock() i32</code></pre>
 
     <h3>使用例</h3>
     <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">fn main() void {
+    <pre><code class="lang-ngs">extern "C" fn time(timer: *i32) i32
+
+fn main() {
     unsafe {
-        val now = time(null)
-        io.println("Current time: " + str(now))
+        val now = time(0 as *i32)
+        println(now)
     }
 }</code></pre>
 
@@ -216,17 +221,17 @@ extern fn clock() i64</code></pre>
     <h2>ctype.h</h2>
     <h3>文字判定</h3>
     <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">extern fn isalpha(c: i32) i32
-extern fn isdigit(c: i32) i32
-extern fn isalnum(c: i32) i32
-extern fn isspace(c: i32) i32
-extern fn isupper(c: i32) i32
-extern fn islower(c: i32) i32</code></pre>
+    <pre><code class="lang-ngs">extern "C" fn isalpha(c: i32) i32
+extern "C" fn isdigit(c: i32) i32
+extern "C" fn isalnum(c: i32) i32
+extern "C" fn isspace(c: i32) i32
+extern "C" fn isupper(c: i32) i32
+extern "C" fn islower(c: i32) i32</code></pre>
 
     <h3>文字変換</h3>
     <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">extern fn toupper(c: i32) i32
-extern fn tolower(c: i32) i32</code></pre>
+    <pre><code class="lang-ngs">extern "C" fn toupper(c: i32) i32
+extern "C" fn tolower(c: i32) i32</code></pre>
 
     <hr>
 
@@ -240,7 +245,7 @@ extern fn tolower(c: i32) i32</code></pre>
 
     <h3>使用例</h3>
     <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">fn main() void {
+    <pre><code class="lang-ngs">fn main() {
     val a: i32 = 42
     val b: u8 = 255
     val c: i64 = 999999999999
@@ -252,36 +257,33 @@ extern fn tolower(c: i32) i32</code></pre>
     <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
     <pre><code class="lang-ngs">// libcurl のラッパー
 
-extern fn curl_easy_init() *mut void
-extern fn curl_easy_setopt(curl: *mut void, option: i32, ...) i32
-extern fn curl_easy_perform(curl: *mut void) i32
-extern fn curl_easy_cleanup(curl: *mut void) void
+extern "C" fn curl_easy_init() *u8
+extern "C" fn curl_easy_setopt(curl: *u8, option: i32) i32
+extern "C" fn curl_easy_perform(curl: *u8) i32
+extern "C" fn curl_easy_cleanup(curl: *u8)
 
 struct Curl {
-    handle: *mut void
+    handle: *u8
 }
 
-fn Curl.init() Curl {
-    Curl {
-        handle: curl_easy_init()
-    }
+fn curl_new(handle: *u8) Curl {
+    Curl { handle: handle }
 }
 
-fn Curl.get(self: Curl, url: str) Result&lt;str, str&gt; {
+fn curl_get(curl: Curl) {
     unsafe {
-        curl_easy_setopt(self.handle, 10002, url.as_ptr())  // CURLOPT_URL
-        val result = curl_easy_perform(self.handle)
-        
-        if result == 0 {
-            Result.Ok("Success")
-        } else {
-            Result.Err("Request failed")
-        }
+        curl_easy_setopt(curl.handle, 10002)  // CURLOPT_URL
+        curl_easy_perform(curl.handle)
     }
 }
 
-fn Curl.cleanup(self: Curl) void {
-    curl_easy_cleanup(self.handle)
+fn main() {
+    unsafe {
+        val h = curl_easy_init()
+        val c = curl_new(h)
+        curl_get(c)
+        curl_easy_cleanup(h)
+    }
 }</code></pre>
 
     <hr>

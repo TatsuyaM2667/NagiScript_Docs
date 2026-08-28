@@ -65,195 +65,140 @@
   </aside>
 
   <main class="main content">
-    <h1>関数とモジュール</h1>
-    <p>関数の定義、呼び出し、モジュール分割を学びます。</p>
+    <h1>関数</h1>
+    <p>関数の定義と呼び出しを学びます。※モジュール分割（<code>import</code>）は現行では<b>未実装</b>のため、本ページ末尾にロードマップとしてまとめます。</p>
+
+    <div class="callout warn">
+      <span class="ct">現行仕様（v0.2.0）</span>
+      <p>戻り値の型は <code>fn name(...) -&gt; 型</code> の<b><code>-&gt;</code> 構文</b>です。<code>-&gt;</code> を省略した書き方は<b>動きません</b>。またブロック末尾の暗黙 return（式ブロック）は<b>非対応</b>なので、必ず <code>return</code> を明示してください。</p>
+    </div>
 
     <hr>
 
     <h2>関数の定義</h2>
 
-    <h3>基本構文</h3>
+    <h3>戻り値あり</h3>
 
     <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">fn add(a: i32, b: i32) i32 {
-    a + b
+    <pre><code class="lang-ngs">fn add(a: i32, b: i32) -&gt; i32 {
+    return a + b
 }</code></pre>
 
     <h3>戻り値なし</h3>
 
+    <p>戻り値がない場合は <code>-&gt;</code> を書きません（<code>-&gt; void</code> は不可）。</p>
     <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">fn greet(name: str) void {
-    io.println("Hello, " + name + "!")
+    <pre><code class="lang-ngs">fn greet(name: string) {
+    println(name)
 }</code></pre>
 
-    <h3>引数なし</h3>
+    <h3>引数なし・文字列を返す</h3>
 
     <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">fn get_version() str {
-    "1.0.0"
+    <pre><code class="lang-ngs">fn get_version() -&gt; string {
+    return "1.0.0"
 }</code></pre>
 
-    <hr>
-
-    <h2>関数の呼び出し</h2>
+    <h3>関数の呼び出し</h3>
 
     <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">val result = add(10, 20)  // 30
-greet("Alice")            // Hello, Alice!
-val ver = get_version()   // "1.0.0"</code></pre>
-
-    <hr>
-
-    <h2>関数式 (Fn)</h2>
-
-    <p>関数は変数に代入できます：</p>
-
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">val double = fn(x: i32) i32 {
-    x * 2
-}
-
-val result = double(5)  // 10</code></pre>
-
-    <hr>
-
-    <h2>高階関数</h2>
-
-    <p>関数を引数に取る関数：</p>
-
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">fn apply(f: fn(i32) i32, x: i32) i32 {
-    f(x)
-}
-
-val result = apply(double, 5)  // 10</code></pre>
-
-    <hr>
-
-    <h2>モジュール</h2>
-
-    <h3>import</h3>
-
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">// 標準ライブラリ
-import "std:io"
-import "std:math"
-
-// ローカルファイル
-import "utils.ngs"
-import "utils/string.ngs"</code></pre>
-
-    <h3>モジュールの利用</h3>
-
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">import "std:io"
-import "std:math"
-
-fn main() void {
-    io.println("Hello!")
-    
-    val pi = math.PI
-    val sqrt2 = math.sqrt(2.0)
-    
-    io.println(pi)
-    io.println(sqrt2)
-}</code></pre>
-
-    <h3>エクスポート</h3>
-
-    <div class="code-header"><span class="code-lang">utils.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">// utils.ngs
-export fn add(a: i32, b: i32) i32 {
-    a + b
-}
-
-export fn multiply(a: i32, b: i32) i32 {
-    a * b
-}</code></pre>
-
-    <div class="code-header"><span class="code-lang">main.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">// main.ngs
-import "utils"
-
-fn main() void {
-    val sum = utils.add(10, 20)
-    val product = utils.multiply(10, 20)
-    
-    io.println(sum)
-    io.println(product)
-}</code></pre>
-
-    <hr>
-
-    <h2>ドキュメントコメント</h2>
-
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">@doc {
-    doc = "2つの整数を加算します"
-    param_a = "最初の整数"
-    param_b = "2番目の整数"
-    return = "加算結果"
-    example = """
-    val result = add(10, 20)
-    // result = 30
-    """
-}
-fn add(a: i32, b: i32) i32 {
-    a + b
-}</code></pre>
-
-    <hr>
-
-    <h2>メソッド（関数の呼び出し方）</h2>
-
-    <h3>メソッド構文</h3>
-
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">import "std:io"
-
-val s = "Hello, World!"
-
-// 通常の呼び出し
-val len1 = str.len(s)
-
-// メソッド構文
-val len2 = s.len()
-// len1 == len2</code></pre>
-
-    <h3>チェーン呼び出し</h3>
-
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">val result = "hello".to_upper().len()
-// "hello" → "HELLO" → 5</code></pre>
+    <pre><code class="lang-ngs">val result = add(10, 20)   // 30
+greet("Alice")              // Alice
+val ver = get_version()     // "1.0.0"
+println(result)</code></pre>
 
     <hr>
 
     <h2>再帰関数</h2>
 
     <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">fn factorial(n: i32) i32 {
+    <pre><code class="lang-ngs">fn factorial(n: i32) -&gt; i32 {
     if n &lt;= 1 {
-        1
-    } else {
-        n * factorial(n - 1)
+        return 1
     }
+    return n * factorial(n - 1)
 }
 
-val result = factorial(5)  // 120</code></pre>
+val result = factorial(5)  // 120
+println(result)</code></pre>
 
     <hr>
 
-    <h2>クロージャ</h2>
+    <h2>エクスポート（Wasm / C 連携）</h2>
+
+    <div class="callout note">
+      <span class="ct">現行仕様（v0.2.0）</span>
+      <p><code>export</code> は<b>関数宣言の前置</b>にのみ使えます。<code>export "C" fn ...</code> の形を書き、Wasm や C ABI から呼び出せるようにします。変数を export する「export 文」は<b>使えません</b>（<code>export fn ...</code> は誤り）。</p>
+    </div>
+    <div class="code-header"><span class="code-lang">utils.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">// utils.ngs
+export "C" fn add(a: i32, b: i32) -&gt; i32 {
+    return a + b
+}
+
+export "C" fn multiply(a: i32, b: i32) -&gt; i32 {
+    return a * b
+}</code></pre>
+
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-bash"># WebAssembly 向けにビルド（外部から add / multiply を呼べる）
+nagiscript wasm utils.ngs -o utils.wasm</code></pre>
+
+    <hr>
+
+    <h2>関数型・クロージャは未対応</h2>
+
+    <div class="callout roadmap">
+      <span class="ct">ロードマップ（未実装）</span>
+      <p>関数を値として扱う「関数式」（<code>val f = fn(x) { ... }</code>）、関数型フィールド（<code>handler: fn(...)</code>）、高階関数、クロージャは<b>現行ではサポートされていません</b>（不安定）。関数の動的切り替えが必要な場合は、enum のバリアントを <code>match</code> + <code>if</code> で分岐して実装してください。</p>
+    </div>
 
     <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">fn make_adder(x: i32) fn(i32) i32 {
-    fn(y: i32) i32 {
-        x + y
+    <pre><code class="lang-ngs">enum Op { Add Sub }
+
+fn apply(op: Op, a: i32, b: i32) -&gt; i32 {
+    match op {
+        Add =&gt; return a + b,
+        Sub =&gt; return a - b,
     }
 }
 
-val add5 = make_adder(5)
-val result = add5(10)  // 15</code></pre>
+val result = apply(Op.Add(), 10, 5)  // 15
+println(result)</code></pre>
+
+    <hr>
+
+    <h2>モジュール / import（ロードマップ）</h2>
+
+    <div class="callout roadmap">
+      <span class="ct">ロードマップ（未実装）</span>
+      <p><code>import</code> は<b>未実装</b>です。複数ファイルへの分割はできず、<code>import "std:io"</code> のような標準モジュールも存在しません。現在は単一ファイルにすべての関数を記述します。複数ファイル分割・<code>std:</code> モジュール・パッケージ管理は将来の予定です。</p>
+    </div>
+
+    <hr>
+
+    <h2>メソッド（impl ブロック）</h2>
+
+    <div class="callout note">
+      <span class="ct">現行仕様（v0.2.0）</span>
+      <p>メソッドは <code>impl</code> ブロックで定義します。文字列組み込みの <code>s.len()</code> / <code>s.to_upper()</code> のようなメソッドは現行では<b>定義されていません</b>。※ <code>impl</code> と <code>self</code> の詳細は「構造体と列挙型」を参照してください。</p>
+    </div>
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">struct Counter {
+    n: i32,
+}
+
+impl Counter {
+    fn incr(self: Counter) -&gt; Counter {
+        return Counter { n: self.n + 1 }
+    }
+}
+
+fn main() {
+    val c = Counter { n: 1 }
+    val c2 = c.incr()
+    println(c2.n)  // 2
+}</code></pre>
 
     <hr>
 

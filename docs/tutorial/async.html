@@ -66,49 +66,62 @@
   </aside>
 
   <main class="main content">
-    <h1>非同期プログラミング</h1>
-    <p>async/await による非同期処理を学びます。</p>
+    <h1>非同期プログラミング（ロードマップ）</h1>
+    <p>async / await による非同期処理の構想を学びます。</p>
+
+    <div class="callout roadmap">
+      <span class="ct">ロードマップ（未実装）</span>
+      <p><code>async</code> / <code>await</code> は現行のコンパイラー（v0.2.0）では<b>完全に未実装</b>です。以下のコードはコンパイルできません。現行では<b>同期処理のみ</b>が可能です。</p>
+    </div>
 
     <hr>
 
-    <h2>async 関数</h2>
-    <div class="code-header"><span class="code-lang">async_fetch.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">import "std:io"
-import "std:async"
-
-async fn fetch_data(url: str) Result&lt;str, str&gt; {
-    val response = await http.get(url)
-    match response {
-        Result.Ok(res) =&gt; Result.Ok(res.body),
-        Result.Err(e) =&gt; Result.Err(e)
-    }
+    <h2>現行仕様: 同期処理のみ</h2>
+    <p>現行では非同期構文は使えず、関数はすべて同期的に実行されます。複雑な制御は並列化せず、<code>if</code> / <code>while</code> で順に処理します。</p>
+    <div class="code-header"><span class="code-lang">sync.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">fn fetch_sync() -&gt; string {
+    return "data"
 }
 
-fn main() async void {
-    val data = await fetch_data("https://api.example.com/data")
-
-    match data {
-        Result.Ok(body) =&gt; io.println(body),
-        Result.Err(e) =&gt; io.println("Error: " + e)
-    }
+fn main() {
+    val data = fetch_sync()
+    println(data)
 }</code></pre>
 
     <hr>
 
-    <h2>await</h2>
-    <p><code>await</code> は非同期操作の完了を待ちます：</p>
+    <h2>async 関数（ロードマップ）</h2>
+    <div class="callout note">
+      <span class="ct">将来仕様</span>
+      <p>以下は <code>async</code> / <code>await</code> が実装された後に動く予定のコードです（現行の v0.2.0 では動きません）。</p>
+    </div>
+    <div class="code-header"><span class="code-lang">async_fetch.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">async fn fetch_data(url: string) -&gt; string {
+    val response = await http.get(url)
+    return response.body
+}
+
+fn main() {
+    val data = await fetch_data("https://api.example.com/data")
+    println(data)
+}</code></pre>
+
+    <hr>
+
+    <h2>await（ロードマップ）</h2>
+    <p><code>await</code> は非同期操作の完了を待ちます（将来仕様）：</p>
     <div class="code-header"><span class="code-lang">await.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">async fn process() void {
+    <pre><code class="lang-ngs">async fn process() {
     val a = await heavy_computation()
     val b = await another_computation()
-    io.println(a + b)
+    println(a + b)
 }</code></pre>
 
     <hr>
 
-    <h2>async ブロック</h2>
+    <h2>async ブロック（ロードマップ）</h2>
     <div class="code-header"><span class="code-lang">async_block.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">async fn parallel() void {
+    <pre><code class="lang-ngs">async fn parallel() {
     val result = async {
         val a = await fetch("url1")
         val b = await fetch("url2")
@@ -120,13 +133,20 @@ fn main() async void {
 
     <hr>
 
-    <h2>Result との組み合わせ</h2>
+    <h2>非同期とエラー処理（ロードマップ）</h2>
+    <p>将来的には非同期 API も <code>enum</code> で自作した <code>Result</code> と組み合わせて使う予定です。組み込みの <code>Result</code> は現行では存在しないため、自作してください。</p>
     <div class="code-header"><span class="code-lang">safe_fetch.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">async fn safe_fetch(url: str) Result&lt;str, str&gt; {
-    val response = await http.get(url)
-        .map_err(fn(e: str) str { "Network error: " + e })
+    <pre><code class="lang-ngs">enum Result {
+    Ok
+    Error
+}
 
-    response
+async fn safe_fetch(url: string) -&gt; Result {
+    val response = await http.get(url)
+    if response.ok {
+        return Result.Ok()
+    }
+    return Result.Error()
 }</code></pre>
 
     <hr>

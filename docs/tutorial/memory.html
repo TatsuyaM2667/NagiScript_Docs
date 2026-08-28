@@ -81,92 +81,112 @@
       </tbody>
     </table>
 
+    <div class="callout note">
+      <span class="ct">現行仕様（v0.2.0）</span>
+      <p>NagiScript には<b>借用チェッカーはありません</b>。メモリはスタック確保と参照カウント（Rc）による<b>自動解放</b>が基本です。ポインタ操作は <code>unsafe</code> にまとめ、開発者の責任で扱います。</p>
+    </div>
+
     <hr>
 
     <h2>スタック確保</h2>
     <p>基本型と小さな構造体はスタックに確保されます：</p>
     <div class="code-header"><span class="code-lang">stack.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">val x: i32 = 42
+    <pre><code class="lang-ngs">val x = 42
 val p = Point { x: 1.0, y: 2.0 }
 
-fn add(a: i32, b: i32) i32 {
-    a + b
+fn add(a: i32, b: i32) -&gt; i32 {
+    return a + b
 }</code></pre>
 
     <hr>
 
     <h2>Rc (参照カウント)</h2>
-    <p>大きなオブジェクトや動的サイズのオブジェクトには Rc を使用します：</p>
+    <div class="callout warn">
+      <span class="ct">現行仕様（v0.2.0）</span>
+      <p><code>Rc.new(値)</code> / <code>.get()</code> はありますが、<code>.get()</code> の<b>戻り値が意図と異なる場合があります</b>（要検証 / pending）。大きなデータには現行で安定している「構造体 + 値渡し」を推奨します。</p>
+    </div>
+    <p>大きなオブジェクトや動的サイズのオブジェクトには Rc を使用する設計です：</p>
     <div class="code-header"><span class="code-lang">rc_basic.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">import "std:io"
-
-val data = Rc.new(Data {
-    values: List&lt;i32&gt; { 1, 2, 3, 4, 5 }
-})
-
-val data2 = data  // 参照カウント: 2
-io.println(data.values.len())  // 5</code></pre>
+    <pre><code class="lang-ngs">val a = Rc.new(42)
+val b = a  // 参照カウント: 2
+println(b.get())</code></pre>
 
     <h3>参照カウントの動作</h3>
     <div class="code-header"><span class="code-lang">rc_count.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">val a = Rc.new(Data { x: 10 })  // 参照カウント: 1
+    <pre><code class="lang-ngs">struct Data { x: i32 }
+
+val a = Rc.new(Data { x: 10 })  // 参照カウント: 1
 val b = a                        // 参照カウント: 2
 val c = a                        // 参照カウント: 3
-// b, c がスコープを抜けると a のみ残り、最終解放時にメモリ解放</code></pre>
+// b, c がスコープを抜けると a のみ残り、最終解放時に自動でメモリ解放</code></pre>
 
     <hr>
 
     <h2>リスト (List)</h2>
-    <p>動的配列はヒープに確保されます：</p>
+    <div class="callout warn">
+      <span class="ct">現行仕様（v0.2.0）</span>
+      <p><code>List&lt;T&gt;</code> は <code>List.new()</code> / <code>push</code> / <code>len</code> / <code>get</code> / <code>set</code> という API はありますが、LLVM コード生成で <code>zext i64 to i64</code> になり<b>リンクに失敗</b>する既知バグがあります。当面は使用を避けてください。</p>
+    </div>
+    <p>動的配列はヒープに確保される設計です。以下は現行ビルドではリンクに失敗するため、参考として記載します。</p>
     <div class="code-header"><span class="code-lang">list.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">import "std:io"
+    <pre><code class="lang-ngs">// 現行はリンク失敗バグがあるため使用不可
+var numbers = List.new()
+push(numbers, 10)
+push(numbers, 20)
+println(len(numbers))</code></pre>
 
-var numbers = List&lt;i32&gt; {}
-numbers.add(10)
-numbers.add(20)
-numbers.add(30)
+    <h3>推奨: 構造体 + 値渡し</h3>
+    <div class="callout note">
+      <span class="ct">推奨（v0.2.0）</span>
+      <p>現行で最も安定するのは、<code>List</code> や <code>Rc</code> に頼らず、<b>構造体 + 値渡し</b>でデータを引き回す方法です。構造体はスタックに確保され、コピーも値で渡るため予期しない挙動がありません。</p>
+    </div>
+    <div class="code-header"><span class="code-lang">by_value.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">struct Data {
+    a: i32
+    b: i32
+}
 
-io.println(numbers.len())  // 3
+fn sum(d: Data) -&gt; i32 {
+    return d.a + d.b
+}
 
-val first = numbers[0]  // 10
-numbers[1] = 200</code></pre>
-
-    <h3>コピー-on-Write</h3>
-    <div class="code-header"><span class="code-lang">cow.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">val a = List&lt;i32&gt; { 1, 2, 3 }
-val b = a  // shallow copy（同じメモリを参照）
-
-b.add(4)
-
-io.println(a.len())  // 3（元のまま）
-io.println(b.len())  // 4（コピーが変更された）</code></pre>
-
-    <hr>
-
-    <h2>Unsafe ブロック</h2>
-    <p>ポインタ操作が必要な場合は <code>unsafe</code> ブロックを使用します：</p>
-    <div class="code-header"><span class="code-lang">unsafe.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">fn process_data(data: *mut i32, len: i32) void {
-    unsafe {
-        var i = 0
-        while i &lt; len {
-            *data = *data * 2
-            data = data.offset(1)
-            i += 1
-        }
-    }
+fn main() {
+    val d = Data { a: 10, b: 20 }
+    println(sum(d))
 }</code></pre>
 
     <hr>
 
-    <h2>C言語とのメモリ共有</h2>
-    <div class="code-header"><span class="code-lang">c_memory.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">extern fn malloc(size: i32) *mut u8
-extern fn free(ptr: *mut u8) void
+    <h2>Unsafe ブロックとポインタ</h2>
+    <p>ポインタは <code>*T</code> 型で表し、<code>&amp;&amp;x as *T</code> でアドレスを取得します。取り回しは <code>unsafe</code> ブロックにまとめます：</p>
+    <div class="code-header"><span class="code-lang">unsafe.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">fn read(ptr: *i32) -&gt; i32 {
+    unsafe {
+        return *ptr
+    }
+}
 
-fn process_c_buffer() void {
+fn main() {
+    var x = 42
+    val p = &amp;&amp;x as *i32
+    println(read(p))
+}</code></pre>
+    <div class="callout note">
+      <span class="ct">現行仕様（v0.2.0）</span>
+      <p><code>ptr-&gt;</code> や <code>ptr.offset(n)</code> は<b>未検証</b>です。ポインタ演算は <code>*ptr</code> と整数演算で代替してください。</p>
+    </div>
+
+    <hr>
+
+    <h2>C言語とのメモリ共有</h2>
+    <p>C 標準関数は <code>extern "C" fn</code> で宣言して利用できます：</p>
+    <div class="code-header"><span class="code-lang">c_memory.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">extern "C" fn malloc(size: i32) -&gt; *u8
+extern "C" fn free(ptr: *u8)
+
+fn process_c_buffer() {
     val ptr = malloc(100)
-    unsafe { *ptr = 42 }
+    // ptr 経由でメモリを操作（unsafe 経由）
     free(ptr)
 }</code></pre>
 

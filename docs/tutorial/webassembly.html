@@ -72,13 +72,31 @@
     <hr>
 
     <h2>基本的な Wasm コンパイル</h2>
+    <div class="callout note">
+      <span class="ct">現行仕様（v0.2.0）</span>
+      <p>Wasm 出力のコマンドは <code>nagiscript wasm main.ngs [-o PATH]</code> です（<code>-o PATH</code> は省略可能）。出力は <code>.wat</code>（可能であれば <code>.wasm</code> + <code>.d.ts</code>）です。</p>
+    </div>
     <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-bash">nagiscript wasm main.ngs -o output.wasm</code></pre>
+    <pre><code class="lang-bash"># 実行例: main.ngs を Wasm へ
+nagiscript wasm main.ngs -o output.wasm</code></pre>
     <p>生成されるファイル：</p>
     <ul>
       <li><code>output.wasm</code> — Wasm バイナリ</li>
       <li><code>output.d.ts</code> — TypeScript 型定義</li>
     </ul>
+
+    <hr>
+
+    <h2>エクスポートする関数</h2>
+    <p>Wasm / C へ公開する関数は <code>export "C" fn</code> で宣言し、<code>-&gt; 型</code> と<b>明示的な <code>return</code></b> を使います（<code>export fn ...</code> は誤りです）。</p>
+    <div class="code-header"><span class="code-lang">main.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">export "C" fn add(a: i32, b: i32) -&gt; i32 {
+    return a + b
+}
+
+export "C" fn process(n: i32) -&gt; i32 {
+    return n * 2
+}</code></pre>
 
     <hr>
 
@@ -115,6 +133,10 @@
     <hr>
 
     <h2>React との連携</h2>
+    <div class="callout roadmap">
+      <span class="ct">ドキュメント化保留</span>
+      <p>JSX（<code>.ngsx</code>）用のランタイムには props 基盤が存在しますが、<b>ドキュメント化は保留</b>です。以下の React 側サンプル（TypeScript の JSX）は参考用です。</p>
+    </div>
     <h3>コンポーネント例</h3>
     <div class="code-header"><span class="code-lang">WasmComponent.tsx</span><button class="copy-btn">Copy</button></div>
     <pre><code class="lang-ts">import React, { useEffect, useState } from 'react';
@@ -175,6 +197,10 @@ instance.exports.process_string(ptr, str.length);</code></pre>
     <hr>
 
     <h2>ビルド設定</h2>
+    <div class="callout roadmap">
+      <span class="ct">ロードマップ（未実装）</span>
+      <p>プロジェクト設定ファイル（<code>project.toml</code>）によるビルド設定は<b>将来仕様</b>です。現行は <code>nagiscript wasm main.ngs [-o PATH]</code> の CLI で出力先を指定します。</p>
+    </div>
     <h3>project.toml</h3>
     <div class="code-header"><span class="code-lang">project.toml</span><button class="copy-btn">Copy</button></div>
     <pre><code class="lang-toml">[build]

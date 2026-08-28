@@ -68,11 +68,13 @@
     <h1>組み込み・マイコン開発</h1>
     <p>NagiScript での組み込みシステム開発を学びます。</p>
 
+    <div class="callout warn"><span class="ct">ロードマップ</span><p>組み込み・マイコン開発は、現行コンパイラー v0.2.0 ではまだ対応していない分野です（標準ライブラリが未実装のため）。下記の内容は<b>将来仕様</b>であり、現行の <code>nagiscript</code> コマンドでは<b>動きません</b>。現行で動作するのは組み込み <code>print</code> / <code>println</code> / <code>panic</code> と、C 標準関数の <code>extern "C" fn</code> 呼び出しのみです。</p></div>
+
     <hr>
 
     <h2>概要</h2>
 
-    <p>NagiScript は以下の特性により、組み込み開発に適しています：</p>
+    <p>NagiScript は以下の特性により、組み込み開発に適しています（将来計画）：</p>
 
     <ul>
       <li><strong>軽量ランタイム</strong>: libc のみに依存</li>
@@ -98,33 +100,35 @@
 
     <hr>
 
-    <h2>基本的な LED 点滅</h2>
+    <h2>ハードウェア定義と現行構文の基礎</h2>
 
-    <h3>C言語との連携</h3>
+    <p>下記コードはすべて将来仕様で、文法のみ現行構文（<code>extern "C" fn</code>、戻り値は <code>-&gt;</code> と明示 <code>return</code>、<code>string</code> 型）に合わせてあります。</p>
+
+    <h3>C言語との連携（基本形）</h3>
 
     <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">// ハードウェア定義（C言語で記述）
-extern fn gpio_init(pin: i32) void
-extern fn gpio_set(pin: i32, state: bool) void
-extern fn delay(ms: i32) void
+    <pre><code class="lang-ngs">// ハードウェア定義（C言語で記述）→ 現行では extern "C" fn で宣言
+extern "C" fn gpio_init(pin: i32)
+extern "C" fn gpio_set(pin: i32, state: bool)
+extern "C" fn delay(ms: i32)
 
 // NagiScript での利用
-fn blink_led(pin: i32, count: i32) void {
+fn blink_led(pin: i32, count: i32) {
     gpio_init(pin)
-    
+
     var i = 0
     while i &lt; count {
         gpio_set(pin, true)
         delay(500)
-        
+
         gpio_set(pin, false)
         delay(500)
-        
-        i += 1
+
+        i = i + 1
     }
 }
 
-fn main() void {
+fn main() {
     blink_led(13, 10)  // ピン 13 の LED を 10 回点滅
 }</code></pre>
 
@@ -135,28 +139,25 @@ fn main() void {
     <h3>ピン定義</h3>
 
     <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">struct GpioPin {
+    <pre><code class="lang-ngs">extern "C" fn gpio_init(pin: i32)
+extern "C" fn gpio_set(pin: i32, state: bool)
+extern "C" fn gpio_read(pin: i32) -&gt; bool
+
+struct GpioPin {
     pin: i32
     mode: GpioMode
 }
 
-enum GpioMode {
-    Input
-    Output
-    Alternate
+enum GpioMode { Input Output Alternate }
+
+impl GpioPin {
+    fn write(self: GpioPin, state: bool) {
+        gpio_set(self.pin, state)
+    }
 }
 
-fn GpioPin.init(self: GpioPin, mode: GpioMode) void {
-    self.mode = mode
-    gpio_init(self.pin)
-}
-
-fn GpioPin.write(self: GpioPin, state: bool) void {
-    gpio_set(self.pin, state)
-}
-
-fn GpioPin.read(self: GpioPin) bool {
-    gpio_read(self.pin)
+fn pin_read(pin: i32) -&gt; bool {
+    return gpio_read(pin)
 }</code></pre>
 
     <hr>
@@ -166,22 +167,21 @@ fn GpioPin.read(self: GpioPin) bool {
     <h3>温度センサーの例</h3>
 
     <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">extern fn adc_read(channel: i32) i32
-extern fn delay(ms: i32) void
+    <pre><code class="lang-ngs">extern "C" fn adc_read(channel: i32) -&gt; i32
+extern "C" fn delay(ms: i32)
 
-fn read_temperature(sensor_pin: i32) f64 {
+fn read_temperature(sensor_pin: i32) -&gt; f64 {
     val raw = adc_read(sensor_pin)
     // 10 ビット ADC の場合
     val voltage = (raw as f64) * 3.3 / 1023.0
     // TMP36 センサーの場合
-    val temperature = (voltage - 0.5) * 100.0
-    temperature
+    return (voltage - 0.5) * 100.0
 }
 
-fn main() void {
-    loop {
+fn main() {
+    while true {
         val temp = read_temperature(0)
-        io.println("Temperature: " + str(temp) + " C")
+        println(temp)
         delay(1000)
     }
 }</code></pre>
@@ -191,28 +191,17 @@ fn main() void {
     <h2>UART 通信</h2>
 
     <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">extern fn uart_init(baud_rate: i32) void
-extern fn uart_send(data: *const u8, len: i32) void
-extern fn uart_receive(buffer: *mut u8, len: i32) i32
+    <pre><code class="lang-ngs">extern "C" fn uart_init(baud_rate: i32)
+extern "C" fn uart_send(data: *u8, len: i32)
+extern "C" fn uart_receive(buffer: *u8, len: i32) -&gt; i32
 
-fn send_message(msg: str) void {
-    unsafe {
-        uart_send(msg.as_ptr(), msg.len())
-    }
+// ロードマップ: 文字列は *u8 + 長さで扱う（現行では string の生ポインタ取得は未検証）
+fn send_bytes(data: *u8, len: i32) {
+    uart_send(data, len)
 }
 
-fn receive_message(buffer_size: i32) str {
-    var buffer = alloc&lt;u8&gt;(buffer_size)
-    val len = uart_receive(buffer, buffer_size)
-    
-    if len &gt; 0 {
-        val result = str::from_utf8(buffer, len)
-        free(buffer)
-        result
-    } else {
-        free(buffer)
-        ""
-    }
+fn receive_bytes(buffer: *u8, buffer_size: i32) -&gt; i32 {
+    return uart_receive(buffer, buffer_size)
 }</code></pre>
 
     <hr>
@@ -220,22 +209,19 @@ fn receive_message(buffer_size: i32) str {
     <h2>I2C デバイス</h2>
 
     <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">extern fn i2c_init(sda: i32, scl: i32, freq: i32) void
-extern fn i2c_write(addr: u8, data: *const u8, len: i32) void
-extern fn i2c_read(addr: u8, buffer: *mut u8, len: i32) void
+    <pre><code class="lang-ngs">extern "C" fn i2c_init(sda: i32, scl: i32, freq: i32)
+extern "C" fn i2c_write(addr: u8, data: *u8, len: i32)
+extern "C" fn i2c_read(addr: u8, buffer: *u8, len: i32)
 
 struct I2cDevice {
     addr: u8
 }
 
-fn I2cDevice.write(self: I2cDevice, data: u8) void {
-    i2c_write(self.addr, &amp;data, 1)
-}
-
-fn I2cDevice.read(self: I2cDevice) u8 {
-    var buffer: u8 = 0
-    i2c_read(self.addr, &amp;buffer, 1)
-    buffer
+impl I2cDevice {
+    fn write(self: I2cDevice, data: u8) {
+        var buf = data
+        i2c_write(self.addr, &amp;&amp;buf as *u8, 1)
+    }
 }</code></pre>
 
     <hr>
@@ -243,16 +229,16 @@ fn I2cDevice.read(self: I2cDevice) u8 {
     <h2>SPI 通信</h2>
 
     <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">extern fn spi_init(mosi: i32, miso: i32, sck: i32, cs: i32) void
-extern fn spi_transfer(data: u8) u8
+    <pre><code class="lang-ngs">extern "C" fn spi_init(mosi: i32, miso: i32, sck: i32, cs: i32)
+extern "C" fn spi_transfer(data: u8) -&gt; u8
 
-fn spi_write(buffer: *const u8, len: i32) void {
+fn spi_write(buffer: *u8, len: i32) {
     var i = 0
     while i &lt; len {
         unsafe {
-            spi_transfer(*buffer.offset(i))
+            spi_transfer(*buffer)
         }
-        i += 1
+        i = i + 1
     }
 }</code></pre>
 
@@ -261,21 +247,22 @@ fn spi_write(buffer: *const u8, len: i32) void {
     <h2>割り込み</h2>
 
     <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">extern fn interrupt_enable(irq: i32, handler: fn() void) void
-extern fn interrupt_disable(irq: i32) void
+    <pre><code class="lang-ngs">extern "C" fn interrupt_enable(irq: i32, handler_id: i32)
+extern "C" fn interrupt_disable(irq: i32)
+extern "C" fn delay(ms: i32)
 
-fn button_handler() void {
-    io.println("Button pressed!")
+fn button_handler() {
+    println("Button pressed!")
 }
 
-fn setup_interrupts() void {
-    interrupt_enable(10, button_handler)  // IRQ 10
+fn setup_interrupts() {
+    interrupt_enable(10, 0)  // IRQ 10, ハンドラ ID 0 → if 分岐でハンドラ選択（ロードマップ）
 }
 
-fn main() void {
+fn main() {
     setup_interrupts()
-    
-    loop {
+
+    while true {
         // メインループ
         delay(100)
     }
@@ -286,17 +273,17 @@ fn main() void {
     <h2>パワーマネジメント</h2>
 
     <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">extern fn sleep_enter() void
-extern fn sleep_exit() void
-extern fn deep_sleep(ms: i32) void
+    <pre><code class="lang-ngs">extern "C" fn sleep_enter()
+extern "C" fn sleep_exit()
+extern "C" fn deep_sleep(ms: i32)
 
-fn low_power_mode() void {
+fn low_power_mode() {
     sleep_enter()
     // 低消費電力モード
     sleep_exit()
 }
 
-fn power_save(seconds: i32) void {
+fn power_save(seconds: i32) {
     deep_sleep(seconds * 1000)
 }</code></pre>
 
@@ -304,16 +291,16 @@ fn power_save(seconds: i32) void {
 
     <h2>実践的な例: IoT センサーノード</h2>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">import "std:io"
+    <div class="callout warn"><span class="ct">ロードマップ</span><p>この例はハードウェア制御（GPIO / ADC / UART）を前提としており、現行では利用できません。文法のみ現行構文に合わせてあります。<code>loop</code> は現行では使えないため <code>while true</code> に、文字列連結 <code>+</code> は使わない形に直しています。</p></div>
 
-extern fn gpio_init(pin: i32) void
-extern fn gpio_set(pin: i32, state: bool) void
-extern fn adc_read(channel: i32) i32
-extern fn uart_init(baud_rate: i32) void
-extern fn uart_send(data: *const u8, len: i32) void
-extern fn delay(ms: i32) void
-extern fn deep_sleep(ms: i32) void
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">extern "C" fn gpio_init(pin: i32)
+extern "C" fn gpio_set(pin: i32, state: bool)
+extern "C" fn adc_read(channel: i32) -&gt; i32
+extern "C" fn uart_init(baud_rate: i32)
+extern "C" fn uart_send(data: *u8, len: i32)
+extern "C" fn delay(ms: i32)
+extern "C" fn deep_sleep(ms: i32)
 
 struct SensorNode {
     led_pin: i32
@@ -321,39 +308,37 @@ struct SensorNode {
     uart_baud: i32
 }
 
-fn SensorNode.init(self: SensorNode) void {
-    gpio_init(self.led_pin)
-    uart_init(self.uart_baud)
-}
-
-fn SensorNode.read_sensor(self: SensorNode) f64 {
-    val raw = adc_read(self.sensor_pin)
-    (raw as f64) * 3.3 / 1023.0
-}
-
-fn SensorNode.send_data(self: SensorNode, data: str) void {
-    gpio_set(self.led_pin, true)
-    unsafe {
-        uart_send(data.as_ptr(), data.len())
+impl SensorNode {
+    fn init(self: SensorNode) {
+        gpio_init(self.led_pin)
+        uart_init(self.uart_baud)
     }
-    gpio_set(self.led_pin, false)
+
+    fn read_sensor(self: SensorNode) -&gt; f64 {
+        val raw = adc_read(self.sensor_pin)
+        return (raw as f64) * 3.3 / 1023.0
+    }
+
+    fn send_data(self: SensorNode, data: *u8, len: i32) {
+        gpio_set(self.led_pin, true)
+        uart_send(data, len)
+        gpio_set(self.led_pin, false)
+    }
 }
 
-fn main() void {
+fn main() {
     val node = SensorNode {
         led_pin: 13,
         sensor_pin: 0,
         uart_baud: 115200
     }
-    
+
     node.init()
-    
-    loop {
+
+    while true {
         val temp = node.read_sensor()
-        val msg = "TEMP:" + str(temp)
-        
-        node.send_data(msg)
-        
+        println(temp)
+
         // 1 秒間スリープ
         deep_sleep(1000)
     }
@@ -363,8 +348,10 @@ fn main() void {
 
     <h2>ビルドとフラッシュ</h2>
 
+    <div class="callout warn"><span class="ct">ロードマップ</span><p>クロスコンパイル（組み込み向けターゲット）は現行では未対応です。下記は将来仕様です。</p></div>
+
     <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-bash"># アーム Cortex-M の場合
+    <pre><code class="lang-bash"># アーム Cortex-M の場合（将来仕様）
 nagiscript build main.ngs --target arm-cortex-m4 -o firmware.bin
 
 # フラッシュ

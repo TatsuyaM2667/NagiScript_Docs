@@ -69,6 +69,11 @@
     <h1>演算子リファレンス</h1>
     <p>NagiScript の演算子全体を解説します。</p>
 
+    <div class="callout warn">
+      <span class="ct">現行仕様（v0.2.0）</span>
+      <p>このページは現行コンパイラー v0.2.0 の正仕様に合わせてあります。論理演算は <code>&amp;&amp;</code> / <code>||</code> / <code>!</code> を使用します。<code>and</code> / <code>or</code> / <code>not</code> のキーワード、文字列の <code>+</code> 連結、<code>?</code>（エラー伝播）は<b>未実装・使えません</b>。</p>
+    </div>
+
     <hr>
 
     <h2>算術演算子</h2>
@@ -88,6 +93,11 @@
     <pre><code class="lang-ngs">val a: f64 = 5.0
 val b: f64 = 3.0
 val result = a / b  // 1.66666...</code></pre>
+
+    <div class="callout warn">
+      <span class="ct">現行仕様（v0.2.0）</span>
+      <p>算術演算子（<code>+</code> <code>-</code> <code>*</code> <code>/</code> <code>%</code>）は<b>数値に対してのみ</b>動作します。文字列の <code>+</code> 連結は使えず、<code>"Hello" + " World"</code> はコンパイルエラーになります。</p>
+    </div>
 
     <hr>
 
@@ -110,11 +120,22 @@ val result = a / b  // 1.66666...</code></pre>
     <table>
       <thead><tr><th>演算子</th><th>説明</th><th>例</th><th>結果</th></tr></thead>
       <tbody>
-        <tr><td><code>and</code></td><td>論理AND</td><td><code>true and false</code></td><td><code>false</code></td></tr>
-        <tr><td><code>or</code></td><td>論理OR</td><td><code>true or false</code></td><td><code>true</code></td></tr>
-        <tr><td><code>not</code></td><td>論理NOT</td><td><code>not true</code></td><td><code>false</code></td></tr>
+        <tr><td><code>&amp;&amp;</code></td><td>論理AND</td><td><code>true &amp;&amp; false</code></td><td><code>false</code></td></tr>
+        <tr><td><code>||</code></td><td>論理OR</td><td><code>true || false</code></td><td><code>true</code></td></tr>
+        <tr><td><code>!</code></td><td>論理NOT</td><td><code>!true</code></td><td><code>false</code></td></tr>
       </tbody>
     </table>
+
+    <div class="callout warn">
+      <span class="ct">現行仕様（v0.2.0）</span>
+      <p>論理演算には <code>&amp;&amp;</code> / <code>||</code> / <code>!</code> を使用します。<code>and</code> / <code>or</code> / <code>not</code> のキーワードは<b>未実装</b>で、<code>true and false</code> のような書き方はコンパイルできません。</p>
+    </div>
+
+    <div class="code-header"><span class="code-lang">main.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">val a = true &amp;&amp; (5 &gt; 3)
+val b = !false
+println(a)
+println(b)</code></pre>
 
     <hr>
 
@@ -137,11 +158,24 @@ val result = a / b  // 1.66666...</code></pre>
     <table>
       <thead><tr><th>演算子</th><th>説明</th><th>例</th></tr></thead>
       <tbody>
-        <tr><td><code>&amp;&amp;</code></td><td>アドレス取得</td><td><code>val ptr = &amp;&amp;x</code></td></tr>
-        <tr><td><code>*</code></td><td>参照</td><td><code>val value = *ptr</code></td></tr>
-        <tr><td><code>.offset(n)</code></td><td>ポインタ加算</td><td><code>ptr.offset(1)</code></td></tr>
+        <tr><td><code>&amp;&amp;</code></td><td>アドレス取得</td><td><code>val ptr = &amp;&amp;x as *i32</code></td></tr>
+        <tr><td><code>*</code></td><td>参照外し（unsafe ブロック内）</td><td><code>unsafe { *ptr }</code></td></tr>
+        <tr><td><code>-&gt;</code></td><td>戻り値型の記法（関数定義のみ）</td><td><code>fn f() -&gt; i32</code></td></tr>
       </tbody>
     </table>
+
+    <div class="callout warn">
+      <span class="ct">現行仕様（v0.2.0）</span>
+      <p>ポインタは <code>*T</code> 形式、アドレス取得は <code>&amp;&amp;x as *T</code>、参照外しは <code>unsafe { *ptr }</code> を使います。<code>.offset(n)</code> や <code>ptr-&gt;</code>（ポインタ経由のメンバアクセス）は<b>未対応</b>で、<code>*ptr</code> と整数演算で代替してください。</p>
+    </div>
+
+    <div class="code-header"><span class="code-lang">main.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">fn read(ptr: *i32) -&gt; i32 {
+    unsafe { return *ptr }
+}
+var x = 42
+val p = &amp;&amp;x as *i32
+println(read(p))</code></pre>
 
     <hr>
 
@@ -163,6 +197,11 @@ val result = a / b  // 1.66666...</code></pre>
       </tbody>
     </table>
 
+    <div class="callout roadmap">
+      <span class="ct">ロードマップ（未実装）</span>
+      <p><code>?</code>（エラー伝播）演算子は<b>未実装</b>です。Result 型も組み込みでは存在せず、エラーハンドリングは enum で自作して <code>if</code> 分岐で行ってください。</p>
+    </div>
+
     <hr>
 
     <h2>演算子の優先順位</h2>
@@ -170,16 +209,21 @@ val result = a / b  // 1.66666...</code></pre>
       <thead><tr><th>優先順位</th><th>演算子</th><th>説明</th></tr></thead>
       <tbody>
         <tr><td>1 (最高)</td><td><code>()</code></td><td>括弧</td></tr>
-        <tr><td>2</td><td><code>!</code>, <code>not</code></td><td>否定</td></tr>
+        <tr><td>2</td><td><code>!</code></td><td>否定</td></tr>
         <tr><td>3</td><td><code>*</code>, <code>/</code>, <code>%</code></td><td>乗算、除算、剰余</td></tr>
         <tr><td>4</td><td><code>+</code>, <code>-</code></td><td>加算、減算</td></tr>
         <tr><td>5</td><td><code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code></td><td>比較</td></tr>
         <tr><td>6</td><td><code>==</code>, <code>!=</code></td><td>等値比較</td></tr>
-        <tr><td>7</td><td><code>and</code></td><td>論理AND</td></tr>
-        <tr><td>8</td><td><code>or</code></td><td>論理OR</td></tr>
+        <tr><td>7</td><td><code>&amp;&amp;</code></td><td>論理AND</td></tr>
+        <tr><td>8</td><td><code>||</code></td><td>論理OR</td></tr>
         <tr><td>9</td><td><code>=</code></td><td>代入</td></tr>
       </tbody>
     </table>
+
+    <div class="callout note">
+      <span class="ct">補足</span>
+      <p><code>loop</code> は存在せず、<code>void</code> 型もありません。戻りのない関数は <code>-&gt;</code> を書かず、無限ループは <code>while true { ... }</code> を使います。</p>
+    </div>
 
     <hr>
 
@@ -190,6 +234,15 @@ val result = a / b  // 1.66666...</code></pre>
         <tr><td><code>+</code></td><td>文字列連結</td><td><code>"Hello" + " World"</code></td></tr>
       </tbody>
     </table>
+
+    <div class="callout warn">
+      <span class="ct">現行仕様（v0.2.0）</span>
+      <p>文字列の <code>+</code> 連結は<b>使えません</b>。<code>"Hello" + " World"</code> はコンパイルエラーになります。文字列は <code>print</code> / <code>println</code> でそのまま表示し、複数の値を並べたい場合は個別に <code>println</code> を呼び出してください。</p>
+    </div>
+
+    <div class="code-header"><span class="code-lang">main.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">println("Hello")
+println(" World")</code></pre>
 
     <hr>
 
@@ -202,27 +255,18 @@ val result = a / b  // 1.66666...</code></pre>
       </tbody>
     </table>
 
-    <hr>
-
-    <h2>タプル演算子</h2>
-    <table>
-      <thead><tr><th>演算子</th><th>説明</th><th>例</th></tr></thead>
-      <tbody>
-        <tr><td><code>()</code></td><td>タプル作成</td><td><code>(1, 2, 3)</code></td></tr>
-        <tr><td><code>.0</code>, <code>.1</code>, <code>.2</code></td><td>タプル要素アクセス</td><td><code>t.0</code></td></tr>
-      </tbody>
-    </table>
+    <div class="callout warn">
+      <span class="ct">現行仕様（v0.2.0）</span>
+      <p><code>List&lt;T&gt;</code> は LLVM コード生成で <code>zext i64 to i64</code> エラーになりリンクに失敗する<b>既知バグ</b>があります。当面は構造体 + 値渡しを推奨します。またインデックスアクセスの <code>[]</code> 演算子は、固定配列 <code>[T; N]</code> に対して安全に使えます。</p>
+    </div>
 
     <hr>
 
-    <h2>関数型演算子</h2>
-    <table>
-      <thead><tr><th>演算子</th><th>説明</th><th>例</th></tr></thead>
-      <tbody>
-        <tr><td><code>()</code></td><td>関数呼び出し</td><td><code>f(x)</code></td></tr>
-        <tr><td><code>fn</code></td><td>関数式</td><td><code>fn(x: i32) i32 { x * 2 }</code></td></tr>
-      </tbody>
-    </table>
+    <h2>その他（未実装の演算子・型）</h2>
+    <div class="callout roadmap">
+      <span class="ct">ロードマップ（未実装）</span>
+      <p>タプル（<code>(1, 2, 3)</code>、<code>t.0</code>）は<b>未実装/未検証</b>です。関数式（<code>fn(x: i32) i32 { ... }</code>）や関数型フィールド（<code>handler: fn(Request) Response</code>）は現行では不安定で、ルーターは <code>handler_id: i32</code> と <code>if</code> 分岐で実装してください。<code>void</code> 型も存在しません。</p>
+    </div>
 
     <hr>
 

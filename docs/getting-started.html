@@ -70,6 +70,11 @@
     <h1>はじめに</h1>
     <p>NagiScript のインストールから最初のプログラム実行までを解説します。</p>
 
+    <div class="callout warn">
+      <span class="ct">現行仕様について（v0.2.0）</span>
+      <p><code>import</code>・モジュール分割・<code>std:io</code> 等の標準モジュールは<b>未実装</b>です。本ページは現行コンパイラーで動作する内容のみを扱います。将来の仕様案（ロードマップ）は各ページの注記を参照してください。</p>
+    </div>
+
     <h2>NagiScript とは</h2>
     <p>NagiScript は、以下の特性を持つ Systems Programming 言語です：</p>
     <table>
@@ -107,11 +112,14 @@
 └── project.toml  ← プロジェクト設定</code></pre>
 
     <h3>ステップ 2: コードを確認</h3>
+    <p>出力には組み込みの <code>println(値)</code> を使います。<code>import</code> / <code>std:io</code> / <code>io.println</code> は現行では<b>未実装</b>です。戻り値のない関数は <code>fn name()</code> と書き、<code>-> void</code> は付けません。</p>
+    <div class="callout note">
+      <span class="ct">現行仕様（v0.2.0）</span>
+      <p>動作する型は <code>bool</code> / <code>string</code> / <code>i8</code>〜<code>i64</code> / <code>u8</code>〜<code>u64</code> / <code>usize</code> / <code>isize</code> / <code>f32</code> / <code>f64</code> などです（<code>str</code> という型名はありません）。</p>
+    </div>
     <div class="code-header"><span class="code-lang">main.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">import "std:io"
-
-fn main() void {
-    io.println("Hello from my_project!")
+    <pre><code class="lang-ngs">fn main() {
+    println("Hello from my_project!")
 }</code></pre>
 
     <h3>ステップ 3: 実行</h3>

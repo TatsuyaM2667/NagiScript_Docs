@@ -67,239 +67,113 @@
   <main class="main content">
     <h1>Todo アプリケーション</h1>
     <p>NagiScript で Todo アプリケーションを開発するチュートリアルです。</p>
+
+    <div class="callout note"><span class="ct">現行仕様（v0.2.0）</span><p>この例は現行仕様の構文（<code>print</code> / <code>println</code>、<code>string</code> 型、<code>-></code> と明示 <code>return</code>、<code>while</code>、裸の列挙バリアントの <code>match</code>）で書かれており、文法としては現行コンパイラー v0.2.0 で動作する形です。<code>import</code> / <code>std:args</code> / <code>std:fs</code> は使えないため、ここではメモリ上だけの簡易ロジックとして構成しています。</p></div>
+
     <hr>
 
     <h2>概要</h2>
-    <p>このチュートリアルでは、NagiScript で简单的な Todo アプリケーションを作成します。</p>
+    <p>このチュートリアルでは、NagiScript で簡単な Todo アプリケーションを作成します。</p>
     <ul>
       <li>Todo の追加、削除、一覧表示</li>
-      <li>ファイルへの保存と読み込み</li>
-      <li>エラーハンドリング</li>
+      <li>単一ファイル・単一構造体による表現</li>
+      <li>固定長配列 <code>[Todo; N]</code> によるリスト表現</li>
     </ul>
     <hr>
 
-    <h2>プロジェクト構成</h2>
-    <div class="code-header"><span class="code-lang">text</span><button class="copy-btn">Copy</button></div>
-    <pre><code>todo_app/
-├── main.ngs
-├── todo.ngs
-└── storage.ngs</code></pre>
-    <hr>
+    <h2>実装（単一ファイル）</h2>
 
-    <h2>実装</h2>
-
-    <h3>todo.ngs — Todo 型の定義</h3>
-    <div class="code-header"><span class="code-lang">todo.ngs</span><button class="copy-btn">Copy</button></div>
+    <div class="code-header"><span class="code-lang">main.ngs</span><button class="copy-btn">Copy</button></div>
     <pre><code class="lang-ngs">struct Todo {
     id: i32
-    title: str
+    title: string
     completed: bool
 }
 
-fn Todo.to_string(self: Todo) str {
-    val status = if self.completed { "[x]" } else { "[ ]" }
-    status + " " + self.title
-}</code></pre>
-
-    <h3>storage.ngs — ファイル操作</h3>
-    <div class="code-header"><span class="code-lang">storage.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">import "std:io"
-import "std:fs"
-
-fn save_todos(todos: List&lt;Todo&gt;, path: str) Result&lt;void, str&gt; {
-    var content = ""
-
-    for todo in todos {
-        val line = str(todo.id) + "," + todo.title + "," + str(todo.completed)
-        content = content + line + "\n"
-    }
-
-    fs.write_to_string(path, content)
-        .map_err(fn(e: str) str { "Failed to save: " + e })
+struct TodoList {
+    items: [Todo; 100]
+    count: i32
 }
 
-fn load_todos(path: str) Result&lt;List&lt;Todo&gt;, str&gt; {
-    val content = fs.read_to_string(path)
-        .map_err(fn(e: str) str { "Failed to load: " + e })?
-
-    var todos = List&lt;Todo&gt; {}
-    var id_counter = 1
-
-    for line in content.split("\n") {
-        if line.len() > 0 {
-            val parts = line.split(",")
-            if parts.len() >= 2 {
-                todos.add(Todo {
-                    id: id_counter,
-                    title: parts[1],
-                    completed: parts[2] == "true"
-                })
-                id_counter += 1
-            }
-        }
+fn new_list() -&gt; TodoList {
+    return TodoList {
+        items: [Todo { id: 0, title: "", completed: false }; 100],
+        count: 0
     }
+}
 
-    Result.Ok(todos)
+fn add_todo(list: &amp;TodoList, title: string) {
+    if list.count &lt; 100 {
+        list.items[list.count] = Todo { id: list.count + 1, title: title, completed: false }
+        list.count = list.count + 1
+    }
+}
+
+fn list_todos(list: &amp;TodoList) {
+    var i = 0
+    while i &lt; list.count {
+        val t = list.items[i]
+        var line = ""
+        if t.completed {
+            line = "[x] "
+        } else {
+            line = "[ ] "
+        }
+        println(line)
+        println(t.title)
+        i = i + 1
+    }
 }</code></pre>
+
+    <div class="callout warn"><span class="ct">ロードマップ</span><p>上記の可変参照 <code>&amp;TodoList</code> による書き換えは、現行では参照の変更が不安定な場合があります。より確実なのは値渡しで構造体を返す「純関数」スタイルです（下記の <code>main</code> 例はその方針）。</p></div>
 
     <h3>main.ngs — メインプログラム</h3>
     <div class="code-header"><span class="code-lang">main.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">import "std:io"
-import "std:args"
-import "todo"
-import "storage"
-
-fn main() void {
-    val command = args.get("command")
-
-    match command {
-        Option.Some(cmd) => {
-            match cmd {
-                "add" => add_todo(),
-                "list" => list_todos(),
-                "done" => complete_todo(),
-                "remove" => remove_todo(),
-                _ => print_help()
-            }
-        },
-        Option.None => print_help()
-    }
+    <pre><code class="lang-ngs">struct Todo {
+    id: i32
+    title: string
+    completed: bool
 }
 
-fn print_help() void {
-    io.println("Usage:")
-    io.println("  todo add &lt;title&gt;     - Add a new todo")
-    io.println("  todo list            - List all todos")
-    io.println("  todo done &lt;id&gt;       - Mark todo as completed")
-    io.println("  todo remove &lt;id&gt;     - Remove a todo")
-}
+fn main() {
+    // 値渡し・純関数スタイル（現行で確実な方法）
+    val t1 = Todo { id: 1, title: "Buy groceries", completed: false }
+    val t2 = Todo { id: 2, title: "Write docs", completed: true }
 
-fn add_todo() void {
-    val title = args.get("title")
+    println(t1.title)
+    println(t2.title)
 
-    match title {
-        Option.Some(t) => {
-            val todos = load_todos("todos.txt")
-                .unwrap_or(List&lt;Todo&gt; {})
-
-            val new_todo = Todo {
-                id: todos.len() + 1,
-                title: t,
-                completed: false
-            }
-
-            todos.add(new_todo)
-
-            match save_todos(todos, "todos.txt") {
-                Result.Ok(_) => io.println("Added: " + t),
-                Result.Err(e) => io.println("Error: " + e)
-            }
-        },
-        Option.None => io.println("Please provide a title")
-    }
-}
-
-fn list_todos() void {
-    val todos = load_todos("todos.txt")
-        .unwrap_or(List&lt;Todo&gt; {})
-
-    if todos.is_empty() {
-        io.println("No todos yet!")
+    var found = false
+    if t1.id == 2 {
+        found = true
     } else {
-        for todo in todos {
-            io.println(todo.to_string())
-        }
+        found = false
     }
-}
-
-fn complete_todo() void {
-    val id = args.get("id")
-
-    match id {
-        Option.Some(id_str) => {
-            val target_id = atoi(id_str)
-            val todos = load_todos("todos.txt")
-                .unwrap_or(List&lt;Todo&gt; {})
-
-            var found = false
-            var i = 0
-
-            while i < todos.len() {
-                if todos[i].id == target_id {
-                    todos[i].completed = true
-                    found = true
-                }
-                i += 1
-            }
-
-            if found {
-                match save_todos(todos, "todos.txt") {
-                    Result.Ok(_) => io.println("Completed todo " + id_str),
-                    Result.Err(e) => io.println("Error: " + e)
-                }
-            } else {
-                io.println("Todo not found")
-            }
-        },
-        Option.None => io.println("Please provide a todo ID")
-    }
-}
-
-fn remove_todo() void {
-    val id = args.get("id")
-
-    match id {
-        Option.Some(id_str) => {
-            val target_id = atoi(id_str)
-            val todos = load_todos("todos.txt")
-                .unwrap_or(List&lt;Todo&gt; {})
-
-            var new_todos = List&lt;Todo&gt; {}
-            var found = false
-
-            for todo in todos {
-                if todo.id != target_id {
-                    new_todos.add(todo)
-                } else {
-                    found = true
-                }
-            }
-
-            if found {
-                match save_todos(new_todos, "todos.txt") {
-                    Result.Ok(_) => io.println("Removed todo " + id_str),
-                    Result.Err(e) => io.println("Error: " + e)
-                }
-            } else {
-                io.println("Todo not found")
-            }
-        },
-        Option.None => io.println("Please provide a todo ID")
-    }
+    println(found)
 }</code></pre>
+
+    <div class="callout warn"><span class="ct">ロードマップ</span><p>コマンドライン引数（<code>--command</code> 等）の取得、ファイル保存（<code>std:fs</code>）、動的な <code>List</code> は現行では未実装です。完全な対話型 Todo ツールは将来仕様となります。</p></div>
+
     <hr>
 
     <h2>実行例</h2>
     <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-bash"># Todo を追加
-nagiscript run main.ngs --command add --title "Buy groceries"
+    <pre><code class="lang-bash"># ビルドと実行
+nagiscript build main.ngs -o todo
+./todo
 
-# Todo を一覧表示
-nagiscript run main.ngs --command list
-
-# Todo を完了
-nagiscript run main.ngs --command done --id 1
-
-# Todo を削除
-nagiscript run main.ngs --command remove --id 1</code></pre>
+# 出力例
+Buy groceries
+Write docs
+false</code></pre>
     <hr>
 
     <h2>学べること</h2>
     <ol>
-      <li><strong>モジュール分割</strong>: 複数ファイルに分けてコードを整理</li>
-      <li><strong>ファイル操作</strong>: fs モジュールを使った読み書き</li>
-      <li><strong>エラーハンドリング</strong>: Result 型を使用したエラー処理</li>
-      <li><strong>コマンドライン引数</strong>: args モジュールを使用</li>
+      <li><strong>構造体</strong>: 複数のフィールドをまとめて表現</li>
+      <li><strong>固定長配列</strong>: <code>[Todo; N]</code> によるデータの保持</li>
+      <li><strong>制御構文</strong>: <code>if</code> / <code>while</code> の使用</li>
+      <li><strong>明示 return</strong>: <code>-&gt;</code> 型注釈と <code>return</code></li>
     </ol>
     <hr>
 

@@ -66,7 +66,9 @@
 
   <main class="main content">
     <h1>キーワード一覧</h1>
-    <p>NagiScript のキーワード全体を解説します。</p>
+    <p>NagiScript 現行コンパイラー v0.2.0 で実際に使用できるキーワードと組み込み関数の一覧です。</p>
+
+    <div class="callout warn"><span class="ct">現行仕様（v0.2.0）</span><p>以下が現行で実際に動くキーワードと組み込み関数です。ドキュメントに登場する <code>import</code> / <code>async</code> / <code>loop</code> / <code>type</code> などはロードマップ（未実装）で、現行の <code>nagiscript</code> コマンドでは動きません。それらは「未実装キーワード」の表を参照してください。</p></div>
 
     <hr>
 
@@ -76,10 +78,12 @@
         <tr><th>キーワード</th><th>説明</th><th>例</th></tr>
       </thead>
       <tbody>
-        <tr><td><code>struct</code></td><td>構造体の定義</td><td><code>struct Point { x: f64 }</code></td></tr>
-        <tr><td><code>enum</code></td><td>列挙型の定義</td><td><code>enum Color { Red, Green }</code></td></tr>
-        <tr><td><code>fn</code></td><td>関数の定義</td><td><code>fn add(a: i32, b: i32) i32</code></td></tr>
-        <tr><td><code>type</code></td><td>型エイリアス</td><td><code>type Int = i32</code></td></tr>
+        <tr><td><code>struct</code></td><td>構造体の定義</td><td><code>struct Point { x: f32 y: f32 }</code></td></tr>
+        <tr><td><code>enum</code></td><td>列挙型の定義</td><td><code>enum Status { Ok NotFound }</code></td></tr>
+        <tr><td><code>impl</code></td><td>メソッド用の impl ブロック</td><td><code>impl Point { fn show(self: Point) -&gt; string { ... } }</code></td></tr>
+        <tr><td><code>extern</code></td><td>外部関数の宣言（C 向け）</td><td><code>extern "C" fn strlen(s: *u8) -&gt; i32</code></td></tr>
+        <tr><td><code>fn</code></td><td>関数の定義（戻り値は <code>-&gt;</code> 構文）</td><td><code>fn add(a: i32, b: i32) -&gt; i32</code></td></tr>
+        <tr><td><code>export</code></td><td>関数宣言の前置（Wasm/C エクスポート）</td><td><code>export "C" fn add(a: i32, b: i32) -&gt; i32</code></td></tr>
       </tbody>
     </table>
 
@@ -104,16 +108,19 @@
         <tr><th>キーワード</th><th>説明</th><th>例</th></tr>
       </thead>
       <tbody>
-        <tr><td><code>if</code></td><td>条件分岐</td><td><code>if x &gt; 0 { ... }</code></td></tr>
+        <tr><td><code>if</code></td><td>条件分岐（文として使用）</td><td><code>if x &gt; 0 { ... }</code></td></tr>
         <tr><td><code>else</code></td><td>else ブランチ</td><td><code>if ... { } else { }</code></td></tr>
-        <tr><td><code>for</code></td><td>for ループ</td><td><code>for i in 0..5 { }</code></td></tr>
-        <tr><td><code>while</code></td><td>while ループ</td><td><code>while x &lt; 10 { }</code></td></tr>
-        <tr><td><code>match</code></td><td>パターンマッチング</td><td><code>match x { 1 =&gt; ... }</code></td></tr>
-        <tr><td><code>return</code></td><td>関数からの返却</td><td><code>return 42</code></td></tr>
+        <tr><td><code>for</code></td><td>for ループ（既知バグあり）</td><td><code>for i in 0..5 { }</code></td></tr>
+        <tr><td><code>while</code></td><td>while ループ</td><td><code>while i &lt; 10 { }</code></td></tr>
+        <tr><td><code>in</code></td><td>for ループの範囲指定</td><td><code>for i in 0..5 { }</code></td></tr>
+        <tr><td><code>match</code></td><td>パターンマッチング</td><td><code>match s { Ok =&gt; ..., _ =&gt; ... }</code></td></tr>
+        <tr><td><code>return</code></td><td>関数からの返却（明示必須）</td><td><code>return 42</code></td></tr>
         <tr><td><code>break</code></td><td>ループの脱出</td><td><code>break</code></td></tr>
         <tr><td><code>continue</code></td><td>次の反復へ</td><td><code>continue</code></td></tr>
+        <tr><td><code>as</code></td><td>型変換</td><td><code>val y = x as f64</code></td></tr>
       </tbody>
     </table>
+    <div class="callout warn"><span class="ct">現行仕様（v0.2.0）</span><p><code>for i in 0..5 { ... }</code> は v0.2.0 でループ本体が IR から落ちる既知バグがあるため、当面は <code>while</code> で同等の処理を書いてください。<code>step</code> 指定は未実装です。</p></div>
 
     <hr>
 
@@ -124,21 +131,6 @@
       </thead>
       <tbody>
         <tr><td><code>unsafe</code></td><td>Unsafe ブロック</td><td><code>unsafe { *ptr }</code></td></tr>
-        <tr><td><code>async</code></td><td>非同期関数</td><td><code>async fn fetch() {}</code></td></tr>
-        <tr><td><code>await</code></td><td>非同期操作の待機</td><td><code>await fetch_data()</code></td></tr>
-      </tbody>
-    </table>
-
-    <hr>
-
-    <h2>モジュール</h2>
-    <table>
-      <thead>
-        <tr><th>キーワード</th><th>説明</th><th>例</th></tr>
-      </thead>
-      <tbody>
-        <tr><td><code>import</code></td><td>モジュールのインポート</td><td><code>import "std:io"</code></td></tr>
-        <tr><td><code>export</code></td><td>関数のエクスポート</td><td><code>export fn add()</code></td></tr>
       </tbody>
     </table>
 
@@ -152,136 +144,110 @@
       <tbody>
         <tr><td><code>true</code></td><td>真</td><td><code>val flag = true</code></td></tr>
         <tr><td><code>false</code></td><td>偽</td><td><code>val flag = false</code></td></tr>
-        <tr><td><code>void</code></td><td>単型</td><td><code>fn do_nothing() void</code></td></tr>
-        <tr><td><code>null</code></td><td>ヌルポインタ</td><td><code>val ptr = null</code></td></tr>
       </tbody>
     </table>
 
     <hr>
 
-    <h2>基本型</h2>
+    <h2>組み込み関数</h2>
     <table>
       <thead>
-        <tr><th>キーワード</th><th>説明</th><th>例</th></tr>
+        <tr><th>関数</th><th>説明</th><th>例</th></tr>
       </thead>
       <tbody>
-        <tr><td><code>i8</code></td><td>8ビット整数</td><td><code>val x: i8 = 42</code></td></tr>
-        <tr><td><code>i16</code></td><td>16ビット整数</td><td><code>val x: i16 = 42</code></td></tr>
-        <tr><td><code>i32</code></td><td>32ビット整数</td><td><code>val x: i32 = 42</code></td></tr>
-        <tr><td><code>i64</code></td><td>64ビット整数</td><td><code>val x: i64 = 42</code></td></tr>
-        <tr><td><code>u8</code></td><td>8ビット符号なし整数</td><td><code>val x: u8 = 255</code></td></tr>
-        <tr><td><code>u16</code></td><td>16ビット符号なし整数</td><td><code>val x: u16 = 65535</code></td></tr>
-        <tr><td><code>u32</code></td><td>32ビット符号なし整数</td><td><code>val x: u32 = 4294967295</code></td></tr>
-        <tr><td><code>u64</code></td><td>64ビット符号なし整数</td><td><code>val x: u64 = 18446744073709551615</code></td></tr>
-        <tr><td><code>f32</code></td><td>32ビット浮動小数点</td><td><code>val x: f32 = 3.14</code></td></tr>
-        <tr><td><code>f64</code></td><td>64ビット浮動小数点</td><td><code>val x: f64 = 3.14159</code></td></tr>
-        <tr><td><code>bool</code></td><td>真偽値</td><td><code>val flag: bool = true</code></td></tr>
-        <tr><td><code>str</code></td><td>文字列</td><td><code>val name: str = "Alice"</code></td></tr>
+        <tr><td><code>print</code></td><td>値を改行なしで出力</td><td><code>print(42)</code></td></tr>
+        <tr><td><code>println</code></td><td>値を改行付きで出力</td><td><code>println("Hello")</code></td></tr>
+        <tr><td><code>panic</code></td><td>パニック（実行時エラー）</td><td><code>panic("boom")</code></td></tr>
       </tbody>
     </table>
+    <div class="callout warn"><span class="ct">現行仕様（v0.2.0）</span><p><code>print</code> / <code>println</code> / <code>panic</code> は組み込み関数です。<code>io.println</code> のようなモジュール形式は存在しません。引数は 1 個で、文字列・数値・bool を表示できます（文字列の <code>+</code> 連結は不可）。</p></div>
 
     <hr>
 
-    <h2>演算子</h2>
+    <h2>self と impl</h2>
+    <div class="callout warn"><span class="ct">現行仕様（v0.2.0）</span><p><code>self</code> はキーワードではなく変数名として使えます。メソッド内でレシーバを参照する場合は <code>fn show(self: Point) -&gt; string</code> のように型注釈が必要です。<code>impl</code> は <code>impl 型 { ... }</code> のブロック用です。</p></div>
+
+    <hr>
+
+    <h2>未実装キーワード（ロードマップ）</h2>
+    <p>以下はドキュメントに登場しますが、現行コンパイラー v0.2.0 では未実装です。</p>
     <table>
       <thead>
-        <tr><th>キーワード</th><th>説明</th><th>例</th></tr>
+        <tr><th>キーワード</th><th>現状</th></tr>
       </thead>
       <tbody>
-        <tr><td><code>and</code></td><td>論理AND</td><td><code>a and b</code></td></tr>
-        <tr><td><code>or</code></td><td>論理OR</td><td><code>a or b</code></td></tr>
-        <tr><td><code>not</code></td><td>論理NOT</td><td><code>not a</code></td></tr>
+        <tr><td><code>import</code></td><td>未実装。複数ファイル分割は不可</td></tr>
+        <tr><td><code>export</code>（文として）</td><td>未実装。<code>export</code> は関数宣言の前置のみ可能</td></tr>
+        <tr><td><code>async</code> / <code>await</code></td><td>未実装。非同期は存在しない</td></tr>
+        <tr><td><code>loop</code></td><td>未実装。<code>while true { }</code> を使う</td></tr>
+        <tr><td><code>type</code></td><td>未実装。型エイリアスは不可</td></tr>
+        <tr><td><code>const</code></td><td>未実装</td></tr>
+        <tr><td><code>class</code> / <code>interface</code> / <code>trait</code> / <code>pub</code></td><td>未実装（予約の位置付け）</td></tr>
+        <tr><td><code>self</code>（キーワードとして）</td><td>変数名としては使用可。メソッドでは <code>self: 型</code> の注釈が必要</td></tr>
+        <tr><td><code>step</code></td><td>未実装。for のステップ指定は不可</td></tr>
+        <tr><td><code>and</code> / <code>or</code> / <code>not</code></td><td>未実装。論理演算は <code>&amp;&amp;</code> / <code>||</code> / <code>!</code> を使う</td></tr>
+        <tr><td><code>null</code></td><td>未実装</td></tr>
+        <tr><td><code>void</code></td><td>未実装。戻りなしの関数は <code>-&gt;</code> を書かない</td></tr>
       </tbody>
     </table>
-
-    <hr>
-
-    <h2>特殊なキーワード</h2>
-    <table>
-      <thead>
-        <tr><th>キーワード</th><th>説明</th><th>例</th></tr>
-      </thead>
-      <tbody>
-        <tr><td><code>step</code></td><td>for ループのステップ</td><td><code>for i in 0..10 step 2</code></td></tr>
-        <tr><td><code>as</code></td><td>型変換</td><td><code>val y = x as f64</code></td></tr>
-      </tbody>
-    </table>
-
-    <hr>
-
-    <h2>予約語 (将来の拡張用)</h2>
-    <p>以下のキーワードは現在使用されていませんが、将来の拡張用に予約されています：</p>
-    <ul>
-      <li><code>class</code> — クラス (予約)</li>
-      <li><code>interface</code> — インターフェース (予約)</li>
-      <li><code>trait</code> — トレイト (予約)</li>
-      <li><code>impl</code> — 実装 (予約)</li>
-      <li><code>pub</code> — 公開 (予約)</li>
-      <li><code>self</code> — 自分自身 (予約)</li>
-    </ul>
 
     <hr>
 
     <h2>キーワードの使用例</h2>
     <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
     <pre><code class="lang-ngs">// 型定義
+enum Status { Ok NotFound }
+
 struct Point {
-    x: f64
-    y: f64
+    x: f32
+    y: f32
 }
 
-enum Color {
-    Red
-    Green
-    Blue
+// impl ブロックと self の型注釈
+impl Point {
+    fn show(self: Point) -&gt; string {
+        return "point"
+    }
 }
 
-// 関数定義
-fn add(a: i32, b: i32) i32 {
-    a + b
+// 関数定義（戻り値は -&gt; 構文、return を明示）
+fn add(a: i32, b: i32) -&gt; i32 {
+    return a + b
 }
 
 // 変数宣言
 val x = 42
 var counter = 0
 
-// 制御構文
+// 制御構文（while は動作確認済み）
 if x &gt; 0 {
-    io.println("Positive")
-} else if x &lt; 0 {
-    io.println("Negative")
+    println("Positive")
 } else {
-    io.println("Zero")
+    println("Zero")
 }
 
-for i in 0..10 {
-    io.println(i)
+while counter &lt; 3 {
+    println(counter)
+    counter = counter + 1
 }
 
-while counter &lt; 10 {
-    counter += 1
+// match は裸のバリアント名と _ を使う
+val st = match Status.Ok() {
+    Ok =&gt; "200",
+    _ =&gt; "404",
 }
+println(st)
 
-match color {
-    Color.Red =&gt; "Red",
-    Color.Green =&gt; "Green",
-    Color.Blue =&gt; "Blue"
-}
-
-// メモリ管理
+// unsafe とポインタ
 unsafe {
-    val ptr = &amp;x
-    val value = *ptr
+    var v = 42
+    val p = &amp;&amp;v as *i32
+    println(*p)
 }
 
-// 非同期
-async fn fetch_data() void {
-    val data = await http.get("https://example.com")
-}
-
-// モジュール
-import "std:io"
-export fn public_function() void {}</code></pre>
+// 組み込み関数 print / println
+print("no newline")
+println("Hello, World!")</code></pre>
 
     <hr>
 

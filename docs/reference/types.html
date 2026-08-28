@@ -116,6 +116,8 @@
             <h1>型システム リファレンス</h1>
             <p>NagiScript の型システム全体を解説します。</p>
 
+            <div class="callout warn"><span class="ct">現行仕様（v0.2.0）</span><p>以下は現行コンパイラー v0.2.0 で実際に使用できる仕様です。<code>str</code> / <code>void</code> / タプル / ジェネリクス構造体など、ドキュメントに散見される「将来仕様」は現行では動作しないため、各項目の注記を必ず確認してください。</p></div>
+
             <hr />
 
             <h2>基本型</h2>
@@ -179,6 +181,18 @@
                         <td>0 〜 約1844京</td>
                         <td></td>
                     </tr>
+                    <tr>
+                        <td><code>isize</code></td>
+                        <td>ワード幅</td>
+                        <td>ポインタサイズの符号あり整数</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><code>usize</code></td>
+                        <td>ワード幅</td>
+                        <td>ポインタサイズの符号なし整数</td>
+                        <td></td>
+                    </tr>
                 </tbody>
             </table>
 
@@ -219,15 +233,26 @@
                         <td>真偽値 (<code>true</code> / <code>false</code>)</td>
                     </tr>
                     <tr>
-                        <td><code>str</code></td>
-                        <td>文字列（不変）</td>
-                    </tr>
-                    <tr>
-                        <td><code>void</code></td>
-                        <td>単型（戻り値なし）</td>
+                        <td><code>string</code></td>
+                        <td>文字列（不変）。型名は <code>str</code> ではなく <code>string</code></td>
                     </tr>
                 </tbody>
             </table>
+
+            <div class="callout warn"><span class="ct">現行仕様（v0.2.0）</span><p><code>str</code> と書くと <code>unknown type `str`</code> エラーになるため、<code>string</code> を使ってください。単型 <code>void</code> は存在しません。戻り値がない関数は <code>-&gt;</code> を書かず、戻り値を返す場合は <code>fn name(...) -&gt; 型</code> の <code>-&gt;</code> 構文を使い、ブロック末尾の暗黙 return ではなく必ず <code>return</code> を明示してください。</p></div>
+            <div class="code-header">
+                <span class="code-lang">main.ngs</span
+                ><button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="lang-ngs">fn greet(name: string) -&gt; string {
+    return name
+}
+
+fn do_nothing() { }  // 戻り値なし。void は不要
+
+fn main() {
+    println(greet("Nagi"))
+}</code></pre>
 
             <hr />
 
@@ -239,125 +264,125 @@
                 ><button class="copy-btn">Copy</button>
             </div>
             <pre><code class="lang-ngs">struct Point {
-    x: f64
-    y: f64
+    x: f32
+    y: f32
 }
 
 struct Person {
-    name: str
+    name: string
     age: i32
-    email: str
-}</code></pre>
+    email: string
+}
+
+val p = Point { x: 3.0, y: 4.0 }
+println(p.x)</code></pre>
+            <div class="callout warn"><span class="ct">現行仕様（v0.2.0）</span><p>構造体は値渡しです。フィールドアクセスは <code>p.x</code>。メソッドは <code>impl</code> ブロックで定義し、<code>self</code> に型注釈が必要です（例: <code>fn show(self: Point) -&gt; string</code>）。</p></div>
 
             <h3>列挙型 (Enum)</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
                 ><button class="copy-btn">Copy</button>
             </div>
-            <pre><code class="lang-ngs">enum Color {
-    Red
-    Green
-    Blue
+            <pre><code class="lang-ngs">enum Status { Ok NotFound }
+
+fn show(s: Status) {
+    val st = match s {
+        Ok =&gt; "200",
+        _ =&gt; "404",
+    }
+    println(st)
 }
 
-// データを持つ列挙型
-enum Shape {
-    Circle(f64)
-    Rectangle(f64, f64)
-    Triangle(f64, f64, f64)
+fn main() {
+    show(Status.Ok())
 }</code></pre>
+            <div class="callout warn"><span class="ct">現行仕様（v0.2.0）</span><p>enum の値は <code>Status.Ok()</code> のように括弧付きで生成します。<code>match</code> のパターンは裸のバリアント名（<code>Ok</code> 等）と <code>_</code> ワイルドカードです。</p></div>
 
             <h3>タプル</h3>
+            <div class="callout roadmap"><span class="ct">ロードマップ（未実装）</span><p><code>(i32, str)</code> のようなタプルや <code>val (a, b) = ...</code> のデストラクチャリングは未実装 / 未検証です。複数の値をまとめる場合は構造体を使ってください。</p></div>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
                 ><button class="copy-btn">Copy</button>
             </div>
-            <pre><code class="lang-ngs">val pair: (i32, str) = (42, "hello")
-val triple: (i32, f64, bool) = (1, 2.0, true)
+            <pre><code class="lang-ngs">struct Pair {
+    first: i32
+    second: string
+}
 
-val (a, b, c) = triple  // デストラクチャリング</code></pre>
+val p = Pair { first: 42, second: "hello" }
+println(p.second)</code></pre>
 
             <hr />
 
             <h2>ジェネリクス型</h2>
-
-            <h3>基本的なジェネリクス</h3>
+            <div class="callout roadmap"><span class="ct">ロードマップ（未実装）</span><p><code>Vec2&lt;T&gt;</code> のような型パラメータ付き構造体や <code>Gen&lt;T&gt;</code> は未実装 / 未検証です。型パラメータが使えるのは <code>List&lt;i32&gt;</code> など限定的です。通常は型パラメータなしの構造体を使い、具象型で定義してください。</p></div>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
                 ><button class="copy-btn">Copy</button>
             </div>
-            <pre><code class="lang-ngs">struct Vec2&lt;T&gt; {
-    x: T
-    y: T
+            <pre><code class="lang-ngs">struct Vec2 {
+    x: f32
+    y: f32
 }
 
-val v1 = Vec2&lt;i32&gt; { x: 1, y: 2 }
-val v2 = Vec2&lt;f64&gt; { x: 1.5, y: 2.5 }</code></pre>
+val v = Vec2 { x: 1.0, y: 2.0 }
+println(v.y)</code></pre>
 
             <h3>複数の型パラメータ</h3>
-            <div class="code-header">
-                <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
-            </div>
-            <pre><code class="lang-ngs">struct Pair&lt;A, B&gt; {
-    first: A
-    second: B
-}
-
-val p = Pair&lt;i32, str&gt; { first: 42, second: "hello" }</code></pre>
+            <div class="callout roadmap"><span class="ct">ロードマップ（未実装）</span><p><code>Pair&lt;A, B&gt;</code> のような複数の型パラメータは未実装です。フィールドの型は具象型で指定してください。</p></div>
 
             <hr />
 
             <h2>標準ジェネリクス型</h2>
 
-            <h3>Option&lt;T&gt;</h3>
+            <h3>Option&lt;T&gt; / Result&lt;T, E&gt;</h3>
+            <div class="callout roadmap"><span class="ct">ロードマップ（未実装）</span><p>組み込みの <code>Option&lt;T&gt;</code> / <code>Result&lt;T, E&gt;</code> は存在しません。<code>?</code> 演算子も未実装です。成否を表す型は <code>enum</code> で自作し、<code>match</code> で分岐してください。</p></div>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
                 ><button class="copy-btn">Copy</button>
             </div>
-            <pre><code class="lang-ngs">enum Option&lt;T&gt; {
-    Some(T)
-    None
-}</code></pre>
+            <pre><code class="lang-ngs">enum Status { Ok NotFound }
 
-            <h3>Result&lt;T, E&gt;</h3>
-            <div class="code-header">
-                <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
-            </div>
-            <pre><code class="lang-ngs">enum Result&lt;T, E&gt; {
-    Ok(T)
-    Err(E)
-}</code></pre>
-
-            <h3>List&lt;T&gt;</h3>
-            <div class="code-header">
-                <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
-            </div>
-            <pre><code class="lang-ngs">struct List&lt;T&gt; {
-    data: Rc&lt;ListData&lt;T&gt;&gt;
+fn find(id: i32) -&gt; Status {
+    if id == 1 {
+        return Status.Ok()
+    }
+    return Status.NotFound()
 }
 
-struct ListData&lt;T&gt; {
-    items: RawSlice&lt;T&gt;
-    len: i32
+fn main() {
+    val st = find(2)
+    val s = match st {
+        Ok =&gt; "found",
+        _ =&gt; "not found",
+    }
+    println(s)
+}</code></pre>
+
+            <h3>List&lt;T&gt; / Rc&lt;T&gt;</h3>
+            <div class="callout warn"><span class="ct">現行仕様（v0.2.0）</span><p><code>List&lt;T&gt;</code> は <code>List.new()</code> / <code>push</code> / <code>len</code> / <code>get</code> / <code>set</code> の API が存在しますが、LLVM コード生成で <code>zext i64 to i64</code> エラーが発生してリンクに失敗する既知バグがあります。また <code>Rc&lt;T&gt;</code> は使用可能な型の一つですが、<code>Rc.new(値)</code> / <code>.get()</code> の <code>.get()</code> 戻り値は要検証です。当面は構造体 + 値渡しを推奨します。</p></div>
+            <div class="code-header">
+                <span class="code-lang">main.ngs</span
+                ><button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="lang-ngs">struct Item {
+    value: i32
+}
+
+struct Box {
+    item: Item
+}
+
+fn main() {
+    val b = Box { item: Item { value: 42 } }
+    println(b.item.value)
 }</code></pre>
 
             <hr />
 
             <h2>型変換</h2>
 
-            <h3>隠示的変換</h3>
-            <div class="code-header">
-                <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
-            </div>
-            <pre><code class="lang-ngs">val a: i64 = 100
-val b: i32 = a  // OK: i64 から i32 へ安全な縮小
-
-val x: i32 = 42
-val y: f64 = x  // OK: i32 から f64 への拡張</code></pre>
+            <div class="callout warn"><span class="ct">現行仕様（v0.2.0）</span><p>型変換は <code>as</code> 演算子を使います。暗黙の数値変換（<code>i64</code> → <code>i32</code> の自動縮小など）への依存は避けてください。</p></div>
 
             <h3>明示的なキャスト</h3>
             <div class="code-header">
@@ -365,57 +390,69 @@ val y: f64 = x  // OK: i32 から f64 への拡張</code></pre>
                 ><button class="copy-btn">Copy</button>
             </div>
             <pre><code class="lang-ngs">val x: i32 = 42
-val y: f64 = x as f64  // 明示的な型変換</code></pre>
+val y: f64 = x as f64  // 明示的な型変換
+val n: i64 = x as i64</code></pre>
 
             <hr />
 
             <h2>ポインタ型</h2>
+
+            <div class="callout warn"><span class="ct">現行仕様（v0.2.0）</span><p>ポインタ型は <code>*T</code> 形式（例: <code>*i32</code>）です。<code>*const T</code> / <code>*mut T</code> の区別はありません。アドレスは <code>&amp;&amp;x as *i32</code>、参照解除は <code>unsafe { *ptr }</code> で行います。<code>ptr-&gt;</code> / <code>ptr.offset(n)</code> は未検証のため、<code>*ptr</code> と整数演算で代替してください。</p></div>
 
             <h3>基本的なポインタ</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
                 ><button class="copy-btn">Copy</button>
             </div>
-            <pre><code class="lang-ngs">val x = 42
-val ptr: *const i32 = &amp;x  // 不変ポインタ
-val mut_ptr: *mut i32 = &amp;x  // 可変ポインタ</code></pre>
+            <pre><code class="lang-ngs">fn read(ptr: *i32) -&gt; i32 {
+    unsafe { return *ptr }
+}
+
+fn main() {
+    var x = 42
+    val p = &amp;&amp;x as *i32
+    println(read(p))  // 42
+}</code></pre>
 
             <h3>配列ポインタ</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
                 ><button class="copy-btn">Copy</button>
             </div>
-            <pre><code class="lang-ngs">val arr = [1, 2, 3, 4, 5]
-val ptr: *const i32 = &amp;arr[0]</code></pre>
+            <pre><code class="lang-ngs">var arr: [i32; 3] = [1, 2, 3]
+val ptr: *i32 = &amp;&amp;arr[0]
+unsafe {
+    println(*ptr)
+}</code></pre>
 
             <hr />
 
             <h2>関数型</h2>
+            <div class="callout roadmap"><span class="ct">ロードマップ（未実装）</span><p>関数型フィールド（<code>handler: fn(Request) Response</code> 等）や高階関数は現行では不安定なため非推奨です。関数ポインタの代わりに、<code>id</code>（<code>i32</code>）フィールドと <code>if</code> 分岐で処理を切り替えてください。</p></div>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
                 ><button class="copy-btn">Copy</button>
             </div>
-            <pre><code class="lang-ngs">// 関数ポインタ
-val add: fn(i32, i32) i32 = fn(a: i32, b: i32) i32 { a + b }
-
-// 関数型の引数
-fn apply(f: fn(i32) i32, x: i32) i32 {
-    f(x)
+            <pre><code class="lang-ngs">struct Handler {
+    id: i32
 }
 
-val result = apply(fn(x: i32) i32 { x * 2 }, 5)  // 10</code></pre>
+fn run(h: Handler) {
+    if h.id == 0 {
+        println("handler A")
+    } else {
+        println("handler B")
+    }
+}
+
+fn main() {
+    run(Handler { id: 1 })
+}</code></pre>
 
             <hr />
 
             <h2>型エイリアス</h2>
-            <div class="code-header">
-                <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
-            </div>
-            <pre><code class="lang-ngs">type IntVec = Vec2&lt;i32&gt;
-type Result&lt;T&gt; = Result&lt;T, str&gt;
-
-val v: IntVec = Vec2 { x: 1, y: 2 }</code></pre>
+            <div class="callout roadmap"><span class="ct">ロードマップ（未実装）</span><p><code>type</code> キーワードは未実装のため、型エイリアスは定義できません。</p></div>
 
             <hr />
 
@@ -427,18 +464,13 @@ val v: IntVec = Vec2 { x: 1, y: 2 }</code></pre>
                 ><button class="copy-btn">Copy</button>
             </div>
             <pre><code class="lang-ngs">val x: i32 = 42
-val y: str = "hello"
+val y: string = "hello"
 
-// 型エラー: i32 と str は加算できない
+// 型エラー: i32 と string は加算できない
 // val z = x + y  // コンパイルエラー</code></pre>
 
             <h3>実行時チェック</h3>
-            <div class="code-header">
-                <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
-            </div>
-            <pre><code class="lang-ngs">val list = List&lt;i32&gt; { 1, 2, 3 }
-// val value = list[5]  // 実行時エラー: インデックス範囲外</code></pre>
+            <div class="callout warn"><span class="ct">現行仕様（v0.2.0）</span><p><code>List&lt;T&gt;</code> は <code>zext i64 to i64</code> のリンク失敗という既知バグがあるため、現在は構造体 + 値渡しの利用を推奨します。またポインタの参照解除は必ず <code>unsafe</code> ブロック内で行ってください。</p></div>
 
             <hr />
 

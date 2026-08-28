@@ -73,41 +73,29 @@
     <hr>
 
     <h2>TUI の基本構造</h2>
-    <p>TUI アプリの骨組みは「描画 → 入力待ち → 状態更新 → 再描画」のループです。NagiScript ではこのループを <code>while</code> で書き、画面更新は ANSI エスケープシーケンスで行います。</p>
+    <p>TUI アプリの骨組みは「描画 → 入力待ち → 状態更新 → 再描画」のループです。NagiScript ではこのループを <code>while</code> で書き、画面更新は ANSI エスケープシーケンスの <code>print</code> 出力で行います。</p>
+    <div class="callout note"><span class="ct">現行仕様（v0.2.0)</span><p>文字列の <code>+</code> 連結や数値の文字列化（<code>str()</code>）は<b>未実装</b>です。ANSI シーケンスは <code>"\x1b["</code> のような文字列リテラルを <code>print(...)</code> で出力し、数値は <code>println(n)</code> でそのまま表示します。<code>const</code> も存在しないため、定数は <code>val</code> を使います。</p></div>
     <div class="code-header"><span class="code-lang">loop.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">import "std:io"
-
-// ANSI エスケープ定数
-const ESC = "\x1b["
-const CLEAR = ESC + "2J"       // 画面をクリア
-const HOME = ESC + "H"         // カーソルを(1,1)へ
-const HIDE = ESC + "?25l"      // カーソルを非表示
-const SHOW = ESC + "?25h"      // カーソルを表示
-
-fn draw(frame: i32) {
-    var buf = CLEAR + HOME
-    buf = buf + "TUI frame: " + str(frame) + "\n"
-    buf = buf + "Press [q] to quit.\n"
-    io.print(buf)
-}
-
-fn main() {
+    <pre><code class="lang-ngs">fn main() {
     var frame = 0
-    io.print(HIDE)
+    print("\x1b[?25l")     // カーソル非表示
     while true {
-        draw(frame)        // 描画
-        // 入力待ちはステップ3で実装
+        print("\x1b[2J")   // 画面クリア
+        print("\x1b[H")    // カーソルを(1,1)へ
+        println(frame)     // フレーム番号を描画
+        println("---")
+        println("press q to quit")
         frame = frame + 1
         if frame &gt;= 120 { break }
     }
-    io.print(SHOW)
-    io.print(HOME)
+    print("\x1b[?25h")     // カーソル表示
 }</code></pre>
+    <div class="callout note"><span class="ct">ロードマップ</span><p>「<code>const ESC = "\x1b["</code> のような定数」や「<code>ESC + "2J"</code> のような文字列組み立て（<code>+</code> 連結・<code>str()</code> 変換）は現行では<b>未実装</b>です。現在はリテラル全体を1つの文字列として <code>print</code> / <code>println</code> で出力してください。<code>const</code> <code>+</code> <code>str()</code> は将来の予定です。</p></div>
 
     <hr>
 
     <h2>画面の制御（ANSI エスケープ）</h2>
-    <p>よく使う制御コードは以下のとおりです。<code>io.print</code> でそのまま出力できます。</p>
+    <p>よく使う制御コードは以下のとおりです。<code>print</code> でそのまま出力できます。</p>
     <table>
       <thead><tr><th>コード</th><th>効果</th></tr></thead>
       <tbody>
@@ -121,151 +109,138 @@ fn main() {
     </table>
 
     <div class="code-header"><span class="code-lang">progress.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">import "std:io"
-
-fn progress_bar(width: i32, done: i32, total: i32) str {
-    var bar = "["
-    val filled = (done * width) / total
-    var i = 0
-    while i &lt; width {
-        if i &lt; filled { bar = bar + "#" } else { bar = bar + "-" }
-        i = i + 1
-    }
-    bar = bar + "] " + str((done * 100) / total) + "%"
-    return bar
-}
-
-fn main() {
+    <pre><code class="lang-ngs">fn main() {
     var i = 0
     while i &lt;= 100 {
-        io.print("\r" + progress_bar(30, i, 100))   // \r で行先頭に戻る
+        print("\r")            // \r で行先頭に戻る
+        println(i)             // 進捗を数値で表示
         i = i + 5
     }
-    io.println("")
+    println("done")
 }</code></pre>
+    <div class="callout warn"><span class="ct">ロードマップ</span><p>進捗バー文字列を組み立てる <code>progress_bar()</code>（下記の将来案）は文字列の <code>+</code> 連結と <code>str()</code> 変換が必要なため、現行では<b>動きません</b>。<code>] "</code> や <code>%</code> を含む完成形進捗バーは、連結と <code>str()</code> が実装された将来バージョンで使用できます。現在は数値を <code>println</code> で出力する簡易表示にしてください。</p></div>
+    <pre><code>// 将来案（未実装）
+// fn progress_bar(width: i32, done: i32, total: i32) string {
+//     var bar = "["
+//     val filled = (done * width) / total
+//     var i = 0
+//     while i &lt; width {
+//         if i &lt; filled { bar = bar + "#" } else { bar = bar + "-" }
+//         i = i + 1
+//     }
+//     bar = bar + "] " + str((done * 100) / total) + "%"
+//     return bar
+// }</code></pre>
 
     <hr>
 
     <h2>キーボード入力を受け取る</h2>
     <p>ユーザーがキーを押した瞬間に反応させるには、端末を raw モードにする必要があります。これは C 標準ライブラリの <code>termios</code> を <code>extern</code> で呼び出すと実現できます。C との相互運用の詳細は <a href="cinterop.html">C言語との相互運用</a> を参照してください。</p>
     <div class="code-header"><span class="code-lang">rawmode.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">import "std:io"
+    <pre><code class="lang-ngs">// termios を extern "C" で宣言（libc にリンク）
+extern "C" fn tcgetattr(fd: i32, termp: *u8) -&gt; i32
+extern "C" fn tcsetattr(fd: i32, actions: i32, termp: *u8) -&gt; i32
+extern "C" fn getchar() -&gt; i32
 
-// termios を extern で宣言（libc にリンク）
-extern fn tcgetattr(fd: i32, termp: *mut u8) i32
-extern fn tcsetattr(fd: i32, actions: i32, termp: *const u8) i32
-extern fn getchar() i32
-
-const TCSANOW = 0
-const STDIN_FILENO = 0
-const ECHO = 8          // ECHO ビットフラグ（OS・アーキテクチャ依存）
-
-// 端末のエコーを無効にして、Enter なしでキーを受ける
 fn raw_mode_enter() {
-    var term: [64]u8 = [0; 64]      // struct termios の配置領域
-    tcgetattr(STDIN_FILENO, &amp;term[0])
-    // ECHO ビットを落として反映（簡略化のため、実際は cc_t/lflag 位置を厳密に）
-    val flags = term[12] as i32
-    val next = (flags &amp; ~ECHO) as u8
+    var term: [64]u8 = [0; 64]     // struct termios の配置領域
+    tcgetattr(0, &amp;&amp;term[0] as *u8)
+    // ECHO ビットを落として反映（byte 位置は 実装依存）
+    var next = term[12] &amp; 247      // ECHO(8) の逆ビット
     term[12] = next
-    tcsetattr(STDIN_FILENO, TCSANOW, &amp;term[0])
+    tcsetattr(0, 0, &amp;&amp;term[0] as *u8)
 }
 
-fn read_key() i32 {
+fn read_key() -&gt; i32 {
     return getchar()
 }</code></pre>
+    <div class="callout warn"><span class="ct">注意（現行仕様）</span><p>ポインタは <code>*u8</code> 形式で、アドレスを取るのは <code>&amp;&amp;x as *u8</code>、取り出すのは <code>unsafe { *ptr }</code> です。<code>*mut</code> / <code>*const</code> 記法は存在しません。<code>struct termios</code> の正確なレイアウトは取得していません。上記は概念的な raw モード実装であり、実際にはプラットフォームの termios 定義に合わせる必要があります。<code>println(frame)</code> と同じく出力は <code>print</code> / <code>println</code> を使います。</p></div>
     <p>シンプルな対話アプリであれば、raw モードを使わず「1行の入力で Enter 確定」でも十分動きます。</p>
     <h3>1行入力で動くバージョン</h3>
+    <div class="callout note"><span class="ct">現行仕様（v0.2.0)</span><p>行組み立てには文字列の <code>+</code> 連結が必要なため、現行では <code>getchar()</code> で押されたキーの<i>コード値</i>をそのまま表示するバージョンを示します。Enter（10 か 13）で終了します。</p></div>
     <div class="code-header"><span class="code-lang">input.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">import "std:io"
+    <pre><code class="lang-ngs">extern "C" fn getchar() -&gt; i32
 
-extern fn getchar() i32
-
-// プロンプトを表示して1行読み取る（Enter で確定）
-fn read_line_prompt(prompt: str) str {
-    io.print(prompt)
-    var line = ""
+fn read_key() -&gt; i32 {
     while true {
         val c = getchar()
-        if c == 10 || c == 13 {   // LF / CR
-            io.println("")
-            break
-        }
-        line = line + str(c as u8)
-        io.print(str(c as u8))
+        if c &gt;= 0 { return c }
     }
-    return line
 }
 
 fn main() {
-    val name = read_line_prompt("Your name: ")
-    io.println("Hello, " + name + "!")
+    println("press keys; Enter to quit")
+    while true {
+        val k = read_key()
+        println(k)          // 押されたキーの文字コードを表示
+        if k == 10 || k == 13 { break }   // LF / CR
+    }
+    println("bye!")
 }</code></pre>
+    <div class="callout warn"><span class="ct">ロードマップ</span><p>「プロンプトを表示して1行の文字列を組み立てる」（<code>io.print(prompt)</code> → <code>line + str(c as u8)</code> → <code>"Hello, " + name + "!"</code>）は、文字列連結と <code>str()</code> が未実装のため<b>現行では動きません</b>。単一引数の <code>print</code> / <code>println</code> とキーコード表示で代用してください。</p></div>
 
     <hr>
 
     <h2>タスクマネージャー TUI を作る</h2>
-    <p>実用的な「タスクリスト管理」アプリです。<code>List&lt;T&gt;</code> でタスクを保持し、<code>std:fs</code> で保存・読み込みも行います。</p>
+    <div class="callout note"><span class="ct">現行仕様（v0.2.0)</span><p><code>List&lt;T&gt;</code> は LLVM リンクに失敗する既知バグ、<code>Rc</code> は <code>.get()</code> の戻り値が不確実、<code>std:fs</code> / <code>Result</code> 型は未実装です。そのため実用的な「タスクリスト管理」アプリは固定配列 <code>[Task; 16]</code> + 件数カウンターで状態を持ち、保存・読み込みは行わないメモリ内版として示します。</p></div>
     <div class="code-header"><span class="code-lang">tasks.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">import "std:io"
-import "std:fs"
+    <pre><code class="lang-ngs">extern "C" fn getchar() -&gt; i32
 
 struct Task {
-    title: str,
-    done: bool,
+    title: string
+    done: bool
 }
 
-var tasks = List&lt;Task&gt; {}
+var tasks: [Task; 16]
+var task_count: i32 = 0
 
-fn add_task(title: str) {
-    tasks.add(Task { title: title, done: false })
+fn add_task(title: string) {
+    if task_count &lt; 16 {
+        tasks[task_count] = Task { title: title, done: false }
+        task_count = task_count + 1
+    }
 }
 
 fn toggle_task(index: i32) {
-    if index &gt;= 0 &amp;&amp; index &lt; tasks.len() {
+    if index &gt;= 0 &amp;&amp; index &lt; task_count {
         tasks[index].done = !tasks[index].done
     }
 }
 
-fn render() str {
-    val ESC = "\x1b["
-    var buf = ESC + "2J" + ESC + "H"
-    buf = buf + "=== Task Manager ===\n\n"
-    var i = 0
-    while i &lt; tasks.len() {
-        val t = tasks[i]
-        val mark = if t.done { "[x]" } else { "[ ]" }
-        buf = buf + " " + mark + " " + str(i + 1) + ". " + t.title + "\n"
-        i = i + 1
+fn main() {
+    // 入力ループ:
+    //   a : タスク追加（id のみ増える）
+    //   t : 最新タスクをトグル
+    //   q : 終了
+    print("\x1b[?25l")           // カーソル非表示
+    while true {
+        print("\x1b[2J")         // クリア
+        print("\x1b[H")          // 左上へ
+        println("=== Task Manager ===")
+        var i = 0
+        while i &lt; task_count {
+            val t = tasks[i]
+            if t.done {
+                println("[x]")
+            } else {
+                println("[ ]")
+            }
+            i = i + 1
+        }
+        println("---")
+        println("[a]dd  [t]oggle  [q]uit")
+        val key = read_key()
+        if key == 113 { break }            // q
+        if key == 97 { add_task("task") }  // a
+        if key == 116 { toggle_task(task_count - 1) }  // t
     }
-    buf = buf + "\n  [a]dd  [t]oggle  [q]uit\n"
-    return buf
+    print("\x1b[?25h")           // カーソル表示
+    println("bye!")
+    println(task_count)          // 件数を表示
 }
 
-fn main() {
-    // フォルダ/ファイルから復元（なければ空で開始）
-    val saved = fs.read_to_string("tasks.txt")
-    match saved {
-        Result.Ok(_) =&gt; io.println("loaded saved tasks"),
-        Result.Err(_) =&gt; { /* 初回起動 */ }
-    }
-
-    io.print("\x1b[?25l")
-    while true {
-        io.print(render())       // 描画
-        val key = getchar()      // 入力（raw モードなら Enter なし）
-
-        if key == 113 { break }  // q
-        if key == 97 {           // a → タスク追加
-            val title = read_line_prompt("\ntitle: ")
-            if len(title) &gt; 0 { add_task(title) }
-        }
-        if key == 116 {          // t → 最新タスクをトグル
-            toggle_task(tasks.len() - 1)
-        }
-    }
-    io.print("\x1b[?25h")
-    io.println("bye!")
+fn read_key() -&gt; i32 {
+    return getchar()
 }</code></pre>
 
     <hr>
@@ -283,9 +258,9 @@ nagiscript build tasks.ngs -o task-manager
 
     <h2>発展させるときのヒント</h2>
     <ol>
-      <li><strong>ウィンドウ描画を抽象化</strong> — 位置指定（<code>\x1b[行;列H</code>）を使うと、複数ペインをHTTPレスに作れます</li>
+      <li><strong>ウィンドウ描画を抽象化</strong> — 位置指定（<code>\x1b[行;列H</code>）を使うと、複数ペインを自由に並べられます</li>
       <li><strong>状態は struct でまとめる</strong> — <code>AppState</code> を1つの構造体にすると再描画・永続化が楽になります</li>
-      <li><strong>帳票のような出力は <code>std:fs</code> で CSV に吐く</strong> — TUI は「見る」だけで「結果」はファイルに出す運用が扱いやすい</li>
+      <li><strong>永久化は将来の <code>std:fs</code> で</strong> — 現行ではファイル保存・読み込み（<code>std:fs</code>）は未実装です。保存機能はロードマップとして設計に残し、当面はメモリ内で動かします</li>
       <li><strong>色を使う</strong> — <code>\x1b[31m</code>（赤）等を組み合わせて選択中カーソルや完了タスクを強調できます</li>
     </ol>
 

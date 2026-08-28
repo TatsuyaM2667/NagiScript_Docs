@@ -116,296 +116,86 @@
             <h1>標準ライブラリ</h1>
             <p>NagiScript の標準ライブラリを解説します。</p>
 
-            <hr />
-
-            <h2>io モジュール</h2>
-
-            <h3>基本的な出力</h3>
-            <div class="code-header">
-                <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
-            </div>
-            <pre><code class="lang-ngs">import "std:io"
-
-io.println("Hello, World!")  // 改行付き
-io.print("Hello")            // 改行なし</code></pre>
-
-            <h3>フォーマット出力</h3>
-            <div class="code-header">
-                <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
-            </div>
-            <pre><code class="lang-ngs">import "std:io"
-
-val name = "Alice"
-val age = 30
-
-io.println("Name: " + name + ", Age: " + str(age))</code></pre>
+            <div class="callout warn"><span class="ct">現行仕様（v0.2.0）</span><p>std: モジュール群（io / math / fs / args / async / net 等）は現行コンパイラー v0.2.0 では<b>未実装</b>です。実際に使えるのは下記の組み込み <code>print</code> / <code>println</code> / <code>panic</code> と、ランタイムの <code>__ngs_*</code> 関数のみです。これら std: モジュールは将来（ロードマップ）として扱ってください。</p></div>
 
             <hr />
 
-            <h2>math モジュール</h2>
+            <h2>組み込み API</h2>
 
-            <h3>定数</h3>
+            <p>現行の NagiScript が提供する出力 API は組み込みの <code>print(値)</code> と <code>println(値)</code> です。引数はちょうど 1 個で、文字列・数値・bool を表示できます。</p>
+
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
                 ><button class="copy-btn">Copy</button>
             </div>
-            <pre><code class="lang-ngs">import "std:math"
-
-val pi = math.PI          // 3.141592653589793
-val e = math.E            // 2.718281828459045
-val infinity = math.INF   // 無限大</code></pre>
-
-            <h3>関数</h3>
-            <div class="code-header">
-                <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
-            </div>
-            <pre><code class="lang-ngs">import "std:math"
-
-// 三角関数
-val sin_val = math.sin(math.PI / 2.0)  // 1.0
-val cos_val = math.cos(0.0)             // 1.0
-
-// べき乗
-val pow_val = math.pow(2.0, 10.0)  // 1024.0
-
-// 平方根
-val sqrt_val = math.sqrt(16.0)  // 4.0
-
-// 絶対値
-val abs_val = math.abs(-5.0)  // 5.0
-
-// 最大値・最小値
-val max_val = math.max(10.0, 20.0)  // 20.0
-val min_val = math.min(10.0, 20.0)  // 10.0</code></pre>
-
-            <hr />
-
-            <h2>fs モジュール</h2>
-
-            <h3>ファイル読み込み</h3>
-            <div class="code-header">
-                <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
-            </div>
-            <pre><code class="lang-ngs">import "std:fs"
-
-// ファイル全体を読み込み
-val content = fs.read_to_string("data.txt")
-match content {
-    Result.Ok(data) =&gt; io.println(data),
-    Result.Err(e) =&gt; io.println("Error: " + e)
+            <pre><code class="lang-ngs">fn main() {
+    println("Hello, World!")
+    print("no newline")
+    print(42)
+    println(true)
 }</code></pre>
 
-            <h3>ファイル書き込み</h3>
+            <h3>panic</h3>
+            <p><code>panic</code> は実行時エラーを発生させて停止します。</p>
+
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
                 ><button class="copy-btn">Copy</button>
             </div>
-            <pre><code class="lang-ngs">import "std:fs"
-
-// ファイルに書き込み
-val result = fs.write_to_string("output.txt", "Hello, World!")
-match result {
-    Result.Ok(_) =&gt; io.println("File written"),
-    Result.Err(e) =&gt; io.println("Error: " + e)
+            <pre><code class="lang-ngs">fn main() {
+    panic("something went wrong")
 }</code></pre>
 
-            <h3>ファイル情報</h3>
+            <h3>文字列比較・数値変換</h3>
+            <p>文字列比較や数値変換はランタイムの <code>__ngs_*</code> 関数を経由して行われます（詳細は内部実装）。型名は <code>str</code> ではなく <code>string</code> です。<code>str</code> と書くと unknown type <code>str</code> エラーになります。</p>
+
+            <hr />
+
+            <h2>List&lt;T&gt;</h2>
+
+            <div class="callout warn"><span class="ct">既知バグ</span><p><code>List&lt;T&gt;</code> は <code>List.new()</code> / <code>push</code> / <code>len</code> / <code>get</code> / <code>set</code> の API としては定義されていますが、現行 v0.2.0 では LLVM コード生成時に <code>zext i64 to i64</code> エラーが発生し、リンクに失敗する既知バグがあります。当面は構造体 + 値渡しを推奨します。</p></div>
+
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
                 ><button class="copy-btn">Copy</button>
             </div>
-            <pre><code class="lang-ngs">import "std:fs"
-
-val metadata = fs.metadata("data.txt")
-match metadata {
-    Result.Ok(meta) =&gt; {
-        io.println("Size: " + str(meta.size) + " bytes")
-        io.println("Is file: " + str(meta.is_file))
-        io.println("Is dir: " + str(meta.is_dir))
-    },
-    Result.Err(e) =&gt; io.println("Error: " + e)
+            <pre><code class="lang-ngs">// なお、List は現行ビルドでリンクに失敗する既知バグがあるため、
+// 当面は構造体 + 値渡しでの実装を推奨します
+struct IntList {
+    items: [i32; 4]
+    len: i32
 }</code></pre>
 
             <hr />
 
-            <h2>args モジュール</h2>
+            <h2>Rc&lt;T&gt;</h2>
 
-            <h3>コマンドライン引数</h3>
+            <div class="callout warn"><span class="ct">要検証</span><p><code>Rc.new(値)</code> と <code>.get()</code> は API としては存在しますが、v0.2.0 では <code>.get()</code> の戻り値が意図と異なる場合があります。安定性を確認するまで続けて、当面は構造体 + 値渡しを推奨します。</p></div>
+
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
                 ><button class="copy-btn">Copy</button>
             </div>
-            <pre><code class="lang-ngs">import "std:args"
-
-// 全ての引数を取得
-val all_args = args.get_all()
-
-// 特定の引数を取得
-val name = args.get("name")
-match name {
-    Option.Some(n) =&gt; io.println("Name: " + n),
-    Option.None =&gt; io.println("No name provided")
+            <pre><code class="lang-ngs">// Rc の .get() の戻り値は要検証のため、当面は構造体 + 値渡しで実装します
+struct Data {
+    x: i32
 }
 
-// 引数の有無を確認
-val verbose = args.has("verbose")
-if verbose {
-    io.println("Verbose mode enabled")
+fn main() {
+    val d = Data { x: 10 }
+    println(d.x)
 }</code></pre>
 
             <hr />
 
-            <h2>async モジュール</h2>
-
-            <h3>非同期処理</h3>
-            <div class="code-header">
-                <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
-            </div>
-            <pre><code class="lang-ngs">import "std:async"
-
-async fn fetch_data(url: str) Result&lt;str, str&gt; {
-    val response = await http.get(url)
-    match response {
-        Result.Ok(res) =&gt; Result.Ok(res.body),
-        Result.Err(e) =&gt; Result.Err(e)
-    }
-}
-
-fn main() async void {
-    val data = await fetch_data("https://api.example.com/data")
-}</code></pre>
-
-            <hr />
-
-            <h2>List&lt;T&gt; メソッド</h2>
-
-            <h3>基本操作</h3>
-            <div class="code-header">
-                <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
-            </div>
-            <pre><code class="lang-ngs">val list = List&lt;i32&gt; { 1, 2, 3 }
-
-// 要素の追加　
-list.add(4)
-
-// 要素の取得
-val first = list[0]  // 1
-
-// 長さ
-val len = list.len()  // 4
-
-// 空かどうか
-val empty = list.is_empty()  // false</code></pre>
-
-            <h3>関数型メソッド</h3>
-            <div class="code-header">
-                <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
-            </div>
-            <pre><code class="lang-ngs">val numbers = List&lt;i32&gt; { 1, 2, 3, 4, 5 }
-
-// フィルタリング
-val evens = numbers.filter(fn(x: i32) bool { x % 2 == 0 })
-// evens = [2, 4]
-
-// マッピング
-val doubled = numbers.map(fn(x: i32) i32 { x * 2 })
-// doubled = [2, 4, 6, 8, 10]
-
-// リダクション
-val sum = numbers.reduce(0, fn(acc: i32, x: i32) i32 { acc + x })
-// sum = 15</code></pre>
-
-            <hr />
-
-            <h2>str メソッド</h2>
-
-            <h3>文字列操作</h3>
-            <div class="code-header">
-                <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
-            </div>
-            <pre><code class="lang-ngs">val s = "Hello, World!"
-
-// 長さ
-val len = s.len()  // 13
-
-// 大文字変換
-val upper = s.to_upper()  // "HELLO, WORLD!"
-
-// 小文字変換
-val lower = s.to_lower()  // "hello, world!"
-
-// 部分文字列
-val sub = s.substring(0, 5)  // "Hello"
-
-// 文字列分割
-val parts = s.split(", ")  // ["Hello", "World!"]
-
-// 文字列結合
-val joined = ["Hello", "World"].join(", ")  // "Hello, World!"</code></pre>
-
-            <hr />
-
-            <h2>Rc&lt;T&gt; メソッド</h2>
-
-            <h3>参照カウント操作</h3>
-            <div class="code-header">
-                <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
-            </div>
-            <pre><code class="lang-ngs">val data = Rc.new(Data { x: 10 })
-
-// 参照カウントの取得（デバッグ用）
-val count = data.rc_count()  // 1
-
-// コピー（浅いコピー）
-val data2 = data.clone()  // 参照カウントが増加</code></pre>
-
-            <hr />
-
-            <h2>Option&lt;T&gt; メソッド</h2>
-            <div class="code-header">
-                <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
-            </div>
-            <pre><code class="lang-ngs">val some_value = Option.Some(42)
-val no_value = Option.None
-
-// 値の取得
-val value = some_value.unwrap()  // 42
-
-// デフォルト値
-val value = no_value.unwrap_or(0)  // 0
-
-// 有無の確認
-val is_some = some_value.is_some()  // true
-val is_none = no_value.is_none()  // true</code></pre>
-
-            <hr />
-
-            <h2>Result&lt;T, E&gt; メソッド</h2>
-            <div class="code-header">
-                <span class="code-lang">main.ngs</span
-                ><button class="copy-btn">Copy</button>
-            </div>
-            <pre><code class="lang-ngs">val ok_result = Result.Ok(42)
-val err_result = Result.Err("Error")
-
-// 値の取得
-val value = ok_result.unwrap()  // 42
-
-// デフォルト値
-val value = err_result.unwrap_or(0)  // 0
-
-// エラーの変換
-val new_result = err_result.map_err(fn(e: str) str { "New: " + e })</code></pre>
+            <div class="callout roadmap"><span class="ct">ロードマップ</span><p>以下の std: モジュール群は将来のバージョンでの実装予定（ロードマップ）であり、現行 v0.2.0 では <b>使用できません</b>。</p><ul>
+                <li><code>std:io</code> — 入出力（<code>io.println</code> 等）</li>
+                <li><code>std:math</code> — 数値演算（<code>math.sin</code>, <code>math.pow</code> 等）</li>
+                <li><code>std:fs</code> — ファイル操作</li>
+                <li><code>std:args</code> — コマンドライン引数</li>
+                <li><code>std:async</code> — 非同期処理</li>
+                <li><code>std:net</code> — ネットワーク</li>
+            </ul><p>現行では上記の組み込み <code>print</code> / <code>println</code> / <code>panic</code> と、C 標準関数を <code>extern "C" fn</code> で宣言して利用してください。</p></div>
 
             <hr />
 

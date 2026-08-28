@@ -67,177 +67,96 @@
   <main class="main content">
     <h1>Web フレームワーク</h1>
     <p>NagiScript でシンプルな Web フレームワークを開発するチュートリアルです。</p>
+
+    <div class="callout note"><span class="ct">現行仕様（v0.2.0）</span><p>この例は現行仕様の構文（<code>string</code> 型、<code>-></code> と明示 <code>return</code>、<code>match</code>、<code>while</code>）で書かれており、文法としては現行コンパイラー v0.2.0 で動作する形です。ルーティングは関数型フィールドではなく <code>handler_id: i32</code> と <code>if</code> 分岐で実装します（関数型フィールドは現行では不安定）。</p></div>
+
     <hr>
 
     <h2>概要</h2>
-    <p>このチュートリアルでは、NagiScript で基本的な Web フレームワークを作成します。</p>
+    <p>このチュートリアルでは、NagiScript で基本的な Web フレームワーク（ルーティング部分）を作成します。</p>
     <ul>
-      <li>HTTP リクエストの処理</li>
-      <li>ルーティング</li>
-      <li>JSON レスポンス</li>
+      <li>リクエストとレスポンスの表現</li>
+      <li>ハンドラ ID によるルーティング</li>
+      <li>JSON レスポンス（enum による状態表現）</li>
     </ul>
+
+    <div class="callout warn"><span class="ct">ロードマップ</span><p>実際の HTTP サーバ（<code>std:net</code> の <code>listen</code> / <code>accept</code>）や TCP ソケット操作は現行では<b>未実装</b>です。下記はルーティングロジックのみで、ネットワーク部分は将来仕様です。</p></div>
     <hr>
 
-    <h2>プロジェクト構成</h2>
-    <div class="code-header"><span class="code-lang">text</span><button class="copy-btn">Copy</button></div>
-    <pre><code>web_framework/
-├── main.ngs
-├── router.ngs
-└── handler.ngs</code></pre>
-    <hr>
+    <h2>実装（単一ファイル）</h2>
 
-    <h2>実装</h2>
+    <div class="code-header"><span class="code-lang">main.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">enum Status { Ok NotFound }
 
-    <h3>router.ngs — ルーター</h3>
-    <div class="code-header"><span class="code-lang">router.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">struct Route {
-    method: str
-    path: str
-    handler: fn(Request) Response
-}
-
-struct Router {
-    routes: List&lt;Route&gt;
-}
-
-fn Router.init() Router {
-    Router {
-        routes: List&lt;Route&gt; {}
-    }
-}
-
-fn Router.add_route(self: Router, method: str, path: str, handler: fn(Request) Response) void {
-    self.routes.add(Route {
-        method: method,
-        path: path,
-        handler: handler
-    })
-}
-
-fn Router.handle(self: Router, request: Request) Response {
-    for route in self.routes {
-        if route.method == request.method &amp;&amp; route.path == request.path {
-            return route.handler(request)
-        }
-    }
-
-    Response {
-        status: 404,
-        body: "Not Found"
-    }
-}</code></pre>
-
-    <h3>handler.ngs — ハンドラー</h3>
-    <div class="code-header"><span class="code-lang">handler.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">struct Request {
-    method: str
-    path: str
-    body: str
+struct Request {
+    method: string
+    path: string
 }
 
 struct Response {
-    status: i32
-    body: str
+    status: Status
+    body: string
 }
 
-fn home_handler(request: Request) Response {
-    Response {
-        status: 200,
-        body: "Welcome to NagiScript Web Framework!"
-    }
+fn home_handler() -&gt; Response {
+    return Response { status: Status.Ok(), body: "Welcome to NagiScript Web Framework!" }
 }
 
-fn hello_handler(request: Request) Response {
-    Response {
-        status: 200,
-        body: "Hello, World!"
-    }
+fn hello_handler() -&gt; Response {
+    return Response { status: Status.Ok(), body: "Hello, World!" }
 }
 
-fn not_found_handler(request: Request) Response {
-    Response {
-        status: 404,
-        body: "Page not found"
+fn not_found() -&gt; Response {
+    return Response { status: Status.NotFound(), body: "Page not found" }
+}
+
+fn route(req: Request) -&gt; Response {
+    if req.method == "GET" {
+        if req.path == "/" {
+            return home_handler()
+        }
+        if req.path == "/hello" {
+            return hello_handler()
+        }
     }
+    return not_found()
+}
+
+fn main() {
+    // サンプルリクエストで動作確認
+    val r1 = Request { method: "GET", path: "/" }
+    val r2 = Request { method: "GET", path: "/hello" }
+    val r3 = Request { method: "GET", path: "/nope" }
+
+    val resp = match route(r1).status {
+        Ok =&gt; "200 OK",
+        _ =&gt; "404 Not Found",
+    }
+    println(resp)
+    println(route(r2).body)
+    println(route(r3).body)
 }</code></pre>
 
-    <h3>main.ngs — メインプログラム</h3>
-    <div class="code-header"><span class="code-lang">main.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">import "std:io"
-import "std:net"
-import "router"
-import "handler"
-
-fn main() void {
-    val router = Router.init()
-
-    router.add_route("GET", "/", home_handler)
-    router.add_route("GET", "/hello", hello_handler)
-
-    io.println("Starting server on port 8080...")
-
-    val server = net.listen("0.0.0.0:8080")
-
-    loop {
-        val client = server.accept()
-
-        val request = parse_request(client)
-        val response = router.handle(request)
-
-        send_response(client, response)
-        client.close()
-    }
-}
-
-fn parse_request(client: net.TcpStream) Request {
-    val raw = client.read_line()
-    val parts = raw.split(" ")
-
-    Request {
-        method: parts[0],
-        path: parts[1],
-        body: ""
-    }
-}
-
-fn send_response(client: net.TcpStream, response: Response) void {
-    val status_text = match response.status {
-        200 => "OK",
-        404 => "Not Found",
-        _ => "Unknown"
-    }
-
-    val header = "HTTP/1.1 " + str(response.status) + " " + status_text + "\r\n" +
-                 "Content-Length: " + str(response.body.len()) + "\r\n" +
-                 "Content-Type: text/plain\r\n" +
-                 "\r\n"
-
-    client.write(header + response.body)
-}</code></pre>
+    <div class="callout warn"><span class="ct">ロードマップ</span><p><code>url</code> のルーティング・JSON 直列化・HTTP プロトコル送受信は、<code>std:net</code> と標準ライブラリが未実装のため将来仕様です。上記は現行で動作確認できる構文例です。</p></div>
     <hr>
 
     <h2>実行例</h2>
     <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-bash">nagiscript run main.ngs</code></pre>
+    <pre><code class="lang-bash"># ビルドと実行
+nagiscript build main.ngs -o app
+./app
 
-    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-bash"># テスト
-curl http://localhost:8080/
-# Welcome to NagiScript Web Framework!
-
-curl http://localhost:8080/hello
-# Hello, World!
-
-curl http://localhost:8080/notfound
-# Page not found</code></pre>
+# 出力例
+200 OK
+Hello, World!
+Page not found</code></pre>
     <hr>
 
     <h2>学べること</h2>
     <ol>
-      <li><strong>ルーティング</strong>: URL パスに基づくリクエスト振り分け</li>
-      <li><strong>HTTP プロトコル</strong>: リクエスト/レスポンスの構造</li>
-      <li><strong>コールバック</strong>: 関数を引数として渡す</li>
-      <li><strong>ネットワーク</strong>: TCP ソケットの操作</li>
+      <li><strong>ルーティング</strong>: パスに基づく分岐（<code>if</code>）</li>
+      <li><strong>enum</strong>: ステータスを <code>enum</code> + <code>match</code> で表現</li>
+      <li><strong>明示 return</strong>: 各ハンドラで <code>-&gt; Response</code> と <code>return</code></li>
     </ol>
     <hr>
 

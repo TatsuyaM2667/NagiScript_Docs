@@ -150,6 +150,7 @@
     // 特殊
     Eof, Newline, Indent, Dedent,
 }</code></pre>
+    <div class="callout warn"><span class="ct">現行仕様（v0.2.0）</span><p>実際にキーワードとしてトークン化されるのは <code>fn val var if else for while match struct enum impl unsafe extern export return in as break continue true false</code> です。<code>import</code> / <code>async</code> / <code>await</code> はトークン区分として残っていますが未実装です。<code>and</code> / <code>or</code> / <code>not</code> キーワードは存在しないため、論理演算は <code>&amp;&amp;</code> / <code>||</code> / <code>!</code> を使用してください。</p></div>
 
     <hr>
 
@@ -196,6 +197,7 @@ enum Stmt {
       <li>借用チェック</li>
       <li>エラー検出</li>
     </ol>
+    <div class="callout warn"><span class="ct">現行仕様（v0.2.0）</span><p>名前解決は同一ファイル内の識別子解決のみです。<code>import</code> によるモジュール解決は未実装のため、現行では複数のファイルに分割できず、1 つの <code>main.ngs</code> で完結させます。</p></div>
 
     <h3>型チェック</h3>
     <div class="code-header"><span class="code-lang">rust</span><button class="copy-btn">Copy</button></div>
@@ -256,6 +258,7 @@ fn add_i32(a: i32, b: i32) i32 {
 fn add_f64(a: f64, b: f64) f64 {
     a + b
 }</code></pre>
+    <div class="callout warn"><span class="ct">現行仕様（v0.2.0）</span><p>上記は単型化の動作説明用です。ユーザーコードでは <code>fn add&lt;T: Numeric&gt;(a: T, b: T) T</code> のような型パラメータ付き関数は現行では限定的で、<code>Vec2&lt;T&gt;</code> 等のジェネリクス構造体は未実装です。実コードでは戻り値を <code>-&gt;</code> 構文で書き、ブロック末尾の暗黙 return ではなく <code>return</code> を明示してください。</p></div>
 
     <hr>
 
@@ -287,6 +290,7 @@ fn add_f64(a: f64, b: f64) f64 {
         // ...
     }
 }</code></pre>
+    <div class="callout warn"><span class="ct">現行仕様（v0.2.0）</span><p>整数 / 浮動小数点型は LLVM の対応する型にほぼ 1:1 でマップされます（<code>i32</code> → LLVM <code>i32</code>、<code>f64</code> → LLVM <code>double</code> 等）。既知の問題として、<code>List&lt;T&gt;</code> のコード生成で <code>zext i64 to i64</code> エラーが発生しリンクに失敗するため、現行では構造体 + 値渡しの利用を推奨します。</p></div>
 
     <hr>
 
@@ -308,6 +312,11 @@ fn add_f64(a: f64, b: f64) f64 {
   )
   (export "add" (func $add))
 )</code></pre>
+    <div class="callout warn"><span class="ct">現行仕様（v0.2.0）</span><p>Wasm 出力は <code>nagiscript wasm main.ngs [-o PATH]</code> で行います（<code>.wat</code>、可能なら <code>.wasm</code> + 型定義ファイル <code>.d.ts</code>）。Wasm / C へのエクスポートは <code>export "C" fn</code> 形式が正しい書き方です（<code>export fn</code> とは書けません）。</p></div>
+      <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn">Copy</button></div>
+      <pre><code class="lang-ngs">export "C" fn add(a: i32, b: i32) -&gt; i32 {
+    return a + b
+}</code></pre>
 
     <hr>
 
@@ -329,7 +338,7 @@ fn add_f64(a: f64, b: f64) f64 {
   --&gt; main.ngs:5:10
    |
  5 |     val x: i32 = "hello"
-   |            ---   ^^^^^^^ expected i32, found str
+   |            ---   ^^^^^^^ expected i32, found string
    |</code></pre>
 
     <hr>
@@ -345,10 +354,10 @@ fn add_f64(a: f64, b: f64) f64 {
     </ol>
 
     <h3>コンパイル時の最適化レベル</h3>
+    <div class="callout warn"><span class="ct">現行仕様（v0.2.0）</span><p>現行 CLI の出力コマンドは次のとおりです。<code>--opt</code> 等の最適化レベル指定は現行では提供されません。</p></div>
     <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-bash">nagiscript build main.ngs --opt 0  # 最適化なし
-nagiscript build main.ngs --opt 2  # 標準最適化
-nagiscript build main.ngs --opt 3  # 最大最適化</code></pre>
+    <pre><code class="lang-bash">nagiscript wasm main.ngs          # .wat を出力
+nagiscript wasm main.ngs -o out   # out.wat / out.wasm + out.d.ts を出力</code></pre>
 
     <hr>
 

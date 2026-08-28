@@ -84,24 +84,24 @@
     <hr>
 
     <h2>ステップ 1: ロジックを NagiScript で書く</h2>
-    <p>ブラウザから呼びたす関数は <code>export "C"</code> でエクスポートします。WASM の関数は数値や真偽値、ポインタを引数・戻り値に取れるので、まずは単純なカウンター計算から始めます。</p>
+    <p>ブラウザから呼び出す関数は <code>export "C"</code> でエクスポートします。WASM の関数は数値や真偽値、ポインタを引数・戻り値に取れるので、まずは単純なカウンター計算から始めます。</p>
     <div class="code-header"><span class="code-lang">counter.ngs</span><button class="copy-btn">Copy</button></div>
     <pre><code class="lang-ngs">// counter.ngs — ブラウザから呼び出すビジネスロジック
 
-export "C" fn increment(n: i32) -> i32 {
+export "C" fn increment(n: i32) -&gt; i32 {
     return n + 1
 }
 
-export "C" fn decrement(n: i32) -> i32 {
+export "C" fn decrement(n: i32) -&gt; i32 {
     return n - 1
 }
 
-export "C" fn is_even(n: i32) -> i32 {
+export "C" fn is_even(n: i32) -&gt; i32 {
     if n % 2 == 0 { return 1 }
     return 0
 }
 
-export "C" fn label_for(n: i32) -> i32 {
+export "C" fn label_for(n: i32) -&gt; i32 {
     // 0 なら "zero"、10 以上なら "big"、それ以外は "normal"
     if n == 0 { return 0 }
     if n &gt;= 10 { return 1 }
@@ -113,7 +113,7 @@ export "C" fn label_for(n: i32) -> i32 {
     <h2>ステップ 2: WASM にコンパイル</h2>
     <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
     <pre><code class="lang-bash">nagiscript wasm counter.ngs -o counter.wasm
-# counter.wasm と counter.d.ts が生成される</code></pre>
+# counter.wasm が生成される</code></pre>
 
     <hr>
 
@@ -179,7 +179,7 @@ export "C" fn label_for(n: i32) -> i32 {
     <h2>文字列をやり取りする</h2>
     <p>NagiScript の <code>string</code> はメモリ上で <code>{ data, len }</code> のセルとして渡ります。JS 側からは <code>TextEncoder</code> でバイト列を WASM メモリに書き込み、ポインタと長さを渡します。</p>
     <div class="code-header"><span class="code-lang">greet.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">export "C" fn char_count(data: i32, len: i32) -> i32 {
+    <pre><code class="lang-ngs">export "C" fn char_count(data: i32, len: i32) -&gt; i32 {
     return len
 }</code></pre>
     <div class="code-header"><span class="code-lang">main.js</span><button class="copy-btn">Copy</button></div>
@@ -210,12 +210,13 @@ function writeString(memory, str) {
 
 // 使用例: ngs.char_count(ptr, len) を呼んでから ptr を返す文字列セルを読む
 const ptr = writeString(memory, "hello");
-console.log(ngs.char_count(ptr, 5)); // => 5</code></pre>
+console.log(ngs.char_count(ptr, 5)); // =&gt; 5</code></pre>
     <p>詳細なメモリの扱いは <a href="webassembly.html">WebAssembly チュートリアル</a> を参照してください。</p>
 
     <hr>
 
-    <h2>.ngsx による UI 構文（将来）</h2>
+    <h2>.ngsx による UI 構文（ロードマップ）</h2>
+    <div class="callout warn"><span class="ct">ロードマップ</span><p>.ngsx（JSX 風 UI 構文）はランタイムに props 基盤が存在するものの、ドキュメント化は保留されています。以下は予定されている構文です。</p></div>
     <p>NagiScript は JSX 風のマークアップ構文 <code>.ngsx</code> を予定しています。React コンポーネントと統合し、NagiScript だけで UI まで記述できるようになる予定です。</p>
     <div class="code-header"><span class="code-lang">Counter.ngsx</span><button class="copy-btn">Copy</button></div>
     <pre><code class="lang-ngs">component Counter(ref count, onPlus, onMinus) {
@@ -235,10 +236,10 @@ console.log(ngs.char_count(ptr, 5)); // => 5</code></pre>
     <div class="code-header"><span class="code-lang">store.ngs</span><button class="copy-btn">Copy</button></div>
     <pre><code class="lang-ngs">var counter: i32 = 0
 
-export "C" fn get_counter() -> i32 { return counter }
-export "C" fn set_counter(v: i32) void { counter = v }
+export "C" fn get_counter() -&gt; i32 { return counter }
+export "C" fn set_counter(v: i32) { counter = v }
 
-export "C" fn inc() -> i32 {
+export "C" fn inc() -&gt; i32 {
     counter = counter + 1
     return counter
 }</code></pre>
@@ -258,8 +259,8 @@ document.getElementById('reset').addEventListener('click', () =&gt; {
     <h2>実践のヒント</h2>
     <ol>
       <li><strong>最小限のエクスポートを心がける</strong> — WASM 境界を越える関数は計算集約処理に絞り、DOM は JS に委譲</li>
-      <li><strong>型定義を活用する</strong> — <code>nagiscript dts counter.ngs -o counter.d.ts</code> でヒントが得られる</li>
-      <li><strong>重い処理は async と組み合わせる</strong> — <code>std:async</code> + 逐次処理で UI をブロックしない</li>
+      <li><strong>型定義を活用する</strong> — エクスポート関数は小さい関数に分割し、<code>nagiscript wasm main.ngs</code> の出力から呼び出し方を確認する</li>
+      <li><strong>重い処理は Web Worker に移す</strong> — WASM の同期実行はメインスレッドをブロックするため、計算量の高いエクスポートは Web Worker 側で実行して UI を止めない（<code>async</code> / <code>std:async</code> は現行では未実装）</li>
       <li><strong>数値は i32 / f64 がおすすめ</strong> — JS の <code>Number</code> と相性が良く、変換コストが小さい</li>
     </ol>
 

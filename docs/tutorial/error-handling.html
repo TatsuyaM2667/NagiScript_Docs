@@ -69,250 +69,141 @@
     <h1>エラーハンドリング</h1>
     <p>NagiScript のエラーハンドリング戦略を学びます。</p>
 
-    <hr>
-
-    <h2>Result 型</h2>
-    <p>NagiScript では <code>Result&lt;T, E&gt;</code> 型を使用してエラーを表現します。</p>
-    <div class="code-header"><span class="code-lang">error.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">enum Result&lt;T, E&gt; {
-    Ok(T)
-    Err(E)
-}</code></pre>
+    <div class="callout warn">
+      <span class="ct">現行仕様（v0.2.0）</span>
+      <p><code>Result</code> / <code>Option</code> は<b>組み込みの型としては存在しません</b>。<code>enum</code> で自作して使います。エラーを上位へ伝播させる <code>?</code> 演算子は<b>未実装</b>なので、エラー回避は <b>if / else の分岐</b>で行います。</p>
+    </div>
 
     <hr>
 
-    <h2>基本的な使い方</h2>
-    <h3>関数の戻り値として</h3>
-    <div class="code-header"><span class="code-lang">divide.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">fn divide(a: f64, b: f64) Result&lt;f64, str&gt; {
-    if b == 0.0 {
-        Result.Err("ZeroDivision")
-    } else {
-        Result.Ok(a / b)
-    }
+    <h2>Result を enum で自作する</h2>
+    <p>まず <code>enum</code> で成功・失敗の状態を定義します。値の生成は <code>Result.Ok()</code> のように<b>括弧</b>が必要です。</p>
+    <div class="code-header"><span class="code-lang">result.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">enum Result {
+    Ok
+    NotFound
 }
 
-fn main() void {
-    val result = divide(10.0, 3.0)
-
-    match result {
-        Result.Ok(v) =&gt; io.println("Result: " + str(v)),
-        Result.Err(e) =&gt; io.println("Error: " + e)
+fn find(key: i32) -&gt; Result {
+    if key == 1 {
+        return Result.Ok()
     }
+    return Result.NotFound()
+}
+
+fn main() {
+    val r = find(2)
+    val st = match r {
+        Ok =&gt; "found",
+        NotFound =&gt; "missing",
+    }
+    println(st)
 }</code></pre>
 
-    <hr>
-
-    <h2><code>?</code> 演算子</h2>
-    <p>エラーを上位関数に伝播させる <code>?</code> 演算子：</p>
-    <div class="code-header"><span class="code-lang">process.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">fn parse_int(s: str) Result&lt;i32, str&gt; {
-    // 実際のパース処理
-    if s.len() == 0 {
-        Result.Err("EmptyString")
-    } else {
-        // 簡易的な実装
-        Result.Ok(42)
-    }
+    <h3>match のパターン</h3>
+    <p><code>match</code> のパターンには<b>裸のバリアント名</b>（<code>Ok</code> / <code>NotFound</code>）を使います。どのバリアントにも一致するワイルドカードは <code>_</code> です。</p>
+    <div class="code-header"><span class="code-lang">strict.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">enum Result {
+    Ok
+    NotFound
 }
 
-fn process(s: str) Result&lt;i32, str&gt; {
-    val n = parse_int(s)?  // エラーなら即座に return Err(...)
-    Result.Ok(n * 2)
+fn find(key: i32) -&gt; Result {
+    if key == 1 {
+        return Result.Ok()
+    }
+    return Result.NotFound()
 }
 
-fn main() void {
-    val result = process("123")
-
-    match result {
-        Result.Ok(v) =&gt; io.println("Processed: " + str(v)),
-        Result.Err(e) =&gt; io.println("Error: " + e)
-    }
-}</code></pre>
-
-    <h3><code>?</code> の動作</h3>
-    <div class="code-header"><span class="code-lang">equivalent.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">// このコード
-fn process(s: str) Result&lt;i32, str&gt; {
-    val n = parse_int(s)?
-    Result.Ok(n * 2)
-}
-
-// 以下と同じです
-fn process(s: str) Result&lt;i32, str&gt; {
-    val n = match parse_int(s) {
-        Result.Ok(v) =&gt; v,
-        Result.Err(e) =&gt; return Result.Err(e)
-    }
-    Result.Ok(n * 2)
-}</code></pre>
-
-    <hr>
-
-    <h2>Option 型</h2>
-    <p>値が存在しない場合の表現：</p>
-    <div class="code-header"><span class="code-lang">option.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">enum Option&lt;T&gt; {
-    Some(T)
-    None
-}</code></pre>
-
-    <h3>使い方</h3>
-    <div class="code-header"><span class="code-lang">find_user.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">fn find_user(id: i32) Option&lt;User&gt; {
-    if id == 1 {
-        Option.Some(User { name: "Alice", age: 30 })
-    } else {
-        Option.None
-    }
-}
-
-fn main() void {
-    val user = find_user(1)
-
-    match user {
-        Option.Some(u) =&gt; io.println("Found: " + u.name),
-        Option.None =&gt; io.println("User not found")
+fn main() {
+    val r = find(2)
+    match r {
+        Ok =&gt; println("found"),
+        _ =&gt; println("missing"),
     }
 }</code></pre>
 
     <hr>
 
-    <h2>Option の <code>?</code> 演算子</h2>
-    <div class="code-header"><span class="code-lang">get_email.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">fn get_user_email(user_id: i32) Option&lt;str&gt; {
-    val user = find_user(user_id)?  // None なら即座に return None
-    Option.Some(user.email)
+    <h2>エラー回避は if / else 分岐</h2>
+    <p><code>?</code> 演算子は<b>未実装</b>なので、エラーの判定・回避は <b>if / else</b> と <b>明示的な <code>return</code></b> で行います。</p>
+    <div class="code-header"><span class="code-lang">guard.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">fn divide(a: i32, b: i32) -&gt; i32 {
+    if b == 0 {
+        println("zero division")
+        return 0  // エラー時は別の値で回避
+    }
+    return a / b
+}
+
+fn main() {
+    val x = divide(10, 2)
+    println(x)
+}</code></pre>
+
+    <div class="code-header"><span class="code-lang">status.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">enum DivResult {
+    Ok
+    Error
+}
+
+fn safe_divide(a: i32, b: i32) -&gt; DivResult {
+    if b == 0 {
+        return DivResult.Error()
+    }
+    return DivResult.Ok()
+}
+
+fn main() {
+    val r = safe_divide(10, 0)
+    match r {
+        Ok =&gt; println("divide ok"),
+        Error =&gt; println("zero division"),
+    }
 }</code></pre>
 
     <hr>
 
-    <h2>エラーハンドリングのパターン</h2>
-    <h3>パターン 1: match による分岐</h3>
-    <div class="code-header"><span class="code-lang">read_config.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">fn read_config(path: str) Result&lt;Config, str&gt; {
-    val content = fs.read_to_string(path)?
-    val config = parse_config(content)?
-    Result.Ok(config)
-}
-
-fn main() void {
-    match read_config("config.toml") {
-        Result.Ok(config) =&gt; {
-            io.println("Loaded: " + config.name)
-        },
-        Result.Err(e) =&gt; {
-            io.println("Failed to load config: " + e)
-            std.process.exit(1)
-        }
+    <h2>明示 return の規約</h2>
+    <p>ブロック末尾の暗黙 return（式ブロック）は<b>非対応</b>です。戻り値のある関数は必ず <code>return</code> を書き、戻り値を返さない関数は <code>-&gt;</code> を付けません。</p>
+    <div class="code-header"><span class="code-lang">return.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">fn read_config(name: string) -&gt; string {
+    if name == "main" {
+        return "module:main"
     }
-}</code></pre>
-
-    <h3>パターン 2: エラー値の変換</h3>
-    <div class="code-header"><span class="code-lang">app_error.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">enum AppError {
-    IoError(str)
-    ParseError(str)
-    NotFound(str)
+    return "not found"
 }
 
-fn read_config(path: str) Result&lt;Config, AppError&gt; {
-    val content = fs.read_to_string(path)
-        .map_err(fn(e: str) AppError { AppError.IoError(e) })?
-
-    val config = parse_config(content)
-        .map_err(fn(e: str) AppError { AppError.ParseError(e) })?
-
-    Result.Ok(config)
-}</code></pre>
-
-    <h3>パターン 3: エラーチェーン</h3>
-    <div class="code-header"><span class="code-lang">process_file.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">fn process_file(path: str) Result&lt;str, str&gt; {
-    val content = fs.read_to_string(path)?
-    val lines = content.split("\n")
-    val result = lines
-        .filter(fn(line: str) bool { line.len() &gt; 0 })
-        .map(fn(line: str) str { line.to_upper() })
-        .join("\n")
-    Result.Ok(result)
+fn main() {
+    println(read_config("main"))
 }</code></pre>
 
     <hr>
 
     <h2>panic</h2>
-    <p>unrecoverable なエラーには <code>panic</code> を使用します：</p>
-    <div class="code-header"><span class="code-lang">divide_or_panic.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">fn divide_or_panic(a: f64, b: f64) f64 {
-    if b == 0.0 {
+    <p>回復不能なエラーには組み込みの <code>panic</code> を使います。引数は 1 個で、プログラムを停止します。</p>
+    <div class="code-header"><span class="code-lang">panic.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">fn divide_or_panic(a: i32, b: i32) -&gt; i32 {
+    if b == 0 {
         panic("Division by zero")
     }
-    a / b
+    return a / b
 }</code></pre>
 
     <hr>
 
-    <h2>エラーハンドリングのベストプラクティス</h2>
-    <h3>1. Result を使い忘れない</h3>
-    <div class="code-header"><span class="code-lang">best_practice.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">// 悪い例
-fn main() void {
-    fs.write_to_string("output.txt", "data")  // エラーが無視される
-}
-
-// 良い例
-fn main() void {
-    match fs.write_to_string("output.txt", "data") {
-        Result.Ok(_) =&gt; io.println("File written"),
-        Result.Err(e) =&gt; io.println("Write failed: " + e)
-    }
-}</code></pre>
-
-    <h3>2. エラーメッセージにコンテキストを含める</h3>
-    <div class="code-header"><span class="code-lang">context.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">// 悪い例
-fn read_user(id: i32) Result&lt;User, str&gt; {
-    val data = fs.read_to_string("users.json")?
-    // エラー時に "No such file or directory" しか分からない
-}
-
-// 良い例
-fn read_user(id: i32) Result&lt;User, str&gt; {
-    val data = fs.read_to_string("users.json")
-        .map_err(fn(e: str) str {
-            "Failed to read users.json: " + e
-        })?
-    // エラー時に何が起きたか分かる
-}</code></pre>
-
-    <h3>3. <code>unwrap</code> の使用を避ける</h3>
-    <div class="code-header"><span class="code-lang">unwrap.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">// 悪い例（ランタイムで panic する可能性）
-val config = read_config("config.toml").unwrap()
-
-// 良い例
-match read_config("config.toml") {
-    Result.Ok(config) =&gt; use_config(config),
-    Result.Err(e) =&gt; {
-        io.println("Error: " + e)
-        std.process.exit(1)
-    }
-}</code></pre>
-
-    <hr>
-
-    <h2>エラーハンドリングフロー</h2>
-    <pre><code>関数呼び出し
+    <h2>エラーハンドリングの流れ</h2>
+    <pre><code>enum で状態（Ok / NotFound / Error など）を定義
     ↓
-Result&lt;T, E&gt; を返す
+関数の冒頭で if / else によりエラーを判定
     ↓
-match で分岐
-    ├─ Ok(v) → 正常処理を続行
-    └─ Err(e) → エラー処理
-        ↓
-    ? 演算子で伝播
-        ↓
-    上位関数で処理</code></pre>
+結果を return で明示的に返す
+    ↓
+match でバリアントを分岐
+    ├─ Ok =&gt; 正常処理を続行
+    └─ NotFound =&gt; 別の処理
+    ↓
+? 演算子は未実装。伝播したい場合は if / else で分岐させる</code></pre>
 
     <hr>
 

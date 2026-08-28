@@ -68,60 +68,56 @@
     <h1>CLI ツール開発</h1>
     <p>NagiScript でコマンドラインツールを開発する方法を学びます。</p>
 
+    <div class="callout warn"><span class="ct">ロードマップ</span><p>CLI ツール開発は、現行コンパイラー v0.2.0 では標準モジュール（<code>std:args</code> / <code>std:fs</code> / <code>std:process</code> 等）が未実装のため、ロードマップ扱いです。下記は<b>将来仕様</b>であり、現行の <code>nagiscript</code> コマンドでは<b>動きません</b>。現行で実際に使えるのは組み込み <code>print</code> / <code>println</code> / <code>panic</code> と、C 標準関数の <code>extern "C" fn</code> 呼び出しのみです。</p></div>
+
     <hr>
 
-    <h2>基本的な CLI ツール</h2>
+    <h2>現行で動く最小の CLI 的プログラム</h2>
+
+    <p>現行の組み込み <code>println</code> だけでも、引数なしの出力のみの簡単なプログラムは書けます（引数取得は未実装）。</p>
 
     <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">import "std:io"
-import "std:args"
-
-fn main() void {
-    val arguments = args.get_all()
-    
-    if arguments.len() &lt; 2 {
-        io.println("Usage: mytool &lt;command&gt;")
-        std.process.exit(1)
-    }
-    
-    val command = arguments[1]
-    
-    match command {
-        "help" =&gt; print_help(),
-        "version" =&gt; io.println("1.0.0"),
-        "run" =&gt; run_task(arguments),
-        _ =&gt; {
-            io.println("Unknown command: " + command)
-            std.process.exit(1)
-        }
-    }
+    <pre><code class="lang-ngs">fn main() {
+    println("mytool 1.0.0")
+    println("Usage: mytool &lt;command&gt;")
 }</code></pre>
 
     <hr>
 
-    <h2>引数パース</h2>
+    <h2>基本的な CLI ツール（ロードマップ）</h2>
+
+    <div class="callout warn"><span class="ct">ロードマップ</span><p>引数取得は <code>std:args</code>（未実装）、C 標準関数 <code>argc</code> / <code>argv</code> の利用も現行では検証できていません。下記は将来仕様です。<code>match</code> は文字列パターンではなく裸の列挙バリアントに置き換えています。</p></div>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">// ロードマップ: 引数取得には std:args（未実装）が必要
+enum Command { Help Version Run Unknown }
+
+fn dispatch(cmd: Command) {
+    match cmd {
+        Help =&gt; print_help(),
+        Version =&gt; println("1.0.0"),
+        _ =&gt; println("Unknown command"),
+    }
+}
+
+fn print_help() {
+    println("Usage: mytool &lt;command&gt;")
+}</code></pre>
+
+    <hr>
+
+    <h2>引数パース（ロードマップ）</h2>
 
     <h3>基本的な引数取得</h3>
 
+    <div class="callout warn"><span class="ct">ロードマップ</span><p><code>args.get</code> / <code>args.has</code> は <code>std:args</code>（未実装）の API です。<code>Option</code> 型も組み込みでは存在しないため、enum は自前で定義します。下記は将来仕様です。</p></div>
+
     <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">import "std:args"
+    <pre><code class="lang-ngs">// ロードマップ: std:args は未実装。下記は将来仕様
+enum Opt { SomeName Ok None }
+</code></pre>
 
-fn main() void {
-    val name = args.get("name")
-    val verbose = args.has("verbose")
-    val output = args.get("output")
-    
-    match name {
-        Option.Some(n) =&gt; io.println("Name: " + n),
-        Option.None =&gt; io.println("No name provided")
-    }
-    
-    if verbose {
-        io.println("Verbose mode enabled")
-    }
-}</code></pre>
-
-    <h3>使用例</h3>
+    <h3>使用例（将来仕様）</h3>
 
     <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
     <pre><code class="lang-bash">$ mytool --name Alice --verbose --output result.txt
@@ -130,89 +126,45 @@ Verbose mode enabled</code></pre>
 
     <hr>
 
-    <h2>出力の制御</h2>
+    <h2>出力の制御（ロードマップ）</h2>
+
+    <div class="callout warn"><span class="ct">ロードマップ</span><p>ANSI エスケープによる色付けは想定の将来仕様です。現行の <code>println</code> は 1 引数のみで、<code>+</code> による文字列連結は使えません。</p></div>
 
     <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">import "std:io"
-
-fn print_colored(text: str, color: str) void {
-    val prefix = match color {
-        "red" =&gt; "\x1b[31m",
-        "green" =&gt; "\x1b[32m",
-        "blue" =&gt; "\x1b[34m",
-        _ =&gt; ""
-    }
-    val reset = "\x1b[0m"
-    
-    io.println(prefix + text + reset)
+    <pre><code class="lang-ngs">// ロードマップ: 色付き出力は想定の将来仕様
+// 現行では println(text) をそのまま出力するのみ
+fn print_colored(text: string) {
+    println(text)
 }</code></pre>
 
     <hr>
 
-    <h2>エラーハンドリング</h2>
+    <h2>エラーハンドリング（ロードマップ）</h2>
+
+    <div class="callout warn"><span class="ct">ロードマップ</span><p><code>Result</code> 型は組み込みでは存在しないため enum で自作し、<code>?演算子</code>（エラー伝播）も未実装です。<code>std:fs</code> も未実装です。下記は将来仕様です。</p></div>
 
     <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">import "std:io"
-import "std:fs"
+    <pre><code class="lang-ngs">// ロードマップ: fs モジュールは未実装。Result 形は enum で自作
+enum Result { Ok NotFound }
+</code></pre>
 
-fn main() void {
-    match run() {
-        Result.Ok(_) =&gt; std.process.exit(0),
-        Result.Err(e) =&gt; {
-            io.println("Error: " + e)
-            std.process.exit(1)
-        }
-    }
-}
+    <hr>
 
-fn run() Result&lt;void, str&gt; {
-    val content = fs.read_to_string("config.toml")
-        .map_err(fn(e: str) str {
-            "Failed to read config: " + e
-        })?
-    
-    // 処理
-    Result.Ok(())
+    <h2>実践的な例: ファイルチェッカー（ロードマップ）</h2>
+
+    <div class="callout warn"><span class="ct">ロードマップ</span><p><code>std:fs</code> / <code>std:args</code> は未実装です。下記は将来仕様です。現行ではファイルアクセスは <code>extern "C" fn</code>（例: <code>fopen</code> / <code>fgets</code> 等）でのみ行えます。</p></div>
+
+    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
+    <pre><code class="lang-ngs">extern "C" fn fopen(path: *u8, mode: *u8) -&gt; *u8
+
+fn check_path(path: string) {
+    // ロードマップ: 完全なファイルチェック機能は将来仕様
+    println(path)
 }</code></pre>
 
     <hr>
 
-    <h2>実践的な例: ファイルチェッカー</h2>
-
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn">Copy</button></div>
-    <pre><code class="lang-ngs">import "std:io"
-import "std:fs"
-import "std:args"
-
-fn main() void {
-    val path = args.get("path")
-        .unwrap_or(".")
-    
-    match check_path(path) {
-        Result.Ok(report) =&gt; io.println(report),
-        Result.Err(e) =&gt; {
-            io.println("Error: " + e)
-            std.process.exit(1)
-        }
-    }
-}
-
-fn check_path(path: str) Result&lt;str, str&gt; {
-    val metadata = fs.metadata(path)
-        .map_err(fn(e: str) str {
-            "Cannot access path: " + e
-        })?
-    
-    if metadata.is_dir {
-        Result.Ok("Directory: " + path)
-    } else {
-        Result.Ok("File: " + path + " (" + str(metadata.size) + " bytes)")
-    }
-}</code></pre>
-
-    <hr>
-
-    <h2>ビルドと配布</h2>
+    <h2>ビルドと実行</h2>
 
     <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copy</button></div>
     <pre><code class="lang-bash"># ビルド
