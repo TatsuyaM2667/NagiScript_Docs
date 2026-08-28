@@ -369,9 +369,13 @@ a:hover { color: var(--accent); }
   -webkit-backdrop-filter: blur(14px) saturate(150%);
   box-shadow: var(--shadow);
 }
-[data-theme="dark"] .btn-secondary { color: var(--accent); }
+[data-theme="dark"] .btn-secondary {
+  background: rgba(14, 30, 65, 0.75);
+  color: var(--accent);
+  border-color: rgba(106, 183, 255, 0.35);
+}
 .btn-secondary:hover { background: var(--glass-bg-strong); transform: translateY(-2px); box-shadow: var(--shadow-lg); color: var(--accent-deep); }
-[data-theme="dark"] .btn-secondary:hover { color: var(--accent); }
+[data-theme="dark"] .btn-secondary:hover { background: rgba(20, 45, 90, 0.9); color: var(--accent); }
 
 /* ---------- Glass card ---------- */
 .features {

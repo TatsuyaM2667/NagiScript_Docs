@@ -235,21 +235,26 @@
   }
 
   // ---------- Copy buttons ----------
+  // code-header 内の copy-btn に、直後の pre > code の内容をコピーする動作を付与する。
+  // pre への直接追加は行わない（code-header が UI の唯一のコピーボタン）。
   function addCopyButtons() {
-    document.querySelectorAll('pre').forEach(pre => {
-      if (pre.querySelector('.copy-btn')) return;
-      const btn = document.createElement('button');
-      btn.className = 'copy-btn';
-      btn.textContent = 'Copy';
+    document.querySelectorAll('.code-header').forEach(header => {
+      const btn = header.querySelector('.copy-btn');
+      if (!btn || btn.dataset.copyReady) return;
+      btn.dataset.copyReady = 'true';
+
+      // .code-header の直後の兄弟 pre を探す
+      const pre = header.nextElementSibling;
+      if (!pre || pre.tagName !== 'PRE') return;
+
       btn.addEventListener('click', () => {
         const code = pre.querySelector('code');
-        navigator.clipboard.writeText(code.textContent).then(() => {
+        const text = code ? code.textContent : pre.textContent;
+        navigator.clipboard.writeText(text).then(() => {
           btn.textContent = 'Copied!';
           setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
         });
       });
-      pre.style.position = 'relative';
-      pre.appendChild(btn);
     });
   }
 

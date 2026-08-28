@@ -189,7 +189,8 @@
   }
 
   function attachRunButtons() {
-    document.querySelectorAll('pre').forEach(function (pre) {
+    // run-output / demo-code など内部生成の pre は除外する
+    document.querySelectorAll('pre:not(.run-output):not(.demo-code)').forEach(function (pre) {
       if (pre.dataset.runReady) return;
       pre.dataset.runReady = '1';
 
@@ -213,6 +214,9 @@
         header.prepend(langEl);
         pre.parentNode.insertBefore(header, pre);
       }
+
+      // 封じ込め防止: header にすでに run-btn があればスキップ
+      if (header.querySelector('.run-btn')) return;
 
       const runBtn = document.createElement('button');
       runBtn.className = 'run-btn';
