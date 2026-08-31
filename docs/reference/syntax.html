@@ -9,35 +9,47 @@
             rel="icon"
             href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>"
         />
-    
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
-</head>
+
+        <!-- Lucide Icons -->
+        <script
+            src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"
+            defer
+        ></script>
+    </head>
     <body>
-  <div class="sky-decor" aria-hidden="true">
-    <div class="cloud c1"></div>
-    <div class="cloud c2"></div>
-    <div class="cloud c3"></div>
-    <div class="cloud c4"></div>
-  </div>
+        <div class="sky-decor" aria-hidden="true">
+            <div class="cloud c1"></div>
+            　
+            <div class="cloud c2"></div>
+            <div class="cloud c3"></div>
+            <div class="cloud c4"></div>
+        </div>
         <header class="header">
             <a href="../../index.html" class="header-logo"
-                ><img src="../../assets/logo.png" alt="NagiScript Logo"><span class="logo-text">NagiScript</span></a
+                ><img src="../../assets/logo.png" alt="NagiScript Logo" /><span
+                    class="logo-text"
+                    >NagiScript</span
+                ></a
             >
             <nav class="header-nav" id="header-nav">
-      <a href="../../index.html">ホーム</a>
-      <a href="../getting-started.html">ドキュメント</a>
-      <a href="../tutorial/basics.html">チュートリアル</a>
-      <a href="../reference/types.html">リファレンス</a>
-      <a href="https://github.com/TatsuyaM2667/nagiscript_lang" class="nav-github">
-        <i data-lucide="github"></i><span>GitHub</span>
-      </a>
-      <button class="theme-toggle" aria-label="テーマ切替">
-        <i data-lucide="moon" class="icon-moon"></i>
-        <i data-lucide="sun" class="icon-sun"></i>
-      </button>
-    </nav>
-    <button class="menu-toggle" id="menu-toggle" aria-label="メニュー"><i data-lucide="menu"></i></button>
+                <a href="../../index.html">ホーム</a>
+                <a href="../getting-started.html">ドキュメント</a>
+                <a href="../tutorial/basics.html">チュートリアル</a>
+                <a href="../reference/types.html">リファレンス</a>
+                <a
+                    href="https://github.com/TatsuyaM2667/nagiscript_lang"
+                    class="nav-github"
+                >
+                    <i data-lucide="github"></i><span>GitHub</span>
+                </a>
+                <button class="theme-toggle" aria-label="テーマ切替">
+                    <i data-lucide="moon" class="icon-moon"></i>
+                    <i data-lucide="sun" class="icon-sun"></i>
+                </button>
+            </nav>
+            <button class="menu-toggle" id="menu-toggle" aria-label="メニュー">
+                <i data-lucide="menu"></i>
+            </button>
         </header>
         <div class="sidebar-overlay"></div>
 
@@ -129,9 +141,20 @@
             <p>NagiScript の構文全体を解説します。</p>
 
             <div class="callout warn">
-      <span class="ct">現行仕様（v0.2.0）</span>
-      <p>このページは現行コンパイラー v0.2.0 の正仕様に合わせてあります。本バージョンで実際に使えるキーワードは「fn, val, var, if, else, for, while, match, struct, enum, impl, unsafe, extern, export, return, in, as, break, continue, true, false, print, println, panic」のみです。それ以外のキーワード（import / loop / async / await / type / const / class / interface / trait / pub / step / and / or / not / null / void など）は<b>未実装</b>であり、現行の <code>nagiscript</code> コマンドではコンパイルできません。</p>
-    </div>
+                <span class="ct">現行仕様</span>
+                <p>
+                    このページは現行コンパイラーの正仕様に合わせてあります。実際に使えるキーワードは「fn,
+                    val, var, if, else, for, while, match, struct, enum, impl,
+                    unsafe, extern, export, return, in, as, break, continue,
+                    true, false, print, println,
+                    panic」と、<code>for</code> の増分指定 <code>step</code>
+                    です（2026-08 の変更履歴 change.md で追加）。それ以外のキーワード（import
+                    / loop / async / await / type / const / class / interface /
+                    trait / pub / and / or / not / null / void
+                    など）は<b>未実装</b>であり、現行の
+                    <code>nagiscript</code> コマンドではコンパイルできません。
+                </p>
+            </div>
 
             <hr />
 
@@ -140,7 +163,9 @@
             <h3>基本構造</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">// 出力は print / println（argc はちょうど 1 個）
 fn main() {
@@ -149,9 +174,20 @@ fn main() {
 }</code></pre>
 
             <div class="callout roadmap">
-      <span class="ct">ロードマップ（未実装）</span>
-      <p><code>import</code> は未実装です。複数ファイルへの分割はできません。また <code>const</code>（定数定義）や <code>void</code> の戻り値型も存在しません。戻り値のない関数は <code>-&gt;</code> を書きません。出力は組み込みの <code>print</code> / <code>println</code> を使い、<code>io.println</code> や <code>std:io</code> は利用できません。</p>
-    </div>
+                <span class="ct">ロードマップ（未実装）</span>
+                <p>
+                    <code>import</code>
+                    は未実装です。複数ファイルへの分割はできません。また
+                    <code>const</code>（定数定義）や
+                    <code>void</code>
+                    の戻り値型も存在しません。戻り値のない関数は
+                    <code>-&gt;</code> を書きません。出力は組み込みの
+                    <code>print</code> / <code>println</code> を使い、<code
+                        >io.println</code
+                    >
+                    や <code>std:io</code> は利用できません。
+                </p>
+            </div>
 
             <hr />
 
@@ -160,7 +196,9 @@ fn main() {
             <h3>不変変数</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">val x: i32 = 42
 val name = "NagiScript"  // 型推論</code></pre>
@@ -168,16 +206,24 @@ val name = "NagiScript"  // 型推論</code></pre>
             <h3>可変変数</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">var counter: i32 = 0
 counter = 10  // OK
 counter = counter + 1  // OK</code></pre>
 
             <div class="callout note">
-      <span class="ct">補足</span>
-      <p>変数宣言は <code>val</code>（不変）と <code>var</code>（可変）の 2 種類です。定数キーワード <code>const</code> は存在しません。文字列の型名は <code>string</code> であり、<code>str</code> は unknown type <code>str</code> エラーになります。</p>
-    </div>
+                <span class="ct">補足</span>
+                <p>
+                    変数宣言は <code>val</code>（不変）と
+                    <code>var</code>（可変）の 2 種類です。定数キーワード
+                    <code>const</code> は存在しません。文字列の型名は
+                    <code>string</code> であり、<code>str</code> は unknown type
+                    <code>str</code> エラーになります。
+                </p>
+            </div>
 
             <hr />
 
@@ -186,37 +232,58 @@ counter = counter + 1  // OK</code></pre>
             <h3>基本構文</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">fn add(a: i32, b: i32) -&gt; i32 {
     return a + b
 }</code></pre>
 
             <div class="callout warn">
-      <span class="ct">現行仕様（v0.2.0）</span>
-      <p>関数定義は <code>fn name(...) -&gt; 型 { ... }</code> の形で、戻り値の型は <code>-&gt;</code> 構文で指定します。<code>-&gt;</code> を省略した場合やブロック末尾の暗黙 return（式ブロック）は<b>非対応</b>です。戻り値を返す関数では必ず <code>return</code> を明示してください。</p>
-    </div>
+                <span class="ct">現行仕様（v0.2.0）</span>
+                <p>
+                    関数定義は
+                    <code>fn name(...) -&gt; 型 { ... }</code>
+                    の形で、戻り値の型は
+                    <code>-&gt;</code> 構文で指定します。<code>-&gt;</code>
+                    を省略した場合やブロック末尾の暗黙
+                    return（式ブロック）は<b>非対応</b>です。戻り値を返す関数では必ず
+                    <code>return</code> を明示してください。
+                </p>
+            </div>
 
             <h3>ジェネリクス関数</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">fn first(list: List&lt;i32&gt;) -&gt; i32 {
     return list[0]
 }</code></pre>
 
             <div class="callout roadmap">
-      <span class="ct">ロードマップ（未実装）</span>
-      <p>関数式（無名関数）の安定利用は未対応です。また <code>List&lt;T&gt;</code> のジェネリクスは、LLVM コード生成で <code>zext i64 to i64</code> エラーになりリンクに失敗する既知バグがあります。当面は構造体 + 値渡しを推奨します。</p>
-    </div>
+                <span class="ct">ロードマップ（未実装）</span>
+                <p>
+                    関数式（無名関数）の安定利用は未対応です。また
+                    <code>List&lt;T&gt;</code> のジェネリクスは、LLVM
+                    コード生成で
+                    <code>zext i64 to i64</code>
+                    エラーになりリンクに失敗する既知バグがあります。当面は構造体
+                    + 値渡しを推奨します。
+                </p>
+            </div>
 
             <hr />
 
             <h2>出力</h2>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">fn main() {
     println("Hello, World!")  // 改行付き
@@ -225,9 +292,17 @@ counter = counter + 1  // OK</code></pre>
 }</code></pre>
 
             <div class="callout warn">
-      <span class="ct">現行仕様（v0.2.0）</span>
-      <p>組み込みの出力は <code>print(値)</code> と <code>println(値)</code> です。引数はちょうど 1 個で、文字列・数値・bool を表示できます。文字列の <code>+</code> による連結は<b>使えません</b>（<code>"Hello" + " World"</code> はコンパイルエラー）。</p>
-    </div>
+                <span class="ct">現行仕様（v0.2.0）</span>
+                <p>
+                    組み込みの出力は <code>print(値)</code> と
+                    <code>println(値)</code> です。引数はちょうど 1
+                    個で、文字列・数値・bool を表示できます。文字列の
+                    <code>+</code> による連結は<b>使えません</b>（<code
+                        >"Hello" + " World"</code
+                    >
+                    はコンパイルエラー）。
+                </p>
+            </div>
 
             <hr />
 
@@ -236,7 +311,9 @@ counter = counter + 1  // OK</code></pre>
             <h3>if 文</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">if x &gt; 5 {
     println("大きい")
@@ -245,14 +322,26 @@ counter = counter + 1  // OK</code></pre>
 }</code></pre>
 
             <div class="callout note">
-      <span class="ct">補足</span>
-      <p><code>if</code> は<b>文として使う</b>のが確実です。式として値を返す <code>if</code> は不要・非対応のため、値を分岐させたい場合は <code>var</code> に代入してから <code>if</code> 文の中で代入してください。</p>
-    </div>
+                <span class="ct">補足（change.md, 2026-08）</span>
+                <p>
+                    関数の<b>ブロック末尾</b>（<code>}</code> 直前）に置いた
+                    <code>if</code> / <code>match</code> は、返り値の tail
+                    式として扱われます。<code>if</code> / <code>else</code>
+                    の両分岐が値を返せば、そのまま関数の戻り値になります
+                    （<code>return</code> 不要）。<code>else</code>
+                    が無い <code>if x { return 1 }</code>
+                    のような、戻り値の欠ける経路はコンパイルエラーになります。通常の文としての
+                    <code>if</code>
+                    も従来どおり使えますが、ブロック途中の値は変数への代入で保持してください。
+                </p>
+            </div>
 
             <h3>while ループ</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">var i = 0
 while i &lt; 5 {
@@ -260,24 +349,38 @@ while i &lt; 5 {
     i = i + 1
 }</code></pre>
 
-            <h3>for ループ（既知バグあり）</h3>
+            <h3>for ループ（<code>step</code> 対応）</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
-            <pre><code class="lang-ngs">for i in 0..5 {
-    println(i)
-}</code></pre>
+            <pre><code class="lang-ngs">for i in 0..10 step 2 { println(i) }   // 0 2 4 6 8
+for i in 10..0 step -3 { println(i) }  // 10 7 4 1
+for i in 0..5 { println(i) }           // 省略で 1 ずつ</code></pre>
 
-            <div class="callout warn">
-      <span class="ct">現行仕様（v0.2.0）</span>
-      <p><code>for i in 0..5 { ... }</code> は現行ビルドで<b>既知バグ</b>があり、ループ本体が IR から落ちて何も出力されません。当面は <code>while</code> で書き換えてください。また <code>step</code> は未実装です。</p>
-    </div>
+            <div class="callout note">
+                <span class="ct">現行仕様（change.md, 2026-08）</span>
+                <p>
+                    <code>for</code> の範囲ループに任意の増分（ステップ値）を指定する
+                    <code>step</code> 節が追加されました。省略時は従来どおり
+                    <code>1</code> ずつ増えます。負のステップは降順ループ
+                    （<code>10..0 step -1</code>）で使えます。継続条件は
+                    <code>step * (end - i) &gt; 0</code> で評価されるため、
+                    <code>0..10 step -1</code>
+                    のような「進まない向き」のループは即座に終了します。また、同じ変数名のループ変数を複数の
+                    <code>for</code> で使い回す再宣言バグも修正されています
+                    （<code>while</code> での書き換えも従来どおり可能）。
+                </p>
+            </div>
 
             <h3>loop（未実装）</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">// loop は存在しない。while true を使う
 while true {
@@ -286,14 +389,23 @@ while true {
 }</code></pre>
 
             <div class="callout roadmap">
-      <span class="ct">ロードマップ（未実装）</span>
-      <p>無限ループ用の <code>loop</code> キーワードは存在しません。<code>while true { ... }</code> を使用してください。<code>break</code> / <code>continue</code> は使用できます。</p>
-    </div>
+                <span class="ct">ロードマップ（未実装）</span>
+                <p>
+                    無限ループ用の
+                    <code>loop</code> キーワードは存在しません。<code
+                        >while true { ... }</code
+                    >
+                    を使用してください。<code>break</code> /
+                    <code>continue</code> は使用できます。
+                </p>
+            </div>
 
             <h3>match 式</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">enum Status { Ok NotFound }
 
@@ -306,9 +418,16 @@ fn show(s: Status) {
 }</code></pre>
 
             <div class="callout warn">
-      <span class="ct">現行仕様（v0.2.0）</span>
-      <p><code>match</code> のパターンは <b>裸の列挙バリアント名</b>（<code>Ok</code>, <code>NotFound</code> など）と <code>_</code> ワイルドカードを使用します。enum の値を生成するときは <code>Status.Ok()</code> のように括弧が必要です。</p>
-    </div>
+                <span class="ct">現行仕様（v0.2.0）</span>
+                <p>
+                    <code>match</code> のパターンは
+                    <b>裸の列挙バリアント名</b>（<code>Ok</code>,
+                    <code>NotFound</code> など）と
+                    <code>_</code> ワイルドカードを使用します。enum
+                    の値を生成するときは
+                    <code>Status.Ok()</code> のように括弧が必要です。
+                </p>
+            </div>
 
             <hr />
 
@@ -317,7 +436,9 @@ fn show(s: Status) {
             <h3>構造体</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">struct Point { x: f32 y: f32 }
 val p = Point { x: 3.0, y: 4.0 }
@@ -326,7 +447,9 @@ println(p.x)</code></pre>
             <h3>impl ブロック（メソッド）</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">struct Point { x: f32 y: f32 }
 
@@ -342,14 +465,22 @@ fn main() {
 }</code></pre>
 
             <div class="callout warn">
-      <span class="ct">現行仕様（v0.2.0）</span>
-      <p>メソッドは <code>impl</code> ブロックに定義します。<code>fn Point.distance_to(self: Point, ...)</code> 形式は動きません。また <code>self</code> には型注釈が必須です。</p>
-    </div>
+                <span class="ct">現行仕様（v0.2.0）</span>
+                <p>
+                    メソッドは <code>impl</code> ブロックに定義します。<code
+                        >fn Point.distance_to(self: Point, ...)</code
+                    >
+                    形式は動きません。また
+                    <code>self</code> には型注釈が必須です。
+                </p>
+            </div>
 
             <h3>列挙型</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">enum Color {
     Red
@@ -360,7 +491,9 @@ fn main() {
             <h3>ジェネリクス型</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">struct Vec2 {
     x: f32
@@ -368,9 +501,16 @@ fn main() {
 }</code></pre>
 
             <div class="callout roadmap">
-      <span class="ct">ロードマップ（未実装）</span>
-      <p><code>Vec2&lt;T&gt;</code> のようなジェネリクス構造体や <code>class</code> / <code>interface</code> / <code>trait</code> は未実装です。型パラメータは <code>List&lt;i32&gt;</code> 以外では限定的です。実用法は <code>struct Vec2 { x: f32 y: f32 }</code> のような具体的な型で定義してください。</p>
-    </div>
+                <span class="ct">ロードマップ（未実装）</span>
+                <p>
+                    <code>Vec2&lt;T&gt;</code> のようなジェネリクス構造体や
+                    <code>class</code> / <code>interface</code> /
+                    <code>trait</code> は未実装です。型パラメータは
+                    <code>List&lt;i32&gt;</code> 以外では限定的です。実用法は
+                    <code>struct Vec2 { x: f32 y: f32 }</code>
+                    のような具体的な型で定義してください。
+                </p>
+            </div>
 
             <hr />
 
@@ -379,7 +519,9 @@ fn main() {
             <h3>Result 型（enum で自作）</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">enum Result { Ok Err }
 
@@ -391,9 +533,14 @@ fn divide(a: f64, b: f64) -&gt; Result {
 }</code></pre>
 
             <div class="callout roadmap">
-      <span class="ct">ロードマップ（未実装）</span>
-      <p>組み込みの <code>Result&lt;T, E&gt;</code> 型は存在せず、<code>? </code>演算子（エラー伝播）も未実装です。エラーハンドリングが必要な場合は enum で自分で定義し、<code>if</code> 文で分岐します。</p>
-    </div>
+                <span class="ct">ロードマップ（未実装）</span>
+                <p>
+                    組み込みの
+                    <code>Result&lt;T, E&gt;</code> 型は存在せず、<code>? </code
+                    >演算子（エラー伝播）も未実装です。エラーハンドリングが必要な場合は
+                    enum で自分で定義し、<code>if</code> 文で分岐します。
+                </p>
+            </div>
 
             <hr />
 
@@ -402,7 +549,9 @@ fn divide(a: f64, b: f64) -&gt; Result {
             <h3>ポインタと unsafe ブロック</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">fn read(ptr: *i32) -&gt; i32 {
     unsafe { return *ptr }
@@ -412,22 +561,37 @@ val p = &amp;&amp;x as *i32
 println(read(p))</code></pre>
 
             <div class="callout warn">
-      <span class="ct">現行仕様（v0.2.0）</span>
-      <p>ポインタは <code>*T</code> 形式、アドレス取得は <code>&amp;&amp;x as *T</code>、参照外しは <code>unsafe { *ptr }</code> を使います。<code>ptr-&gt;</code> は未対応なので <code>*ptr</code> と整数演算で代替してください。</p>
-    </div>
+                <span class="ct">現行仕様（v0.2.0）</span>
+                <p>
+                    ポインタは <code>*T</code> 形式、アドレス取得は
+                    <code>&amp;&amp;x as *T</code>、参照外しは
+                    <code>unsafe { *ptr }</code> を使います。<code
+                        >ptr-&gt;</code
+                    >
+                    は未対応なので
+                    <code>*ptr</code> と整数演算で代替してください。
+                </p>
+            </div>
 
             <h3>Rc (参照カウント)</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">val data = Rc.new(Data { x: 10 })
 val data2 = data  // 参照の共有</code></pre>
 
             <div class="callout warn">
-      <span class="ct">現行仕様（v0.2.0）</span>
-      <p><code>Rc.new(値)</code> / <code>.get()</code> は存在しますが、<code>.get()</code> の戻り値が意図と異なる場合がある既知の不具合があります。当面は構造体 + 値渡しを推奨します。</p>
-    </div>
+                <span class="ct">現行仕様（v0.2.0）</span>
+                <p>
+                    <code>Rc.new(値)</code> /
+                    <code>.get()</code> は存在しますが、<code>.get()</code>
+                    の戻り値が意図と異なる場合がある既知の不具合があります。当面は構造体
+                    + 値渡しを推奨します。
+                </p>
+            </div>
 
             <hr />
 
@@ -436,48 +600,80 @@ val data2 = data  // 参照の共有</code></pre>
             <h3>import（未実装）</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">// import は未実装（ロードマップ）
 // 複数ファイルへの分割はできない</code></pre>
 
             <div class="callout roadmap">
-      <span class="ct">ロードマップ（未実装）</span>
-      <p><code>import</code> は未実装です。<code>"std:io"</code> などの標準モジュールも存在しないため、<code>import "std:io"</code> のような書き方はできません。複数ファイルの分割は現行では行えません。</p>
-    </div>
+                <span class="ct">ロードマップ（未実装）</span>
+                <p>
+                    <code>import</code> は未実装です。<code>"std:io"</code>
+                    などの標準モジュールも存在しないため、<code
+                        >import "std:io"</code
+                    >
+                    のような書き方はできません。複数ファイルの分割は現行では行えません。
+                </p>
+            </div>
 
             <h3>エクスポート（Wasm / C 向け）</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">export "C" fn add(a: i32, b: i32) -&gt; i32 {
     return a + b
 }</code></pre>
 
             <div class="callout warn">
-      <span class="ct">現行仕様（v0.2.0）</span>
-      <p><code>export</code> は関数宣言の前置としてのみ使用できます（Wasm / C 向け）。正しい書き方は <code>export "C" fn add(...) -&gt; i32 { ... }</code> の形です。<code>export fn</code> という書き方は誤りです。Wasm 出力は <code>nagiscript wasm main.ngs [-o PATH]</code> でサポートされています。</p>
-    </div>
+                <span class="ct">現行仕様（v0.2.0）</span>
+                <p>
+                    <code>export</code>
+                    は関数宣言の前置としてのみ使用できます（Wasm / C
+                    向け）。正しい書き方は
+                    <code>export "C" fn add(...) -&gt; i32 { ... }</code>
+                    の形です。<code>export fn</code>
+                    という書き方は誤りです。Wasm 出力は
+                    <code>nagiscript wasm main.ngs [-o PATH]</code>
+                    でサポートされています。
+                </p>
+            </div>
 
             <h3>extern（C 関数の宣言）</h3>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">extern "C" fn strlen(s: *u8) -&gt; i32</code></pre>
 
             <div class="callout note">
-      <span class="ct">補足</span>
-      <p>C 標準関数は <code>extern "C" fn</code> で宣言して利用できます。<code>std:math</code> / <code>std:fs</code> / <code>std:args</code> / <code>std:async</code> / <code>std:net</code> などのモジュールはすべて未実装（ロードマップ）です。</p>
-    </div>
+                <span class="ct">補足</span>
+                <p>
+                    C 標準関数は
+                    <code>extern "C" fn</code> で宣言して利用できます。<code
+                        >std:math</code
+                    >
+                    / <code>std:fs</code> / <code>std:args</code> /
+                    <code>std:async</code> /
+                    <code>std:net</code>
+                    などのモジュールはすべて未実装（ロードマップ）です。
+                </p>
+            </div>
 
             <hr />
 
             <h2>コメント</h2>
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">// 単一行コメント
 
@@ -532,9 +728,16 @@ fn greet(name: string) -&gt; string {
             </table>
 
             <div class="callout note">
-      <span class="ct">補足</span>
-      <p>算術演算子（<code>+</code> <code>-</code> <code>*</code> <code>/</code> <code>%</code>）は数値に対して正常に動作します。ただし文字列の <code>+</code> 連結は<b>使えません</b>。詳細は「演算子リファレンス」を参照してください。</p>
-    </div>
+                <span class="ct">補足</span>
+                <p>
+                    算術演算子（<code>+</code> <code>-</code> <code>*</code>
+                    <code>/</code>
+                    <code>%</code
+                    >）は数値に対して正常に動作します。ただし文字列の
+                    <code>+</code>
+                    連結は<b>使えません</b>。詳細は「演算子リファレンス」を参照してください。
+                </p>
+            </div>
 
             <h3>比較演算子</h3>
             <table>
@@ -608,9 +811,14 @@ fn greet(name: string) -&gt; string {
             </table>
 
             <div class="callout warn">
-      <span class="ct">現行仕様（v0.2.0）</span>
-      <p>論理演算は <code>&amp;&amp;</code> <code>||</code> <code>!</code> を使用します。<code>and</code> / <code>or</code> / <code>not</code> のキーワードは<b>使えません</b>。</p>
-    </div>
+                <span class="ct">現行仕様（v0.2.0）</span>
+                <p>
+                    論理演算は <code>&amp;&amp;</code> <code>||</code>
+                    <code>!</code> を使用します。<code>and</code> /
+                    <code>or</code> /
+                    <code>not</code> のキーワードは<b>使えません</b>。
+                </p>
+            </div>
 
             <h3>その他の演算子</h3>
             <table>
@@ -646,9 +854,14 @@ fn greet(name: string) -&gt; string {
             </table>
 
             <div class="callout warn">
-      <span class="ct">現行仕様（v0.2.0）</span>
-      <p><code>-&gt;</code> は関数定義での戻り値型の記法としてのみ使用します（<code>fn name(...) -&gt; 型</code>）。<code>ptr-&gt;</code>（ポインタ経由のメンバアクセス）は未対応です。<code>?</code>（エラー伝播）も未実装です。詳細は「演算子リファレンス」を参照してください。</p>
-    </div>
+                <span class="ct">現行仕様（v0.2.0）</span>
+                <p>
+                    <code>-&gt;</code>
+                    は関数定義での戻り値型の記法としてのみ使用します（<code
+                        >fn name(...) -&gt; 型</code
+                    >）。<code>ptr-&gt;</code>（ポインタ経由のメンバアクセス）は未対応です。<code>?</code>（エラー伝播）も未実装です。詳細は「演算子リファレンス」を参照してください。
+                </p>
+            </div>
 
             <hr />
 
@@ -665,12 +878,12 @@ fn greet(name: string) -&gt; string {
         </main>
 
         <script src="../../js/main.js"></script>
-  <script src="../../js/play-wasm.js"></script>
-    
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      if (window.lucide) lucide.createIcons();
-    });
-  </script>
-</body>
+        <script src="../../js/play-wasm.js"></script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                if (window.lucide) lucide.createIcons();
+            });
+        </script>
+    </body>
 </html>

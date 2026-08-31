@@ -1,157 +1,279 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>メモリ管理 - NagiScript</title>
-  <link rel="stylesheet" href="../../css/style.css">
-  <link rel="icon" href="../../assets/logo.png">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>メモリ管理 - NagiScript</title>
+        <link rel="stylesheet" href="../../css/style.css" />
+        <link rel="icon" href="../../assets/logo.png" />
 
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
-</head>
-<body>
-  <div class="sky-decor" aria-hidden="true">
-    <div class="cloud c1"></div>
-    <div class="cloud c2"></div>
-    <div class="cloud c3"></div>
-    <div class="cloud c4"></div>
-  </div>
-  <header class="header">
-    <a href="../../index.html" class="header-logo"><img src="../../assets/logo.png" alt="NagiScript Logo"><span class="logo-text">NagiScript</span></a>
-    <nav class="header-nav" id="header-nav">
-      <a href="../../index.html">ホーム</a>
-      <a href="../getting-started.html">ドキュメント</a>
-      <a href="../tutorial/basics.html">チュートリアル</a>
-      <a href="../reference/types.html">リファレンス</a>
-      <a href="https://github.com/TatsuyaM2667/nagiscript_lang" class="nav-github">
-        <i data-lucide="github"></i><span>GitHub</span>
-      </a>
-      <button class="theme-toggle" aria-label="テーマ切替">
-        <i data-lucide="moon" class="icon-moon"></i>
-        <i data-lucide="sun" class="icon-sun"></i>
-      </button>
-    </nav>
-    <button class="menu-toggle" id="menu-toggle" aria-label="メニュー"><i data-lucide="menu"></i></button>
-  </header>
-  <div class="sidebar-overlay"></div>
+        <!-- Lucide Icons -->
+        <script
+            src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"
+            defer
+        ></script>
+    </head>
+    <body>
+        <div class="sky-decor" aria-hidden="true">
+            <div class="cloud c1"></div>
+            　
+            <div class="cloud c2"></div>
+            <div class="cloud c3"></div>
+            <div class="cloud c4"></div>
+        </div>
+        <header class="header">
+            <a href="../../index.html" class="header-logo"
+                ><img src="../../assets/logo.png" alt="NagiScript Logo" /><span
+                    class="logo-text"
+                    >NagiScript</span
+                ></a
+            >
+            <nav class="header-nav" id="header-nav">
+                <a href="../../index.html">ホーム</a>
+                <a href="../getting-started.html">ドキュメント</a>
+                <a href="../tutorial/basics.html">チュートリアル</a>
+                <a href="../reference/types.html">リファレンス</a>
+                <a
+                    href="https://github.com/TatsuyaM2667/nagiscript_lang"
+                    class="nav-github"
+                >
+                    <i data-lucide="github"></i><span>GitHub</span>
+                </a>
+                <button class="theme-toggle" aria-label="テーマ切替">
+                    <i data-lucide="moon" class="icon-moon"></i>
+                    <i data-lucide="sun" class="icon-sun"></i>
+                </button>
+            </nav>
+            <button class="menu-toggle" id="menu-toggle" aria-label="メニュー">
+                <i data-lucide="menu"></i>
+            </button>
+        </header>
+        <div class="sidebar-overlay"></div>
 
-  <aside class="sidebar">
-    <div class="sidebar-section">
-      <div class="sidebar-title">入门</div>
-      <a href="../getting-started.html" class="sidebar-link">はじめに</a>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-title">チュートリアル</div>
-      <a href="basics.html" class="sidebar-link">基本概念</a>
-      <a href="functions.html" class="sidebar-link">関数とモジュール</a>
-      <a href="structs-enums.html" class="sidebar-link">構造体と列挙型</a>
-      <a href="generics.html" class="sidebar-link">ジェネリクス</a>
-      <a href="error-handling.html" class="sidebar-link">エラーハンドリング</a>
-      <a href="memory.html" class="sidebar-link active">メモリ管理</a>
-      <a href="async.html" class="sidebar-link">非同期プログラミング</a>
-      <a href="webassembly.html" class="sidebar-link">WebAssembly</a>
-      <a href="browser-app.html" class="sidebar-link">ブラウザアプリ</a>
-      <a href="tui-app.html" class="sidebar-link">TUI アプリ</a>
-      <a href="cli.html" class="sidebar-link">CLI ツール開発</a>
-      <a href="microcontroller.html" class="sidebar-link">組み込み開発</a>
-      <a href="cinterop.html" class="sidebar-link">C言語との相互運用</a>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-title">リファレンス</div>
-      <a href="../reference/types.html" class="sidebar-link">型システム</a>
-      <a href="../reference/syntax.html" class="sidebar-link">構文リファレンス</a>
-      <a href="../reference/operators.html" class="sidebar-link">演算子リファレンス</a>
-      <a href="../reference/standard-library.html" class="sidebar-link">標準ライブラリ</a>
-      <a href="../reference/standard-c-library.html" class="sidebar-link">C 標準ライブラリ</a>
-      <a href="../reference/compiler.html" class="sidebar-link">コンパイラ内部構造</a>
-      <a href="../reference/keywords.html" class="sidebar-link">キーワード一覧</a>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-title">実践</div>
-      <a href="../examples/todo-app.html" class="sidebar-link">Todo アプリ</a>
-      <a href="../examples/web-framework.html" class="sidebar-link">Web フレームワーク</a>
-      <a href="../examples/iot-sensor.html" class="sidebar-link">IoT センサー</a>
-    </div>
-  </aside>
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">入门</div>
+                <a href="../getting-started.html" class="sidebar-link"
+                    >はじめに</a
+                >
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">チュートリアル</div>
+                <a href="basics.html" class="sidebar-link">基本概念</a>
+                <a href="functions.html" class="sidebar-link"
+                    >関数とモジュール</a
+                >
+                <a href="structs-enums.html" class="sidebar-link"
+                    >構造体と列挙型</a
+                >
+                <a href="generics.html" class="sidebar-link">ジェネリクス</a>
+                <a href="error-handling.html" class="sidebar-link"
+                    >エラーハンドリング</a
+                >
+                <a href="memory.html" class="sidebar-link active">メモリ管理</a>
+                <a href="async.html" class="sidebar-link"
+                    >非同期プログラミング</a
+                >
+                <a href="webassembly.html" class="sidebar-link">WebAssembly</a>
+                <a href="browser-app.html" class="sidebar-link"
+                    >ブラウザアプリ</a
+                >
+                <a href="tui-app.html" class="sidebar-link">TUI アプリ</a>
+                <a href="cli.html" class="sidebar-link">CLI ツール開発</a>
+                <a href="microcontroller.html" class="sidebar-link"
+                    >組み込み開発</a
+                >
+                <a href="cinterop.html" class="sidebar-link"
+                    >C言語との相互運用</a
+                >
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">リファレンス</div>
+                <a href="../reference/types.html" class="sidebar-link"
+                    >型システム</a
+                >
+                <a href="../reference/syntax.html" class="sidebar-link"
+                    >構文リファレンス</a
+                >
+                <a href="../reference/operators.html" class="sidebar-link"
+                    >演算子リファレンス</a
+                >
+                <a
+                    href="../reference/standard-library.html"
+                    class="sidebar-link"
+                    >標準ライブラリ</a
+                >
+                <a
+                    href="../reference/standard-c-library.html"
+                    class="sidebar-link"
+                    >C 標準ライブラリ</a
+                >
+                <a href="../reference/compiler.html" class="sidebar-link"
+                    >コンパイラ内部構造</a
+                >
+                <a href="../reference/keywords.html" class="sidebar-link"
+                    >キーワード一覧</a
+                >
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">実践</div>
+                <a href="../examples/todo-app.html" class="sidebar-link"
+                    >Todo アプリ</a
+                >
+                <a href="../examples/web-framework.html" class="sidebar-link"
+                    >Web フレームワーク</a
+                >
+                <a href="../examples/iot-sensor.html" class="sidebar-link"
+                    >IoT センサー</a
+                >
+            </div>
+        </aside>
 
-  <main class="main content">
-    <h1>メモリ管理</h1>
-    <p>NagiScript のメモリ管理戦略を学びます。</p>
+        <main class="main content">
+            <h1>メモリ管理</h1>
+            <p>NagiScript のメモリ管理戦略を学びます。</p>
 
-    <hr>
+            <hr />
 
-    <h2>メモリ管理の設計方針</h2>
-    <table>
-      <thead><tr><th>戦略</th><th>用途</th><th>特徴</th></tr></thead>
-      <tbody>
-        <tr><td><strong>スタック確保</strong></td><td>基本型、構造体</td><td>最速、自動管理</td></tr>
-        <tr><td><strong>Rc (参照カウント)</strong></td><td>ヒープ確保</td><td>自動解放、安全</td></tr>
-        <tr><td><strong>Unsafe</strong></td><td>ポインタ操作</td><td>開発者責任</td></tr>
-      </tbody>
-    </table>
+            <h2>メモリ管理の設計方針</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>戦略</th>
+                        <th>用途</th>
+                        <th>特徴</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>スタック確保</strong></td>
+                        <td>基本型、構造体</td>
+                        <td>最速、自動管理</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Rc (参照カウント)</strong></td>
+                        <td>ヒープ確保</td>
+                        <td>自動解放、安全</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Unsafe</strong></td>
+                        <td>ポインタ操作</td>
+                        <td>開発者責任</td>
+                    </tr>
+                </tbody>
+            </table>
 
-    <div class="callout note">
-      <span class="ct">現行仕様（v0.2.0）</span>
-      <p>NagiScript には<b>借用チェッカーはありません</b>。メモリはスタック確保と参照カウント（Rc）による<b>自動解放</b>が基本です。ポインタ操作は <code>unsafe</code> にまとめ、開発者の責任で扱います。</p>
-    </div>
+            <div class="callout note">
+                <span class="ct">現行仕様（v0.2.0）</span>
+                <p>
+                    NagiScript
+                    には<b>借用チェッカーはありません</b>。メモリはスタック確保と参照カウント（Rc）による<b>自動解放</b>が基本です。ポインタ操作は
+                    <code>unsafe</code> にまとめ、開発者の責任で扱います。
+                </p>
+            </div>
 
-    <hr>
+            <hr />
 
-    <h2>スタック確保</h2>
-    <p>基本型と小さな構造体はスタックに確保されます：</p>
-    <div class="code-header"><span class="code-lang">stack.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">val x = 42
+            <h2>スタック確保</h2>
+            <p>基本型と小さな構造体はスタックに確保されます：</p>
+            <div class="code-header">
+                <span class="code-lang">stack.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">val x = 42
 val p = Point { x: 1.0, y: 2.0 }
 
 fn add(a: i32, b: i32) -&gt; i32 {
     return a + b
 }</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>Rc (参照カウント)</h2>
-    <div class="callout warn">
-      <span class="ct">現行仕様（v0.2.0）</span>
-      <p><code>Rc.new(値)</code> / <code>.get()</code> はありますが、<code>.get()</code> の<b>戻り値が意図と異なる場合があります</b>（要検証 / pending）。大きなデータには現行で安定している「構造体 + 値渡し」を推奨します。</p>
-    </div>
-    <p>大きなオブジェクトや動的サイズのオブジェクトには Rc を使用する設計です：</p>
-    <div class="code-header"><span class="code-lang">rc_basic.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">val a = Rc.new(42)
+            <h2>Rc (参照カウント)</h2>
+            <div class="callout warn">
+                <span class="ct">現行仕様（v0.2.0）</span>
+                <p>
+                    <code>Rc.new(値)</code> /
+                    <code>.get()</code> はありますが、<code>.get()</code>
+                    の<b>戻り値が意図と異なる場合があります</b>（要検証 /
+                    pending）。大きなデータには現行で安定している「構造体 +
+                    値渡し」を推奨します。
+                </p>
+            </div>
+            <p>
+                大きなオブジェクトや動的サイズのオブジェクトには Rc
+                を使用する設計です：
+            </p>
+            <div class="code-header">
+                <span class="code-lang">rc_basic.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">val a = Rc.new(42)
 val b = a  // 参照カウント: 2
 println(b.get())</code></pre>
 
-    <h3>参照カウントの動作</h3>
-    <div class="code-header"><span class="code-lang">rc_count.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">struct Data { x: i32 }
+            <h3>参照カウントの動作</h3>
+            <div class="code-header">
+                <span class="code-lang">rc_count.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">struct Data { x: i32 }
 
 val a = Rc.new(Data { x: 10 })  // 参照カウント: 1
 val b = a                        // 参照カウント: 2
 val c = a                        // 参照カウント: 3
 // b, c がスコープを抜けると a のみ残り、最終解放時に自動でメモリ解放</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>リスト (List)</h2>
-    <div class="callout warn">
-      <span class="ct">現行仕様（v0.2.0）</span>
-      <p><code>List&lt;T&gt;</code> は <code>List.new()</code> / <code>push</code> / <code>len</code> / <code>get</code> / <code>set</code> という API はありますが、LLVM コード生成で <code>zext i64 to i64</code> になり<b>リンクに失敗</b>する既知バグがあります。当面は使用を避けてください。</p>
-    </div>
-    <p>動的配列はヒープに確保される設計です。以下は現行ビルドではリンクに失敗するため、参考として記載します。</p>
-    <div class="code-header"><span class="code-lang">list.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">// 現行はリンク失敗バグがあるため使用不可
+            <h2>リスト (List)</h2>
+            <div class="callout warn">
+                <span class="ct">現行仕様（v0.2.0）</span>
+                <p>
+                    <code>List&lt;T&gt;</code> は <code>List.new()</code> /
+                    <code>push</code> / <code>len</code> / <code>get</code> /
+                    <code>set</code> という API はありますが、LLVM コード生成で
+                    <code>zext i64 to i64</code>
+                    になり<b>リンクに失敗</b>する既知バグがあります。当面は使用を避けてください。
+                </p>
+            </div>
+            <p>
+                動的配列はヒープに確保される設計です。以下は現行ビルドではリンクに失敗するため、参考として記載します。
+            </p>
+            <div class="code-header">
+                <span class="code-lang">list.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">// 現行はリンク失敗バグがあるため使用不可
 var numbers = List.new()
 push(numbers, 10)
 push(numbers, 20)
 println(len(numbers))</code></pre>
 
-    <h3>推奨: 構造体 + 値渡し</h3>
-    <div class="callout note">
-      <span class="ct">推奨（v0.2.0）</span>
-      <p>現行で最も安定するのは、<code>List</code> や <code>Rc</code> に頼らず、<b>構造体 + 値渡し</b>でデータを引き回す方法です。構造体はスタックに確保され、コピーも値で渡るため予期しない挙動がありません。</p>
-    </div>
-    <div class="code-header"><span class="code-lang">by_value.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">struct Data {
+            <h3>推奨: 構造体 + 値渡し</h3>
+            <div class="callout note">
+                <span class="ct">推奨（v0.2.0）</span>
+                <p>
+                    現行で最も安定するのは、<code>List</code> や
+                    <code>Rc</code> に頼らず、<b>構造体 + 値渡し</b
+                    >でデータを引き回す方法です。構造体はスタックに確保され、コピーも値で渡るため予期しない挙動がありません。
+                </p>
+            </div>
+            <div class="code-header">
+                <span class="code-lang">by_value.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">struct Data {
     a: i32
     b: i32
 }
@@ -165,12 +287,23 @@ fn main() {
     println(sum(d))
 }</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>Unsafe ブロックとポインタ</h2>
-    <p>ポインタは <code>*T</code> 型で表し、<code>&amp;&amp;x as *T</code> でアドレスを取得します。取り回しは <code>unsafe</code> ブロックにまとめます：</p>
-    <div class="code-header"><span class="code-lang">unsafe.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">fn read(ptr: *i32) -&gt; i32 {
+            <h2>Unsafe ブロックとポインタ</h2>
+            <p>
+                ポインタは <code>*T</code> 型で表し、<code
+                    >&amp;&amp;x as *T</code
+                >
+                でアドレスを取得します。取り回しは
+                <code>unsafe</code> ブロックにまとめます：
+            </p>
+            <div class="code-header">
+                <span class="code-lang">unsafe.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">fn read(ptr: *i32) -&gt; i32 {
     unsafe {
         return *ptr
     }
@@ -181,17 +314,29 @@ fn main() {
     val p = &amp;&amp;x as *i32
     println(read(p))
 }</code></pre>
-    <div class="callout note">
-      <span class="ct">現行仕様（v0.2.0）</span>
-      <p><code>ptr-&gt;</code> や <code>ptr.offset(n)</code> は<b>未検証</b>です。ポインタ演算は <code>*ptr</code> と整数演算で代替してください。</p>
-    </div>
+            <div class="callout note">
+                <span class="ct">現行仕様（v0.2.0）</span>
+                <p>
+                    <code>ptr-&gt;</code> や
+                    <code>ptr.offset(n)</code>
+                    は<b>未検証</b>です。ポインタ演算は
+                    <code>*ptr</code> と整数演算で代替してください。
+                </p>
+            </div>
 
-    <hr>
+            <hr />
 
-    <h2>C言語とのメモリ共有</h2>
-    <p>C 標準関数は <code>extern "C" fn</code> で宣言して利用できます：</p>
-    <div class="code-header"><span class="code-lang">c_memory.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">extern "C" fn malloc(size: i32) -&gt; *u8
+            <h2>C言語とのメモリ共有</h2>
+            <p>
+                C 標準関数は <code>extern "C" fn</code> で宣言して利用できます：
+            </p>
+            <div class="code-header">
+                <span class="code-lang">c_memory.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">extern "C" fn malloc(size: i32) -&gt; *u8
 extern "C" fn free(ptr: *u8)
 
 fn process_c_buffer() {
@@ -200,27 +345,27 @@ fn process_c_buffer() {
     free(ptr)
 }</code></pre>
 
-    <hr>
+            <hr />
 
-    <div class="nav-links">
-      <a href="error-handling.html" class="nav-link">
-        <span class="label">前</span>
-        <span class="title">← エラーハンドリング</span>
-      </a>
-      <a href="async.html" class="nav-link">
-        <span class="label">次</span>
-        <span class="title">非同期プログラミング →</span>
-      </a>
-    </div>
-  </main>
+            <div class="nav-links">
+                <a href="error-handling.html" class="nav-link">
+                    <span class="label">前</span>
+                    <span class="title">← エラーハンドリング</span>
+                </a>
+                <a href="async.html" class="nav-link">
+                    <span class="label">次</span>
+                    <span class="title">非同期プログラミング →</span>
+                </a>
+            </div>
+        </main>
 
-  <script src="../../js/main.js"></script>
-  <script src="../../js/play-wasm.js"></script>
+        <script src="../../js/main.js"></script>
+        <script src="../../js/play-wasm.js"></script>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      if (window.lucide) lucide.createIcons();
-    });
-  </script>
-</body>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                if (window.lucide) lucide.createIcons();
+            });
+        </script>
+    </body>
 </html>

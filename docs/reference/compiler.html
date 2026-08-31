@@ -1,88 +1,148 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>コンパイラ内部構造 - NagiScript</title>
-  <link rel="stylesheet" href="../../css/style.css">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>コンパイラ内部構造 - NagiScript</title>
+        <link rel="stylesheet" href="../../css/style.css" />
 
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
-</head>
-<body>
-  <div class="sky-decor" aria-hidden="true">
-    <div class="cloud c1"></div>
-    <div class="cloud c2"></div>
-    <div class="cloud c3"></div>
-    <div class="cloud c4"></div>
-  </div>
-  <header class="header">
-    <a href="../../index.html" class="header-logo"><img src="../../assets/logo.png" alt="NagiScript Logo"><span class="logo-text">NagiScript</span></a>
-    <nav class="header-nav" id="header-nav">
-      <a href="../../index.html">ホーム</a>
-      <a href="../getting-started.html">ドキュメント</a>
-      <a href="../tutorial/basics.html">チュートリアル</a>
-      <a href="../reference/types.html">リファレンス</a>
-      <a href="https://github.com/TatsuyaM2667/nagiscript_lang" class="nav-github">
-        <i data-lucide="github"></i><span>GitHub</span>
-      </a>
-      <button class="theme-toggle" aria-label="テーマ切替">
-        <i data-lucide="moon" class="icon-moon"></i>
-        <i data-lucide="sun" class="icon-sun"></i>
-      </button>
-    </nav>
-    <button class="menu-toggle" id="menu-toggle" aria-label="メニュー"><i data-lucide="menu"></i></button>
-  </header>
-  <div class="sidebar-overlay"></div>
+        <!-- Lucide Icons -->
+        <script
+            src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"
+            defer
+        ></script></head
+    >　
+    <body>
+        <div class="sky-decor" aria-hidden="true">
+            <div class="cloud c1"></div>
+            <div class="cloud c2"></div>
+            <div class="cloud c3"></div>
+            <div class="cloud c4"></div>
+        </div>
+        <header class="header">
+            <a href="../../index.html" class="header-logo"
+                ><img src="../../assets/logo.png" alt="NagiScript Logo" /><span
+                    class="logo-text"
+                    >NagiScript</span
+                ></a
+            >
+            <nav class="header-nav" id="header-nav">
+                <a href="../../index.html">ホーム</a>
+                <a href="../getting-started.html">ドキュメント</a>
+                <a href="../tutorial/basics.html">チュートリアル</a>
+                <a href="../reference/types.html">リファレンス</a>
+                <a
+                    href="https://github.com/TatsuyaM2667/nagiscript_lang"
+                    class="nav-github"
+                >
+                    <i data-lucide="github"></i><span>GitHub</span>
+                </a>
+                <button class="theme-toggle" aria-label="テーマ切替">
+                    <i data-lucide="moon" class="icon-moon"></i>
+                    <i data-lucide="sun" class="icon-sun"></i>
+                </button>
+            </nav>
+            <button class="menu-toggle" id="menu-toggle" aria-label="メニュー">
+                <i data-lucide="menu"></i>
+            </button>
+        </header>
+        <div class="sidebar-overlay"></div>
 
-  <aside class="sidebar">
-    <div class="sidebar-section">
-      <div class="sidebar-title">入门</div>
-      <a href="../getting-started.html" class="sidebar-link">はじめに</a>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-title">チュートリアル</div>
-      <a href="../tutorial/basics.html" class="sidebar-link">基本概念</a>
-      <a href="../tutorial/functions.html" class="sidebar-link">関数とモジュール</a>
-      <a href="../tutorial/structs-enums.html" class="sidebar-link">構造体と列挙型</a>
-      <a href="../tutorial/generics.html" class="sidebar-link">ジェネリクス</a>
-      <a href="../tutorial/error-handling.html" class="sidebar-link">エラーハンドリング</a>
-      <a href="../tutorial/memory.html" class="sidebar-link">メモリ管理</a>
-      <a href="../tutorial/async.html" class="sidebar-link">非同期プログラミング</a>
-      <a href="../tutorial/webassembly.html" class="sidebar-link">WebAssembly</a>
-      <a href="../tutorial/browser-app.html" class="sidebar-link">ブラウザアプリ</a>
-      <a href="../tutorial/tui-app.html" class="sidebar-link">TUI アプリ</a>
-      <a href="../tutorial/cli.html" class="sidebar-link">CLI ツール開発</a>
-      <a href="../tutorial/microcontroller.html" class="sidebar-link">組み込み開発</a>
-      <a href="../tutorial/cinterop.html" class="sidebar-link">C言語との相互運用</a>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-title">リファレンス</div>
-      <a href="types.html" class="sidebar-link">型システム</a>
-      <a href="syntax.html" class="sidebar-link">構文リファレンス</a>
-      <a href="operators.html" class="sidebar-link">演算子リファレンス</a>
-      <a href="standard-library.html" class="sidebar-link">標準ライブラリ</a>
-      <a href="standard-c-library.html" class="sidebar-link">C 標準ライブラリ</a>
-      <a href="compiler.html" class="sidebar-link active">コンパイラ内部構造</a>
-      <a href="keywords.html" class="sidebar-link">キーワード一覧</a>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-title">実践</div>
-      <a href="../examples/todo-app.html" class="sidebar-link">Todo アプリ</a>
-      <a href="../examples/web-framework.html" class="sidebar-link">Web フレームワーク</a>
-      <a href="../examples/iot-sensor.html" class="sidebar-link">IoT センサー</a>
-    </div>
-  </aside>
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">入门</div>
+                <a href="../getting-started.html" class="sidebar-link"
+                    >はじめに</a
+                >
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">チュートリアル</div>
+                <a href="../tutorial/basics.html" class="sidebar-link"
+                    >基本概念</a
+                >
+                <a href="../tutorial/functions.html" class="sidebar-link"
+                    >関数とモジュール</a
+                >
+                <a href="../tutorial/structs-enums.html" class="sidebar-link"
+                    >構造体と列挙型</a
+                >
+                <a href="../tutorial/generics.html" class="sidebar-link"
+                    >ジェネリクス</a
+                >
+                <a href="../tutorial/error-handling.html" class="sidebar-link"
+                    >エラーハンドリング</a
+                >
+                <a href="../tutorial/memory.html" class="sidebar-link"
+                    >メモリ管理</a
+                >
+                <a href="../tutorial/async.html" class="sidebar-link"
+                    >非同期プログラミング</a
+                >
+                <a href="../tutorial/webassembly.html" class="sidebar-link"
+                    >WebAssembly</a
+                >
+                <a href="../tutorial/browser-app.html" class="sidebar-link"
+                    >ブラウザアプリ</a
+                >
+                <a href="../tutorial/tui-app.html" class="sidebar-link"
+                    >TUI アプリ</a
+                >
+                <a href="../tutorial/cli.html" class="sidebar-link"
+                    >CLI ツール開発</a
+                >
+                <a href="../tutorial/microcontroller.html" class="sidebar-link"
+                    >組み込み開発</a
+                >
+                <a href="../tutorial/cinterop.html" class="sidebar-link"
+                    >C言語との相互運用</a
+                >
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">リファレンス</div>
+                <a href="types.html" class="sidebar-link">型システム</a>
+                <a href="syntax.html" class="sidebar-link">構文リファレンス</a>
+                <a href="operators.html" class="sidebar-link"
+                    >演算子リファレンス</a
+                >
+                <a href="standard-library.html" class="sidebar-link"
+                    >標準ライブラリ</a
+                >
+                <a href="standard-c-library.html" class="sidebar-link"
+                    >C 標準ライブラリ</a
+                >
+                <a href="compiler.html" class="sidebar-link active"
+                    >コンパイラ内部構造</a
+                >
+                <a href="keywords.html" class="sidebar-link">キーワード一覧</a>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">実践</div>
+                <a href="../examples/todo-app.html" class="sidebar-link"
+                    >Todo アプリ</a
+                >
+                <a href="../examples/web-framework.html" class="sidebar-link"
+                    >Web フレームワーク</a
+                >
+                <a href="../examples/iot-sensor.html" class="sidebar-link"
+                    >IoT センサー</a
+                >
+            </div>
+        </aside>
 
-  <main class="main content">
-    <h1>コンパイラ内部構造</h1>
-    <p>NagiScript コンパイラの内部構造を解説します。</p>
+        <main class="main content">
+            <h1>コンパイラ内部構造</h1>
+            <p>NagiScript コンパイラの内部構造を解説します。</p>
 
-    <hr>
+            <hr />
 
-    <h2>アーキテクチャ</h2>
-    <div class="code-header"><span class="code-lang">plaintext</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code>┌─────────────────────────────────────────────────────┐
+            <h2>アーキテクチャ</h2>
+            <div class="code-header">
+                <span class="code-lang">plaintext</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code>┌─────────────────────────────────────────────────────┐
 │                    Source Code                       │
 │                  (main.ngs)                          │
 └─────────────────┬───────────────────────────────────┘
@@ -124,57 +184,86 @@
 │   (.o → ELF)  │ │  (Wasm binary)   │
 └───────────────┘ └─────────────────┘</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>Lexer (字句解析)</h2>
-    <h3>処理</h3>
-    <ol>
-      <li>ソースコードをトークンに分割</li>
-      <li>キーワード、識別子、リテラルを認識</li>
-      <li>行番号・列番号を追跡</li>
-    </ol>
+            <h2>Lexer (字句解析)</h2>
+            <h3>処理</h3>
+            <ol>
+                <li>ソースコードをトークンに分割</li>
+                <li>キーワード、識別子、リテラルを認識</li>
+                <li>行番号・列番号を追跡</li>
+            </ol>
 
-    <h3>トークンタイプ</h3>
-    <div class="code-header"><span class="code-lang">rust</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-c">enum Token {
+            <h3>トークンタイプ</h3>
+            <div class="code-header">
+                <span class="code-lang">rust</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-c">enum Token {
     // キーワード
     Fn, Val, Var, Struct, Enum, If, Else, For, While, Match,
     Return, Break, Continue, Import, Export, Async, Await,
-    
+
     // リテラル
     IntLit(f64), FloatLit(f64), StrLit(String), BoolLit(bool),
-    
+
     // 識別子
     Ident(String),
-    
+
     // 演算子
     Plus, Minus, Star, Slash, Percent,
     Eq, Neq, Lt, Gt, Leq, Geq,
     And, Or, Not,
     AmpAmp, StarStar, Question,
-    
+
     // 区切り
     LParen, RParen, LBrace, RBrace, LBracket, RBracket,
     Comma, Colon, Semicolon, Dot, Arrow,
-    
+
     // 特殊
     Eof, Newline, Indent, Dedent,
 }</code></pre>
-    <div class="callout warn"><span class="ct">現行仕様（v0.2.0）</span><p>実際にキーワードとしてトークン化されるのは <code>fn val var if else for while match struct enum impl unsafe extern export return in as break continue true false</code> です。<code>import</code> / <code>async</code> / <code>await</code> はトークン区分として残っていますが未実装です。<code>and</code> / <code>or</code> / <code>not</code> キーワードは存在しないため、論理演算は <code>&amp;&amp;</code> / <code>||</code> / <code>!</code> を使用してください。</p></div>
+            <div class="callout warn">
+                <span class="ct">現行仕様（v0.2.0）</span>
+                <p>
+                    実際にキーワードとしてトークン化されるのは
+                    <code
+                        >fn val var if else for while match struct enum impl
+                        unsafe extern export return in as break continue true
+                        false</code
+                    >
+                    です。<code>import</code> / <code>async</code> /
+                    <code>await</code>
+                    はトークン区分として残っていますが未実装です。<code
+                        >and</code
+                    >
+                    / <code>or</code> /
+                    <code>not</code> キーワードは存在しないため、論理演算は
+                    <code>&amp;&amp;</code> / <code>||</code> /
+                    <code>!</code> を使用してください。
+                </p>
+            </div>
 
-    <hr>
+            <hr />
 
-    <h2>Parser (構文解析)</h2>
-    <h3>処理</h3>
-    <ol>
-      <li>トークン列から抽象構文木 (AST) を構築</li>
-      <li>構文ルールに従ってノードを作成</li>
-      <li>エラーメッセージを生成</li>
-    </ol>
+            <h2>Parser (構文解析)</h2>
+            <h3>処理</h3>
+            <ol>
+                <li>トークン列から抽象構文木 (AST) を構築</li>
+                <li>構文ルールに従ってノードを作成</li>
+                <li>エラーメッセージを生成</li>
+            </ol>
 
-    <h3>AST ノード</h3>
-    <div class="code-header"><span class="code-lang">rust</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-c">enum Expr {
+            <h3>AST ノード</h3>
+            <div class="code-header">
+                <span class="code-lang">rust</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-c">enum Expr {
     IntLit(i64),
     FloatLit(f64),
     StrLit(String),
@@ -197,61 +286,85 @@ enum Stmt {
     // ...
 }</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>Semantic Analysis (意味解析)</h2>
-    <h3>処理</h3>
-    <ol>
-      <li>型チェック</li>
-      <li>名前解決</li>
-      <li>借用チェック</li>
-      <li>エラー検出</li>
-    </ol>
-    <div class="callout warn"><span class="ct">現行仕様（v0.2.0）</span><p>名前解決は同一ファイル内の識別子解決のみです。<code>import</code> によるモジュール解決は未実装のため、現行では複数のファイルに分割できず、1 つの <code>main.ngs</code> で完結させます。</p></div>
+            <h2>Semantic Analysis (意味解析)</h2>
+            <h3>処理</h3>
+            <ol>
+                <li>型チェック</li>
+                <li>名前解決</li>
+                <li>借用チェック</li>
+                <li>エラー検出</li>
+            </ol>
+            <div class="callout warn">
+                <span class="ct">現行仕様（v0.2.0）</span>
+                <p>
+                    名前解決は同一ファイル内の識別子解決のみです。<code
+                        >import</code
+                    >
+                    によるモジュール解決は未実装のため、現行では複数のファイルに分割できず、1
+                    つの <code>main.ngs</code> で完結させます。
+                </p>
+            </div>
 
-    <h3>型チェック</h3>
-    <div class="code-header"><span class="code-lang">rust</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-c">fn check_expr(expr: &amp;Expr, env: &amp;mut Env) -&gt; Result&lt;Type, Error&gt; {
+            <h3>型チェック</h3>
+            <div class="code-header">
+                <span class="code-lang">rust</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-c">fn check_expr(expr: &amp;Expr, env: &amp;mut Env) -&gt; Result&lt;Type, Error&gt; {
     match expr {
         Expr::IntLit(_) =&gt; Ok(Type::I32),
         Expr::Ident(name) =&gt; env.lookup(name),
         Expr::BinaryOp { op, left, right } =&gt; {
             let left_ty = check_expr(left, env)?;
             let right_ty = check_expr(right, env)?;
-            
+
             if left_ty != right_ty {
                 return Err(Error::TypeMismatch(left_ty, right_ty));
             }
-            
+
             Ok(left_ty)
         }
         // ...
     }
 }</code></pre>
 
-    <h3>借用チェック</h3>
-    <div class="code-header"><span class="code-lang">rust</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-c">fn check_borrow(expr: &amp;Expr, env: &amp;mut Env) -&gt; Result&lt;(), Error&gt; {
+            <h3>借用チェック</h3>
+            <div class="code-header">
+                <span class="code-lang">rust</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-c">fn check_borrow(expr: &amp;Expr, env: &amp;mut Env) -&gt; Result&lt;(), Error&gt; {
     // 不変借用のチェック
     // 可変借用のチェック
     // 参照の寿命のチェック
     // ...
 }</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>IR Lowering (中間表現変換)</h2>
-    <h3>処理</h3>
-    <ol>
-      <li>AST → HIR (High-level IR) 変換</li>
-      <li>HIR → MIR (Mid-level IR) 変換</li>
-      <li>型消去 (Type Erasure)</li>
-      <li>単型化 (Monomorphization)</li>
-    </ol>
+            <h2>IR Lowering (中間表現変換)</h2>
+            <h3>処理</h3>
+            <ol>
+                <li>AST → HIR (High-level IR) 変換</li>
+                <li>HIR → MIR (Mid-level IR) 変換</li>
+                <li>型消去 (Type Erasure)</li>
+                <li>単型化 (Monomorphization)</li>
+            </ol>
 
-    <h3>単型化の例</h3>
-    <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">// 元のコード
+            <h3>単型化の例</h3>
+            <div class="code-header">
+                <span class="code-lang">ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">// 元のコード
 fn add&lt;T: Numeric&gt;(a: T, b: T) T {
     a + b
 }
@@ -259,8 +372,13 @@ fn add&lt;T: Numeric&gt;(a: T, b: T) T {
 val x = add(10, 20)      // T = i32
 val y = add(1.5, 2.5)    // T = f64</code></pre>
 
-    <div class="code-header"><span class="code-lang">rust</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-c">// 展開後
+            <div class="code-header">
+                <span class="code-lang">rust</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-c">// 展開後
 fn add_i32(a: i32, b: i32) i32 {
     a + b
 }
@@ -268,27 +386,44 @@ fn add_i32(a: i32, b: i32) i32 {
 fn add_f64(a: f64, b: f64) f64 {
     a + b
 }</code></pre>
-    <div class="callout warn"><span class="ct">現行仕様（v0.2.0）</span><p>上記は単型化の動作説明用です。ユーザーコードでは <code>fn add&lt;T: Numeric&gt;(a: T, b: T) T</code> のような型パラメータ付き関数は現行では限定的で、<code>Vec2&lt;T&gt;</code> 等のジェネリクス構造体は未実装です。実コードでは戻り値を <code>-&gt;</code> 構文で書き、ブロック末尾の暗黙 return ではなく <code>return</code> を明示してください。</p></div>
+            <div class="callout warn">
+                <span class="ct">現行仕様（v0.2.0）</span>
+                <p>
+                    上記は単型化の動作説明用です。ユーザーコードでは
+                    <code>fn add&lt;T: Numeric&gt;(a: T, b: T) T</code>
+                    のような型パラメータ付き関数は現行では限定的で、<code
+                        >Vec2&lt;T&gt;</code
+                    >
+                    等のジェネリクス構造体は未実装です。実コードでは戻り値を
+                    <code>-&gt;</code> 構文で書き、ブロック末尾の暗黙 return
+                    ではなく <code>return</code> を明示してください。
+                </p>
+            </div>
 
-    <hr>
+            <hr />
 
-    <h2>LLVM Backend</h2>
-    <h3>処理</h3>
-    <ol>
-      <li>MIR → LLVM IR 変換</li>
-      <li>最適化パスの適用</li>
-      <li>ネイティブコード生成</li>
-    </ol>
+            <h2>LLVM Backend</h2>
+            <h3>処理</h3>
+            <ol>
+                <li>MIR → LLVM IR 変換</li>
+                <li>最適化パスの適用</li>
+                <li>ネイティブコード生成</li>
+            </ol>
 
-    <h3>LLVM IR 生成</h3>
-    <div class="code-header"><span class="code-lang">rust</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-c">fn codegen_expr(expr: &amp;Expr, builder: &amp;Builder) -&gt; IntValue {
+            <h3>LLVM IR 生成</h3>
+            <div class="code-header">
+                <span class="code-lang">rust</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-c">fn codegen_expr(expr: &amp;Expr, builder: &amp;Builder) -&gt; IntValue {
     match expr {
         Expr::IntLit(n) =&gt; builder.const_int(*n),
         Expr::BinaryOp { op, left, right } =&gt; {
             let l = codegen_expr(left, builder);
             let r = codegen_expr(right, builder);
-            
+
             match op {
                 BinOp::Add =&gt; builder.build_add(l, r),
                 BinOp::Sub =&gt; builder.build_sub(l, r),
@@ -300,21 +435,40 @@ fn add_f64(a: f64, b: f64) f64 {
         // ...
     }
 }</code></pre>
-    <div class="callout warn"><span class="ct">現行仕様（v0.2.0）</span><p>整数 / 浮動小数点型は LLVM の対応する型にほぼ 1:1 でマップされます（<code>i32</code> → LLVM <code>i32</code>、<code>f64</code> → LLVM <code>double</code> 等）。既知の問題として、<code>List&lt;T&gt;</code> のコード生成で <code>zext i64 to i64</code> エラーが発生しリンクに失敗するため、現行では構造体 + 値渡しの利用を推奨します。</p></div>
+            <div class="callout warn">
+                <span class="ct">現行仕様（v0.2.0）</span>
+                <p>
+                    整数 / 浮動小数点型は LLVM の対応する型にほぼ 1:1
+                    でマップされます（<code>i32</code> → LLVM
+                    <code>i32</code>、<code>f64</code> → LLVM
+                    <code>double</code> 等）。既知の問題として、<code
+                        >List&lt;T&gt;</code
+                    >
+                    のコード生成で
+                    <code>zext i64 to i64</code>
+                    エラーが発生しリンクに失敗するため、現行では構造体 +
+                    値渡しの利用を推奨します。
+                </p>
+            </div>
 
-    <hr>
+            <hr />
 
-    <h2>Wasm Backend</h2>
-    <h3>処理</h3>
-    <ol>
-      <li>MIR → WAT (WebAssembly Text) 変換</li>
-      <li>WAT → Wasm バイナリ変換</li>
-      <li>型定義ファイル (.d.ts) 生成</li>
-    </ol>
+            <h2>Wasm Backend</h2>
+            <h3>処理</h3>
+            <ol>
+                <li>MIR → WAT (WebAssembly Text) 変換</li>
+                <li>WAT → Wasm バイナリ変換</li>
+                <li>型定義ファイル (.d.ts) 生成</li>
+            </ol>
 
-    <h3>WAT 生成</h3>
-    <div class="code-header"><span class="code-lang">wat</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code>(module
+            <h3>WAT 生成</h3>
+            <div class="code-header">
+                <span class="code-lang">wat</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code>(module
   (func $add (param i32 i32) (result i32)
     local.get 0
     local.get 1
@@ -322,18 +476,41 @@ fn add_f64(a: f64, b: f64) f64 {
   )
   (export "add" (func $add))
 )</code></pre>
-    <div class="callout warn"><span class="ct">現行仕様（v0.2.0）</span><p>Wasm 出力は <code>nagiscript wasm main.ngs [-o PATH]</code> で行います（<code>.wat</code>、可能なら <code>.wasm</code> + 型定義ファイル <code>.d.ts</code>）。Wasm / C へのエクスポートは <code>export "C" fn</code> 形式が正しい書き方です（<code>export fn</code> とは書けません）。</p></div>
-      <div class="code-header"><span class="code-lang">ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-      <pre><code class="lang-ngs">export "C" fn add(a: i32, b: i32) -&gt; i32 {
+            <div class="callout warn">
+                <span class="ct">現行仕様（v0.2.0）</span>
+                <p>
+                    Wasm 出力は
+                    <code>nagiscript wasm main.ngs [-o PATH]</code>
+                    で行います（<code>.wat</code>、可能なら <code>.wasm</code> +
+                    型定義ファイル <code>.d.ts</code>）。Wasm / C
+                    へのエクスポートは
+                    <code>export "C" fn</code> 形式が正しい書き方です（<code
+                        >export fn</code
+                    >
+                    とは書けません）。
+                </p>
+            </div>
+            <div class="code-header">
+                <span class="code-lang">ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">export "C" fn add(a: i32, b: i32) -&gt; i32 {
     return a + b
 }</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>エラーハンドリング</h2>
-    <h3>エラータイプ</h3>
-    <div class="code-header"><span class="code-lang">rust</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-c">enum Error {
+            <h2>エラーハンドリング</h2>
+            <h3>エラータイプ</h3>
+            <div class="code-header">
+                <span class="code-lang">rust</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-c">enum Error {
     LexError { line: usize, col: usize, msg: String },
     ParseError { line: usize, col: usize, msg: String },
     TypeError { line: usize, col: usize, msg: String },
@@ -342,67 +519,92 @@ fn add_f64(a: f64, b: f64) f64 {
     CodegenError { msg: String },
 }</code></pre>
 
-    <h3>エラーメッセージの生成</h3>
-    <div class="code-header"><span class="code-lang">plaintext</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code>Error[E001]: Type mismatch
+            <h3>エラーメッセージの生成</h3>
+            <div class="code-header">
+                <span class="code-lang">plaintext</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code>Error[E001]: Type mismatch
   --&gt; main.ngs:5:10
    |
  5 |     val x: i32 = "hello"
    |            ---   ^^^^^^^ expected i32, found string
    |</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>最適化</h2>
-    <h3>LLVM 最適化パス</h3>
-    <ol>
-      <li><strong>Constant Folding</strong>: 定数畳み込み</li>
-      <li><strong>Dead Code Elimination</strong>: 死コード除去</li>
-      <li><strong>Inlining</strong>: 関数インライン化</li>
-      <li><strong>Loop Unrolling</strong>: ループ展開</li>
-      <li><strong>Vectorization</strong>: ベクトル化</li>
-    </ol>
+            <h2>最適化</h2>
+            <h3>LLVM 最適化パス</h3>
+            <ol>
+                <li><strong>Constant Folding</strong>: 定数畳み込み</li>
+                <li><strong>Dead Code Elimination</strong>: 死コード除去</li>
+                <li><strong>Inlining</strong>: 関数インライン化</li>
+                <li><strong>Loop Unrolling</strong>: ループ展開</li>
+                <li><strong>Vectorization</strong>: ベクトル化</li>
+            </ol>
 
-    <h3>コンパイル時の最適化レベル</h3>
-    <div class="callout warn"><span class="ct">現行仕様（v0.2.0）</span><p>現行 CLI の出力コマンドは次のとおりです。<code>--opt</code> 等の最適化レベル指定は現行では提供されません。</p></div>
-    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-bash">nagiscript wasm main.ngs          # .wat を出力
+            <h3>コンパイル時の最適化レベル</h3>
+            <div class="callout warn">
+                <span class="ct">現行仕様（v0.2.0）</span>
+                <p>
+                    現行 CLI の出力コマンドは次のとおりです。<code>--opt</code>
+                    等の最適化レベル指定は現行では提供されません。
+                </p>
+            </div>
+            <div class="code-header">
+                <span class="code-lang">bash</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-bash">nagiscript wasm main.ngs          # .wat を出力
 nagiscript wasm main.ngs -o out   # out.wat / out.wasm + out.d.ts を出力</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>パフォーマンス</h2>
-    <h3>コンパイル速度</h3>
-    <ul>
-      <li><strong>字句解析</strong>: O(n)</li>
-      <li><strong>構文解析</strong>: O(n)</li>
-      <li><strong>意味解析</strong>: O(n log n)</li>
-      <li><strong>IR 変換</strong>: O(n)</li>
-      <li><strong>コード生成</strong>: O(n)</li>
-    </ul>
+            <h2>パフォーマンス</h2>
+            <h3>コンパイル速度</h3>
+            <ul>
+                <li><strong>字句解析</strong>: O(n)</li>
+                <li><strong>構文解析</strong>: O(n)</li>
+                <li><strong>意味解析</strong>: O(n log n)</li>
+                <li><strong>IR 変換</strong>: O(n)</li>
+                <li><strong>コード生成</strong>: O(n)</li>
+            </ul>
 
-    <h3>実行時パフォーマンス</h3>
-    <ul>
-      <li><strong>関数呼び出し</strong>: C ABI と同等</li>
-      <li><strong>メモリアクセス</strong>: ヒープ確保のみオーバーヘッド</li>
-      <li><strong>エラーハンドリング</strong>: Result 型による分岐</li>
-    </ul>
+            <h3>実行時パフォーマンス</h3>
+            <ul>
+                <li><strong>関数呼び出し</strong>: C ABI と同等</li>
+                <li>
+                    <strong>メモリアクセス</strong>:
+                    ヒープ確保のみオーバーヘッド
+                </li>
+                <li>
+                    <strong>エラーハンドリング</strong>: Result 型による分岐
+                </li>
+            </ul>
 
-    <hr>
+            <hr />
 
-    <div class="page-nav">
-      <a href="standard-c-library.html" class="nav-link prev">← C 標準ライブラリ</a>
-      <a href="keywords.html" class="nav-link next">キーワード一覧 →</a>
-    </div>
-  </main>
+            <div class="page-nav">
+                <a href="standard-c-library.html" class="nav-link prev"
+                    >← C 標準ライブラリ</a
+                >
+                <a href="keywords.html" class="nav-link next"
+                    >キーワード一覧 →</a
+                >
+            </div>
+        </main>
 
-  <script src="../../js/main.js"></script>
-  <script src="../../js/play-wasm.js"></script>
+        <script src="../../js/main.js"></script>
+        <script src="../../js/play-wasm.js"></script>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      if (window.lucide) lucide.createIcons();
-    });
-  </script>
-</body>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                if (window.lucide) lucide.createIcons();
+            });
+        </script>
+    </body>
 </html>

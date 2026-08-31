@@ -1,95 +1,165 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>エラーハンドリング - NagiScript</title>
-  <link rel="stylesheet" href="../../css/style.css">
-  <link rel="icon" href="../../assets/logo.png">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>エラーハンドリング - NagiScript</title>
+        <link rel="stylesheet" href="../../css/style.css" />
+        <link rel="icon" href="../../assets/logo.png" />
 
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
-</head>
-<body>
-  <div class="sky-decor" aria-hidden="true">
-    <div class="cloud c1"></div>
-    <div class="cloud c2"></div>
-    <div class="cloud c3"></div>
-    <div class="cloud c4"></div>
-  </div>
-  <header class="header">
-    <a href="../../index.html" class="header-logo"><img src="../../assets/logo.png" alt="NagiScript Logo"><span class="logo-text">NagiScript</span></a>
-    <nav class="header-nav" id="header-nav">
-      <a href="../../index.html">ホーム</a>
-      <a href="../getting-started.html">ドキュメント</a>
-      <a href="../tutorial/basics.html">チュートリアル</a>
-      <a href="../reference/types.html">リファレンス</a>
-      <a href="https://github.com/TatsuyaM2667/nagiscript_lang" class="nav-github">
-        <i data-lucide="github"></i><span>GitHub</span>
-      </a>
-      <button class="theme-toggle" aria-label="テーマ切替">
-        <i data-lucide="moon" class="icon-moon"></i>
-        <i data-lucide="sun" class="icon-sun"></i>
-      </button>
-    </nav>
-    <button class="menu-toggle" id="menu-toggle" aria-label="メニュー"><i data-lucide="menu"></i></button>
-  </header>
-  <div class="sidebar-overlay"></div>
+        <!-- Lucide Icons -->
+        <script
+            src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"
+            defer
+        ></script>
+    </head>
+    <body>
+        <div class="sky-decor" aria-hidden="true">
+            <div class="cloud c1"></div>
+            <div class="cloud c2"></div>
+            <div class="cloud c3"></div>
+            <div class="cloud c4"></div>
+        </div>
+        　
+        <header class="header">
+            <a href="../../index.html" class="header-logo"
+                ><img src="../../assets/logo.png" alt="NagiScript Logo" /><span
+                    class="logo-text"
+                    >NagiScript</span
+                ></a
+            >
+            <nav class="header-nav" id="header-nav">
+                <a href="../../index.html">ホーム</a>
+                <a href="../getting-started.html">ドキュメント</a>
+                <a href="../tutorial/basics.html">チュートリアル</a>
+                <a href="../reference/types.html">リファレンス</a>
+                <a
+                    href="https://github.com/TatsuyaM2667/nagiscript_lang"
+                    class="nav-github"
+                >
+                    <i data-lucide="github"></i><span>GitHub</span>
+                </a>
+                <button class="theme-toggle" aria-label="テーマ切替">
+                    <i data-lucide="moon" class="icon-moon"></i>
+                    <i data-lucide="sun" class="icon-sun"></i>
+                </button>
+            </nav>
+            <button class="menu-toggle" id="menu-toggle" aria-label="メニュー">
+                <i data-lucide="menu"></i>
+            </button>
+        </header>
+        <div class="sidebar-overlay"></div>
 
-  <aside class="sidebar">
-    <div class="sidebar-section">
-      <div class="sidebar-title">入门</div>
-      <a href="../getting-started.html" class="sidebar-link">はじめに</a>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-title">チュートリアル</div>
-      <a href="basics.html" class="sidebar-link">基本概念</a>
-      <a href="functions.html" class="sidebar-link">関数とモジュール</a>
-      <a href="structs-enums.html" class="sidebar-link">構造体と列挙型</a>
-      <a href="generics.html" class="sidebar-link">ジェネリクス</a>
-      <a href="error-handling.html" class="sidebar-link active">エラーハンドリング</a>
-      <a href="memory.html" class="sidebar-link">メモリ管理</a>
-      <a href="async.html" class="sidebar-link">非同期プログラミング</a>
-      <a href="webassembly.html" class="sidebar-link">WebAssembly</a>
-      <a href="browser-app.html" class="sidebar-link">ブラウザアプリ</a>
-      <a href="tui-app.html" class="sidebar-link">TUI アプリ</a>
-      <a href="cli.html" class="sidebar-link">CLI ツール開発</a>
-      <a href="microcontroller.html" class="sidebar-link">組み込み開発</a>
-      <a href="cinterop.html" class="sidebar-link">C言語との相互運用</a>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-title">リファレンス</div>
-      <a href="../reference/types.html" class="sidebar-link">型システム</a>
-      <a href="../reference/syntax.html" class="sidebar-link">構文リファレンス</a>
-      <a href="../reference/operators.html" class="sidebar-link">演算子リファレンス</a>
-      <a href="../reference/standard-library.html" class="sidebar-link">標準ライブラリ</a>
-      <a href="../reference/standard-c-library.html" class="sidebar-link">C 標準ライブラリ</a>
-      <a href="../reference/compiler.html" class="sidebar-link">コンパイラ内部構造</a>
-      <a href="../reference/keywords.html" class="sidebar-link">キーワード一覧</a>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-title">実践</div>
-      <a href="../examples/todo-app.html" class="sidebar-link">Todo アプリ</a>
-      <a href="../examples/web-framework.html" class="sidebar-link">Web フレームワーク</a>
-      <a href="../examples/iot-sensor.html" class="sidebar-link">IoT センサー</a>
-    </div>
-  </aside>
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">入门</div>
+                <a href="../getting-started.html" class="sidebar-link"
+                    >はじめに</a
+                >
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">チュートリアル</div>
+                <a href="basics.html" class="sidebar-link">基本概念</a>
+                <a href="functions.html" class="sidebar-link"
+                    >関数とモジュール</a
+                >
+                <a href="structs-enums.html" class="sidebar-link"
+                    >構造体と列挙型</a
+                >
+                <a href="generics.html" class="sidebar-link">ジェネリクス</a>
+                <a href="error-handling.html" class="sidebar-link active"
+                    >エラーハンドリング</a
+                >
+                <a href="memory.html" class="sidebar-link">メモリ管理</a>
+                <a href="async.html" class="sidebar-link"
+                    >非同期プログラミング</a
+                >
+                <a href="webassembly.html" class="sidebar-link">WebAssembly</a>
+                <a href="browser-app.html" class="sidebar-link"
+                    >ブラウザアプリ</a
+                >
+                <a href="tui-app.html" class="sidebar-link">TUI アプリ</a>
+                <a href="cli.html" class="sidebar-link">CLI ツール開発</a>
+                <a href="microcontroller.html" class="sidebar-link"
+                    >組み込み開発</a
+                >
+                <a href="cinterop.html" class="sidebar-link"
+                    >C言語との相互運用</a
+                >
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">リファレンス</div>
+                <a href="../reference/types.html" class="sidebar-link"
+                    >型システム</a
+                >
+                <a href="../reference/syntax.html" class="sidebar-link"
+                    >構文リファレンス</a
+                >
+                <a href="../reference/operators.html" class="sidebar-link"
+                    >演算子リファレンス</a
+                >
+                <a
+                    href="../reference/standard-library.html"
+                    class="sidebar-link"
+                    >標準ライブラリ</a
+                >
+                <a
+                    href="../reference/standard-c-library.html"
+                    class="sidebar-link"
+                    >C 標準ライブラリ</a
+                >
+                <a href="../reference/compiler.html" class="sidebar-link"
+                    >コンパイラ内部構造</a
+                >
+                <a href="../reference/keywords.html" class="sidebar-link"
+                    >キーワード一覧</a
+                >
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">実践</div>
+                <a href="../examples/todo-app.html" class="sidebar-link"
+                    >Todo アプリ</a
+                >
+                <a href="../examples/web-framework.html" class="sidebar-link"
+                    >Web フレームワーク</a
+                >
+                <a href="../examples/iot-sensor.html" class="sidebar-link"
+                    >IoT センサー</a
+                >
+            </div>
+        </aside>
 
-  <main class="main content">
-    <h1>エラーハンドリング</h1>
-    <p>NagiScript のエラーハンドリング戦略を学びます。</p>
+        <main class="main content">
+            <h1>エラーハンドリング</h1>
+            <p>NagiScript のエラーハンドリング戦略を学びます。</p>
 
-    <div class="callout warn">
-      <span class="ct">現行仕様（v0.2.0）</span>
-      <p><code>Result</code> / <code>Option</code> は<b>組み込みの型としては存在しません</b>。<code>enum</code> で自作して使います。エラーを上位へ伝播させる <code>?</code> 演算子は<b>未実装</b>なので、エラー回避は <b>if / else の分岐</b>で行います。</p>
-    </div>
+            <div class="callout warn">
+                <span class="ct">現行仕様（v0.2.0）</span>
+                <p>
+                    <code>Result</code> /
+                    <code>Option</code>
+                    は<b>組み込みの型としては存在しません</b>。<code>enum</code>
+                    で自作して使います。エラーを上位へ伝播させる
+                    <code>?</code> 演算子は<b>未実装</b>なので、エラー回避は
+                    <b>if / else の分岐</b>で行います。
+                </p>
+            </div>
 
-    <hr>
+            <hr />
 
-    <h2>Result を enum で自作する</h2>
-    <p>まず <code>enum</code> で成功・失敗の状態を定義します。値の生成は <code>Result.Ok()</code> のように<b>括弧</b>が必要です。</p>
-    <div class="code-header"><span class="code-lang">result.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">enum Result {
+            <h2>Result を enum で自作する</h2>
+            <p>
+                まず
+                <code>enum</code> で成功・失敗の状態を定義します。値の生成は
+                <code>Result.Ok()</code> のように<b>括弧</b>が必要です。
+            </p>
+            <div class="code-header">
+                <span class="code-lang">result.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">enum Result {
     Ok
     NotFound
 }
@@ -110,10 +180,23 @@ fn main() {
     println(st)
 }</code></pre>
 
-    <h3>match のパターン</h3>
-    <p><code>match</code> のパターンには<b>裸のバリアント名</b>（<code>Ok</code> / <code>NotFound</code>）を使います。どのバリアントにも一致するワイルドカードは <code>_</code> です。</p>
-    <div class="code-header"><span class="code-lang">strict.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">enum Result {
+            <h3>match のパターン</h3>
+            <p>
+                <code>match</code> のパターンには<b>裸のバリアント名</b>（<code
+                    >Ok</code
+                >
+                /
+                <code>NotFound</code
+                >）を使います。どのバリアントにも一致するワイルドカードは
+                <code>_</code> です。
+            </p>
+            <div class="code-header">
+                <span class="code-lang">strict.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">enum Result {
     Ok
     NotFound
 }
@@ -133,12 +216,21 @@ fn main() {
     }
 }</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>エラー回避は if / else 分岐</h2>
-    <p><code>?</code> 演算子は<b>未実装</b>なので、エラーの判定・回避は <b>if / else</b> と <b>明示的な <code>return</code></b> で行います。</p>
-    <div class="code-header"><span class="code-lang">guard.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">fn divide(a: i32, b: i32) -&gt; i32 {
+            <h2>エラー回避は if / else 分岐</h2>
+            <p>
+                <code>?</code> 演算子は<b>未実装</b>なので、エラーの判定・回避は
+                <b>if / else</b> と
+                <b>明示的な <code>return</code></b> で行います。
+            </p>
+            <div class="code-header">
+                <span class="code-lang">guard.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">fn divide(a: i32, b: i32) -&gt; i32 {
     if b == 0 {
         println("zero division")
         return 0  // エラー時は別の値で回避
@@ -151,8 +243,13 @@ fn main() {
     println(x)
 }</code></pre>
 
-    <div class="code-header"><span class="code-lang">status.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">enum DivResult {
+            <div class="code-header">
+                <span class="code-lang">status.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">enum DivResult {
     Ok
     Error
 }
@@ -172,12 +269,22 @@ fn main() {
     }
 }</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>明示 return の規約</h2>
-    <p>ブロック末尾の暗黙 return（式ブロック）は<b>非対応</b>です。戻り値のある関数は必ず <code>return</code> を書き、戻り値を返さない関数は <code>-&gt;</code> を付けません。</p>
-    <div class="code-header"><span class="code-lang">return.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">fn read_config(name: string) -&gt; string {
+            <h2>明示 return の規約</h2>
+            <p>
+                ブロック末尾の暗黙
+                return（式ブロック）は<b>非対応</b>です。戻り値のある関数は必ず
+                <code>return</code> を書き、戻り値を返さない関数は
+                <code>-&gt;</code> を付けません。
+            </p>
+            <div class="code-header">
+                <span class="code-lang">return.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">fn read_config(name: string) -&gt; string {
     if name == "main" {
         return "module:main"
     }
@@ -188,22 +295,31 @@ fn main() {
     println(read_config("main"))
 }</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>panic</h2>
-    <p>回復不能なエラーには組み込みの <code>panic</code> を使います。引数は 1 個で、プログラムを停止します。</p>
-    <div class="code-header"><span class="code-lang">panic.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">fn divide_or_panic(a: i32, b: i32) -&gt; i32 {
+            <h2>panic</h2>
+            <p>
+                回復不能なエラーには組み込みの
+                <code>panic</code> を使います。引数は 1
+                個で、プログラムを停止します。
+            </p>
+            <div class="code-header">
+                <span class="code-lang">panic.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">fn divide_or_panic(a: i32, b: i32) -&gt; i32 {
     if b == 0 {
         panic("Division by zero")
     }
     return a / b
 }</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>エラーハンドリングの流れ</h2>
-    <pre><code>enum で状態（Ok / NotFound / Error など）を定義
+            <h2>エラーハンドリングの流れ</h2>
+            <pre><code>enum で状態（Ok / NotFound / Error など）を定義
     ↓
 関数の冒頭で if / else によりエラーを判定
     ↓
@@ -215,27 +331,27 @@ match でバリアントを分岐
     ↓
 ? 演算子は未実装。伝播したい場合は if / else で分岐させる</code></pre>
 
-    <hr>
+            <hr />
 
-    <div class="nav-links">
-      <a href="generics.html" class="nav-link">
-        <span class="label">前</span>
-        <span class="title">← ジェネリクス</span>
-      </a>
-      <a href="memory.html" class="nav-link">
-        <span class="label">次</span>
-        <span class="title">メモリ管理 →</span>
-      </a>
-    </div>
-  </main>
+            <div class="nav-links">
+                <a href="generics.html" class="nav-link">
+                    <span class="label">前</span>
+                    <span class="title">← ジェネリクス</span>
+                </a>
+                <a href="memory.html" class="nav-link">
+                    <span class="label">次</span>
+                    <span class="title">メモリ管理 →</span>
+                </a>
+            </div>
+        </main>
 
-  <script src="../../js/main.js"></script>
-  <script src="../../js/play-wasm.js"></script>
+        <script src="../../js/main.js"></script>
+        <script src="../../js/play-wasm.js"></script>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      if (window.lucide) lucide.createIcons();
-    });
-  </script>
-</body>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                if (window.lucide) lucide.createIcons();
+            });
+        </script>
+    </body>
 </html>

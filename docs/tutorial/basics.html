@@ -5,10 +5,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>基本概念 - NagiScript</title>
         <link rel="stylesheet" href="../../css/style.css" />
-    
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
-</head>
+
+        <!-- Lucide Icons -->
+        <script
+            src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"
+            defer
+        ></script>
+    </head>
     <body>
         <div class="sky-decor" aria-hidden="true">
             <div class="cloud c1"></div>
@@ -17,23 +20,32 @@
             <div class="cloud c4"></div>
         </div>
         <header class="header">
+            　
             <a href="../../index.html" class="header-logo"
-                ><img src="../../assets/logo.png" alt="NagiScript Logo"><span class="logo-text">NagiScript</span></a
+                ><img src="../../assets/logo.png" alt="NagiScript Logo" /><span
+                    class="logo-text"
+                    >NagiScript</span
+                ></a
             >
             <nav class="header-nav" id="header-nav">
-      <a href="../../index.html">ホーム</a>
-      <a href="../getting-started.html">ドキュメント</a>
-      <a href="../tutorial/basics.html">チュートリアル</a>
-      <a href="../reference/types.html">リファレンス</a>
-      <a href="https://github.com/TatsuyaM2667/nagiscript_lang" class="nav-github">
-        <i data-lucide="github"></i><span>GitHub</span>
-      </a>
-      <button class="theme-toggle" aria-label="テーマ切替">
-        <i data-lucide="moon" class="icon-moon"></i>
-        <i data-lucide="sun" class="icon-sun"></i>
-      </button>
-    </nav>
-    <button class="menu-toggle" id="menu-toggle" aria-label="メニュー"><i data-lucide="menu"></i></button>
+                <a href="../../index.html">ホーム</a>
+                <a href="../getting-started.html">ドキュメント</a>
+                <a href="../tutorial/basics.html">チュートリアル</a>
+                <a href="../reference/types.html">リファレンス</a>
+                <a
+                    href="https://github.com/TatsuyaM2667/nagiscript_lang"
+                    class="nav-github"
+                >
+                    <i data-lucide="github"></i><span>GitHub</span>
+                </a>
+                <button class="theme-toggle" aria-label="テーマ切替">
+                    <i data-lucide="moon" class="icon-moon"></i>
+                    <i data-lucide="sun" class="icon-sun"></i>
+                </button>
+            </nav>
+            <button class="menu-toggle" id="menu-toggle" aria-label="メニュー">
+                <i data-lucide="menu"></i>
+            </button>
         </header>
         <div class="sidebar-overlay"></div>
 
@@ -128,7 +140,9 @@
 
             <div class="code-header">
                 <span class="code-lang">filename.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">val x: i32 = 10
 val name: string = "NagiScript"
@@ -140,7 +154,9 @@ val pi: f64 = 3.14159</code></pre>
 
             <div class="code-header">
                 <span class="code-lang">filename.ngs</span>
-                <button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                <button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">var counter: i32 = 0
 counter = 10  // OK
@@ -152,7 +168,9 @@ counter += 1  // OK</code></pre>
 
             <div class="code-header">
                 <span class="code-lang">filename.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">val x = 10        // i32 と推論
 val name = "Hello" // string と推論
@@ -218,7 +236,9 @@ val flag = true    // bool と推論</code></pre>
 
             <div class="code-header">
                 <span class="code-lang">filename.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">val a: i32 = 42
 val b: u8 = 255
@@ -228,7 +248,9 @@ val c: i64 = 999999999999</code></pre>
 
             <div class="code-header">
                 <span class="code-lang">filename.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">val f1: f32 = 3.14
 val f2: f64 = 2.71828182845</code></pre>
@@ -247,7 +269,9 @@ val f2: f64 = 2.71828182845</code></pre>
             </div>
             <div class="code-header">
                 <span class="code-lang">filename.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">val s1: string = "Hello, World!"
 val s2 = "型推論でもOK"
@@ -259,7 +283,9 @@ val eq = s1 == s2  // false</code></pre>
 
             <div class="code-header">
                 <span class="code-lang">filename.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">val flag1: bool = true
 val flag2 = false
@@ -293,15 +319,21 @@ if flag1 && !flag2 {
                 <span class="ct">現行仕様（v0.2.0）</span>
                 <p>
                     <code>if</code>
-                    は<b>文</b>として使うのが確実です。式として値を返す
+                    は<b>文</b>として使うのが基本です。値を分岐させたい場合は
+                    <code>var</code> に代入してから
+                    <code>if</code> 文の中で代入します。なお<b>ブロック末尾</b>
+                    （<code>}</code> 直前）に置いた <code>if</code> /
+                    <code>match</code> は返り値の tail 式として扱われます
+                    （change.md, 2026-08）。通常位置での
                     <code>val x = if ... { } else { }</code>
-                    のような使い方は現行ではサポートされていません（ブロック末尾の暗黙
-                    return も不可）。
+                    のような代入は現行では対応していません。
                 </p>
             </div>
             <div class="code-header">
                 <span class="code-lang">filename.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">var result = ""
 if x &gt; 5 {
@@ -310,38 +342,35 @@ if x &gt; 5 {
     result = "小さい"
 }</code></pre>
 
-            <h3>for ループ（既知バグあり）</h3>
+            <h3>for ループ（<code>step</code> 対応）</h3>
 
-            <div class="callout warn">
-                <span class="ct">現行仕様（v0.2.0）</span>
+            <div class="callout note">
+                <span class="ct">現行仕様（change.md, 2026-08）</span>
                 <p>
-                    <code>for i in 0..5 { }</code> は<b
-                        >ループ本体が IR から落ちて何も実行されない</b
-                    >既知バグがあります。また
-                    <code>step</code> は未実装です。当面は
-                    <b><code>while</code></b> を使用してください。
+                    <code>for i in 0..5 { }</code>
+                    の範囲ループは使用できます。<code>step</code>
+                    節で増分を指定でき（省略時は 1、負のステップは降順）、同じ変数名を複数の
+                    <code>for</code> で使い回す再宣言バグも修正されています。
+                    <code>while</code> での書き換えも従来どおり可能です。
                 </p>
             </div>
             <div class="code-header">
                 <span class="code-lang">filename.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
-            <pre><code class="lang-ngs">// 既知バグのため推奨しない（body が実行されない）
-// for i in 0..5 { println(i) }
-
-// 代わりに while を使う
-var i = 0
-while i &lt; 5 {
-    println(i)
-    i = i + 1
-}
-// 出力: 0, 1, 2, 3, 4</code></pre>
+            <pre><code class="lang-ngs">for i in 0..5 { println(i) }           // 0 1 2 3 4
+for i in 0..10 step 2 { println(i) }  // 0 2 4 6 8
+for i in 10..0 step -3 { println(i) } // 10 7 4 1</code></pre>
 
             <h3>while ループ</h3>
 
             <div class="code-header">
                 <span class="code-lang">filename.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">var i = 0
 while i &lt; 5 {
@@ -367,7 +396,9 @@ while true {
             </div>
             <div class="code-header">
                 <span class="code-lang">filename.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">enum Status { Ok NotFound }
 
@@ -390,12 +421,17 @@ fn main() {
                 <p>
                     ブロック末尾の式を値として返す「式ブロック」（<code
                         >val x = { ... a + b }</code
-                    >）は<b>サポートされていません</b>。文としてのみ使用できます。
+                    >）は<b>サポートされていません</b>。ただし関数ブロック末尾の
+                    <code>if</code> / <code>match</code>
+                    は返り値の tail 式として扱われます（change.md,
+                    2026-08）。それ以外は文としてのみ使用できます。
                 </p>
             </div>
             <div class="code-header">
                 <span class="code-lang">filename.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">// 文ブロック（スコープを区切る目的で使用）
 {
@@ -412,7 +448,9 @@ fn main() {
 
             <div class="code-header">
                 <span class="code-lang">filename.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">val a: i64 = 100
 val b: i32 = a  // OK: i64 から i32 へ安全な縮小</code></pre>
@@ -421,7 +459,9 @@ val b: i32 = a  // OK: i64 から i32 へ安全な縮小</code></pre>
 
             <div class="code-header">
                 <span class="code-lang">filename.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">val x: i32 = 42
 val y: f64 = x  // OK: i32 から f64 への拡張</code></pre>
@@ -443,7 +483,9 @@ val y: f64 = x  // OK: i32 から f64 への拡張</code></pre>
             </div>
             <div class="code-header">
                 <span class="code-lang">filename.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">val s = "Hello"
 
@@ -460,7 +502,9 @@ println(s)</code></pre>
 
             <div class="code-header">
                 <span class="code-lang">filename.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">// これは単一行コメント
 
@@ -487,11 +531,11 @@ fn greet(name: string) {
 
         <script src="../../js/main.js"></script>
         <script src="../../js/play-wasm.js"></script>
-    
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      if (window.lucide) lucide.createIcons();
-    });
-  </script>
-</body>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                if (window.lucide) lucide.createIcons();
+            });
+        </script>
+    </body>
 </html>

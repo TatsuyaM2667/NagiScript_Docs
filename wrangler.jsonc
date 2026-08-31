@@ -2,5 +2,5 @@
   "name": "nagiscript-docs",
   "pages_build_output_dir": ".",
   "compatibility_date": "2026-08-26",
-  "compatibility_flags": ["nodejs_compat"]
+  "compatibility_flags": ["nodejs_compat"],
 }

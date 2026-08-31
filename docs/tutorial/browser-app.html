@@ -1,102 +1,177 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ブラウザアプリの作り方 - NagiScript</title>
-  <meta name="description" content="NagiScript を WebAssembly にコンパイルして、簡単なブラウザアプリをゼロから作るチュートリアル">
-  <link rel="stylesheet" href="../../css/style.css">
-  <link rel="icon" href="../../assets/logo.png">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>ブラウザアプリの作り方 - NagiScript</title>
+        <meta
+            name="description"
+            content="NagiScript を WebAssembly にコンパイルして、簡単なブラウザアプリをゼロから作るチュートリアル"
+        />
+        <link rel="stylesheet" href="../../css/style.css" />
+        <link rel="icon" href="../../assets/logo.png" />
 
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
-</head>
-<body>
-  <div class="sky-decor" aria-hidden="true">
-    <div class="cloud c1"></div>
-    <div class="cloud c2"></div>
-    <div class="cloud c3"></div>
-    <div class="cloud c4"></div>
-  </div>
-  <header class="header">
-    <a href="../../index.html" class="header-logo"><img src="../../assets/logo.png" alt="NagiScript Logo"><span class="logo-text">NagiScript</span></a>
-    <nav class="header-nav" id="header-nav">
-      <a href="../../index.html">ホーム</a>
-      <a href="../getting-started.html">ドキュメント</a>
-      <a href="../tutorial/basics.html">チュートリアル</a>
-      <a href="../reference/types.html">リファレンス</a>
-      <a href="https://github.com/TatsuyaM2667/nagiscript_lang" class="nav-github">
-        <i data-lucide="github"></i><span>GitHub</span>
-      </a>
-      <button class="theme-toggle" aria-label="テーマ切替">
-        <i data-lucide="moon" class="icon-moon"></i>
-        <i data-lucide="sun" class="icon-sun"></i>
-      </button>
-    </nav>
-    <button class="menu-toggle" id="menu-toggle" aria-label="メニュー"><i data-lucide="menu"></i></button>
-  </header>
-  <div class="sidebar-overlay"></div>
+        <!-- Lucide Icons -->
+        <script
+            src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"
+            defer
+        ></script>
+    </head>
+    <body>
+        <div class="sky-decor" aria-hidden="true">
+            <div class="cloud c1"></div>
+            <div class="cloud c2"></div>
+            <div class="cloud c3"></div>
+            　
+            <div class="cloud c4"></div>
+        </div>
+        <header class="header">
+            <a href="../../index.html" class="header-logo"
+                ><img src="../../assets/logo.png" alt="NagiScript Logo" /><span
+                    class="logo-text"
+                    >NagiScript</span
+                ></a
+            >
+            <nav class="header-nav" id="header-nav">
+                <a href="../../index.html">ホーム</a>
+                <a href="../getting-started.html">ドキュメント</a>
+                <a href="../tutorial/basics.html">チュートリアル</a>
+                <a href="../reference/types.html">リファレンス</a>
+                <a
+                    href="https://github.com/TatsuyaM2667/nagiscript_lang"
+                    class="nav-github"
+                >
+                    <i data-lucide="github"></i><span>GitHub</span>
+                </a>
+                <button class="theme-toggle" aria-label="テーマ切替">
+                    <i data-lucide="moon" class="icon-moon"></i>
+                    <i data-lucide="sun" class="icon-sun"></i>
+                </button>
+            </nav>
+            <button class="menu-toggle" id="menu-toggle" aria-label="メニュー">
+                <i data-lucide="menu"></i>
+            </button>
+        </header>
+        <div class="sidebar-overlay"></div>
 
-  <aside class="sidebar">
-    <div class="sidebar-section">
-      <div class="sidebar-title">入门</div>
-      <a href="../getting-started.html" class="sidebar-link">はじめに</a>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-title">チュートリアル</div>
-      <a href="basics.html" class="sidebar-link">基本概念</a>
-      <a href="functions.html" class="sidebar-link">関数とモジュール</a>
-      <a href="structs-enums.html" class="sidebar-link">構造体と列挙型</a>
-      <a href="generics.html" class="sidebar-link">ジェネリクス</a>
-      <a href="error-handling.html" class="sidebar-link">エラーハンドリング</a>
-      <a href="memory.html" class="sidebar-link">メモリ管理</a>
-      <a href="async.html" class="sidebar-link">非同期プログラミング</a>
-      <a href="webassembly.html" class="sidebar-link">WebAssembly</a>
-      <a href="browser-app.html" class="sidebar-link active">ブラウザアプリ</a>
-      <a href="tui-app.html" class="sidebar-link">TUI アプリ</a>
-      <a href="cli.html" class="sidebar-link">CLI ツール開発</a>
-      <a href="microcontroller.html" class="sidebar-link">組み込み開発</a>
-      <a href="cinterop.html" class="sidebar-link">C言語との相互運用</a>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-title">リファレンス</div>
-      <a href="../reference/types.html" class="sidebar-link">型システム</a>
-      <a href="../reference/syntax.html" class="sidebar-link">構文リファレンス</a>
-      <a href="../reference/operators.html" class="sidebar-link">演算子リファレンス</a>
-      <a href="../reference/standard-library.html" class="sidebar-link">標準ライブラリ</a>
-      <a href="../reference/standard-c-library.html" class="sidebar-link">C 標準ライブラリ</a>
-      <a href="../reference/compiler.html" class="sidebar-link">コンパイラ内部構造</a>
-      <a href="../reference/keywords.html" class="sidebar-link">キーワード一覧</a>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-title">実践</div>
-      <a href="../examples/todo-app.html" class="sidebar-link">Todo アプリ</a>
-      <a href="../examples/web-framework.html" class="sidebar-link">Web フレームワーク</a>
-      <a href="../examples/iot-sensor.html" class="sidebar-link">IoT センサー</a>
-    </div>
-  </aside>
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">入门</div>
+                <a href="../getting-started.html" class="sidebar-link"
+                    >はじめに</a
+                >
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">チュートリアル</div>
+                <a href="basics.html" class="sidebar-link">基本概念</a>
+                <a href="functions.html" class="sidebar-link"
+                    >関数とモジュール</a
+                >
+                <a href="structs-enums.html" class="sidebar-link"
+                    >構造体と列挙型</a
+                >
+                <a href="generics.html" class="sidebar-link">ジェネリクス</a>
+                <a href="error-handling.html" class="sidebar-link"
+                    >エラーハンドリング</a
+                >
+                <a href="memory.html" class="sidebar-link">メモリ管理</a>
+                <a href="async.html" class="sidebar-link"
+                    >非同期プログラミング</a
+                >
+                <a href="webassembly.html" class="sidebar-link">WebAssembly</a>
+                <a href="browser-app.html" class="sidebar-link active"
+                    >ブラウザアプリ</a
+                >
+                <a href="tui-app.html" class="sidebar-link">TUI アプリ</a>
+                <a href="cli.html" class="sidebar-link">CLI ツール開発</a>
+                <a href="microcontroller.html" class="sidebar-link"
+                    >組み込み開発</a
+                >
+                <a href="cinterop.html" class="sidebar-link"
+                    >C言語との相互運用</a
+                >
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">リファレンス</div>
+                <a href="../reference/types.html" class="sidebar-link"
+                    >型システム</a
+                >
+                <a href="../reference/syntax.html" class="sidebar-link"
+                    >構文リファレンス</a
+                >
+                <a href="../reference/operators.html" class="sidebar-link"
+                    >演算子リファレンス</a
+                >
+                <a
+                    href="../reference/standard-library.html"
+                    class="sidebar-link"
+                    >標準ライブラリ</a
+                >
+                <a
+                    href="../reference/standard-c-library.html"
+                    class="sidebar-link"
+                    >C 標準ライブラリ</a
+                >
+                <a href="../reference/compiler.html" class="sidebar-link"
+                    >コンパイラ内部構造</a
+                >
+                <a href="../reference/keywords.html" class="sidebar-link"
+                    >キーワード一覧</a
+                >
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">実践</div>
+                <a href="../examples/todo-app.html" class="sidebar-link"
+                    >Todo アプリ</a
+                >
+                <a href="../examples/web-framework.html" class="sidebar-link"
+                    >Web フレームワーク</a
+                >
+                <a href="../examples/iot-sensor.html" class="sidebar-link"
+                    >IoT センサー</a
+                >
+            </div>
+        </aside>
 
-  <main class="main content">
-    <h1>ブラウザアプリの作り方</h1>
-    <p>NagiScript を WebAssembly にコンパイルして、ブラウザで動く小さなアプリをゼロから作ってみましょう。ロジックは NagiScript で書き、DOM 操作やイベントは JavaScript が担当する役割分担が基本です。</p>
+        <main class="main content">
+            <h1>ブラウザアプリの作り方</h1>
+            <p>
+                NagiScript を WebAssembly
+                にコンパイルして、ブラウザで動く小さなアプリをゼロから作ってみましょう。ロジックは
+                NagiScript で書き、DOM 操作やイベントは JavaScript
+                が担当する役割分担が基本です。
+            </p>
 
-    <hr>
+            <hr />
 
-    <h2>完成イメージ</h2>
-    <p>このチュートリアルで作るのは「カウンターアプリ」です。ボタンを押すと NagiScript で書いた関数が WASM 上で呼ばれ、カウントが増減します。</p>
-    <pre><code>┌───────────────────────────┐
+            <h2>完成イメージ</h2>
+            <p>
+                このチュートリアルで作るのは「カウンターアプリ」です。ボタンを押すと
+                NagiScript で書いた関数が WASM
+                上で呼ばれ、カウントが増減します。
+            </p>
+            <pre><code>┌───────────────────────────┐
 │  +──────┐                 │
 │  │ = 5  │   [!] [-1] [+1] │
 │  └──────┘                 │
 │  count in NagiScript      │
 └───────────────────────────┘</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>ステップ 1: ロジックを NagiScript で書く</h2>
-    <p>ブラウザから呼び出す関数は <code>export "C"</code> でエクスポートします。WASM の関数は数値や真偽値、ポインタを引数・戻り値に取れるので、まずは単純なカウンター計算から始めます。</p>
-    <div class="code-header"><span class="code-lang">counter.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">// counter.ngs — ブラウザから呼び出すビジネスロジック
+            <h2>ステップ 1: ロジックを NagiScript で書く</h2>
+            <p>
+                ブラウザから呼び出す関数は
+                <code>export "C"</code> でエクスポートします。WASM
+                の関数は数値や真偽値、ポインタを引数・戻り値に取れるので、まずは単純なカウンター計算から始めます。
+            </p>
+            <div class="code-header">
+                <span class="code-lang">counter.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">// counter.ngs — ブラウザから呼び出すビジネスロジック
 
 export "C" fn increment(n: i32) -&gt; i32 {
     return n + 1
@@ -118,19 +193,35 @@ export "C" fn label_for(n: i32) -&gt; i32 {
     return 2
 }</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>ステップ 2: WASM にコンパイル</h2>
-    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-bash">nagiscript wasm counter.ngs -o counter.wasm
+            <h2>ステップ 2: WASM にコンパイル</h2>
+            <div class="code-header">
+                <span class="code-lang">bash</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-bash">nagiscript wasm counter.ngs -o counter.wasm
 # counter.wasm が生成される</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>ステップ 3: HTML と JavaScript で組み込む</h2>
-    <p>生成した <code>counter.wasm</code> を <code>fetch</code> で読み込み、<code>WebAssembly.instantiate</code> で初期化します。ヘルパー関数を使って DOM に組み込みます。</p>
-    <div class="code-header"><span class="code-lang">index.html</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-html">&lt;!DOCTYPE html&gt;
+            <h2>ステップ 3: HTML と JavaScript で組み込む</h2>
+            <p>
+                生成した <code>counter.wasm</code> を
+                <code>fetch</code> で読み込み、<code
+                    >WebAssembly.instantiate</code
+                >
+                で初期化します。ヘルパー関数を使って DOM に組み込みます。
+            </p>
+            <div class="code-header">
+                <span class="code-lang">index.html</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-html">&lt;!DOCTYPE html&gt;
 &lt;html lang="ja"&gt;
 &lt;head&gt;
   &lt;meta charset="UTF-8"&gt;
@@ -182,18 +273,38 @@ export "C" fn label_for(n: i32) -&gt; i32 {
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
 
-    <p>ブラウザで開けば、「+1」「-1」ボタンでカウントが増減し、NagiScript 側の <code>increment</code> / <code>decrement</code> / <code>is_even</code> / <code>label_for</code> が WASM 上で実行されているのが分かります。</p>
+            <p>
+                ブラウザで開けば、「+1」「-1」ボタンでカウントが増減し、NagiScript
+                側の <code>increment</code> / <code>decrement</code> /
+                <code>is_even</code> / <code>label_for</code> が WASM
+                上で実行されているのが分かります。
+            </p>
 
-    <hr>
+            <hr />
 
-    <h2>文字列をやり取りする</h2>
-    <p>NagiScript の <code>string</code> はメモリ上で <code>{ data, len }</code> のセルとして渡ります。JS 側からは <code>TextEncoder</code> でバイト列を WASM メモリに書き込み、ポインタと長さを渡します。</p>
-    <div class="code-header"><span class="code-lang">greet.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">export "C" fn char_count(data: i32, len: i32) -&gt; i32 {
+            <h2>文字列をやり取りする</h2>
+            <p>
+                NagiScript の <code>string</code> はメモリ上で
+                <code>{ data, len }</code> のセルとして渡ります。JS 側からは
+                <code>TextEncoder</code> でバイト列を WASM
+                メモリに書き込み、ポインタと長さを渡します。
+            </p>
+            <div class="code-header">
+                <span class="code-lang">greet.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">export "C" fn char_count(data: i32, len: i32) -&gt; i32 {
     return len
 }</code></pre>
-    <div class="code-header"><span class="code-lang">main.js</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-js">let memory;
+            <div class="code-header">
+                <span class="code-lang">main.js</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-js">let memory;
 
 async function load() {
   const bytes = await fetch('greet.wasm').then(r =&gt; r.arrayBuffer());
@@ -221,15 +332,35 @@ function writeString(memory, str) {
 // 使用例: ngs.char_count(ptr, len) を呼んでから ptr を返す文字列セルを読む
 const ptr = writeString(memory, "hello");
 console.log(ngs.char_count(ptr, 5)); // =&gt; 5</code></pre>
-    <p>詳細なメモリの扱いは <a href="webassembly.html">WebAssembly チュートリアル</a> を参照してください。</p>
+            <p>
+                詳細なメモリの扱いは
+                <a href="webassembly.html">WebAssembly チュートリアル</a>
+                を参照してください。
+            </p>
 
-    <hr>
+            <hr />
 
-    <h2>.ngsx による UI 構文（ロードマップ）</h2>
-    <div class="callout warn"><span class="ct">ロードマップ</span><p>.ngsx（JSX 風 UI 構文）はランタイムに props 基盤が存在するものの、ドキュメント化は保留されています。以下は予定されている構文です。</p></div>
-    <p>NagiScript は JSX 風のマークアップ構文 <code>.ngsx</code> を予定しています。React コンポーネントと統合し、NagiScript だけで UI まで記述できるようになる予定です。</p>
-    <div class="code-header"><span class="code-lang">Counter.ngsx</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">component Counter(ref count, onPlus, onMinus) {
+            <h2>.ngsx による UI 構文（ロードマップ）</h2>
+            <div class="callout warn">
+                <span class="ct">ロードマップ</span>
+                <p>
+                    .ngsx（JSX 風 UI 構文）はランタイムに props
+                    基盤が存在するものの、ドキュメント化は保留されています。以下は予定されている構文です。
+                </p>
+            </div>
+            <p>
+                NagiScript は JSX 風のマークアップ構文
+                <code>.ngsx</code> を予定しています。React
+                コンポーネントと統合し、NagiScript だけで UI
+                まで記述できるようになる予定です。
+            </p>
+            <div class="code-header">
+                <span class="code-lang">Counter.ngsx</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">component Counter(ref count, onPlus, onMinus) {
     return (
         &lt;div class="counter"&gt;
             &lt;p&gt;{count}&lt;/p&gt;
@@ -239,12 +370,22 @@ console.log(ngs.char_count(ptr, 5)); // =&gt; 5</code></pre>
     )
 }</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>状態管理のパターン</h2>
-    <p>今回のように「計算は NagiScript、状態は JS」が最もシンプルです。規模が大きくなったら、状態も NagiScript 側に置いて <code>export "C"</code> で読み書きする設計にできます。</p>
-    <div class="code-header"><span class="code-lang">store.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">var counter: i32 = 0
+            <h2>状態管理のパターン</h2>
+            <p>
+                今回のように「計算は NagiScript、状態は
+                JS」が最もシンプルです。規模が大きくなったら、状態も NagiScript
+                側に置いて
+                <code>export "C"</code> で読み書きする設計にできます。
+            </p>
+            <div class="code-header">
+                <span class="code-lang">store.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">var counter: i32 = 0
 
 export "C" fn get_counter() -&gt; i32 { return counter }
 export "C" fn set_counter(v: i32) { counter = v }
@@ -253,8 +394,13 @@ export "C" fn inc() -&gt; i32 {
     counter = counter + 1
     return counter
 }</code></pre>
-    <div class="code-header"><span class="code-lang">main.js</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-js">plusBtn.addEventListener('click', () =&gt; {
+            <div class="code-header">
+                <span class="code-lang">main.js</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-js">plusBtn.addEventListener('click', () =&gt; {
   const v = exports.inc();          // 状態は WASM 内で保持
   document.getElementById('count').textContent = v;
 });
@@ -264,37 +410,54 @@ document.getElementById('reset').addEventListener('click', () =&gt; {
   document.getElementById('count').textContent = 0;
 });</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>実践のヒント</h2>
-    <ol>
-      <li><strong>最小限のエクスポートを心がける</strong> — WASM 境界を越える関数は計算集約処理に絞り、DOM は JS に委譲</li>
-      <li><strong>型定義を活用する</strong> — エクスポート関数は小さい関数に分割し、<code>nagiscript wasm main.ngs</code> の出力から呼び出し方を確認する</li>
-      <li><strong>重い処理は Web Worker に移す</strong> — WASM の同期実行はメインスレッドをブロックするため、計算量の高いエクスポートは Web Worker 側で実行して UI を止めない（<code>async</code> / <code>std:async</code> は現行では未実装）</li>
-      <li><strong>数値は i32 / f64 がおすすめ</strong> — JS の <code>Number</code> と相性が良く、変換コストが小さい</li>
-    </ol>
+            <h2>実践のヒント</h2>
+            <ol>
+                <li>
+                    <strong>最小限のエクスポートを心がける</strong> — WASM
+                    境界を越える関数は計算集約処理に絞り、DOM は JS に委譲
+                </li>
+                <li>
+                    <strong>型定義を活用する</strong> —
+                    エクスポート関数は小さい関数に分割し、<code
+                        >nagiscript wasm main.ngs</code
+                    >
+                    の出力から呼び出し方を確認する
+                </li>
+                <li>
+                    <strong>重い処理は Web Worker に移す</strong> — WASM
+                    の同期実行はメインスレッドをブロックするため、計算量の高いエクスポートは
+                    Web Worker 側で実行して UI を止めない（<code>async</code> /
+                    <code>std:async</code> は現行では未実装）
+                </li>
+                <li>
+                    <strong>数値は i32 / f64 がおすすめ</strong> — JS の
+                    <code>Number</code> と相性が良く、変換コストが小さい
+                </li>
+            </ol>
 
-    <hr>
+            <hr />
 
-    <div class="nav-links">
-      <a href="webassembly.html" class="nav-link">
-        <span class="label">前</span>
-        <span class="title">← WebAssembly</span>
-      </a>
-      <a href="tui-app.html" class="nav-link">
-        <span class="label">次</span>
-        <span class="title">TUI アプリ →</span>
-      </a>
-    </div>
-  </main>
+            <div class="nav-links">
+                <a href="webassembly.html" class="nav-link">
+                    <span class="label">前</span>
+                    <span class="title">← WebAssembly</span>
+                </a>
+                <a href="tui-app.html" class="nav-link">
+                    <span class="label">次</span>
+                    <span class="title">TUI アプリ →</span>
+                </a>
+            </div>
+        </main>
 
-  <script src="../../js/main.js"></script>
-  <script src="../../js/play-wasm.js"></script>
+        <script src="../../js/main.js"></script>
+        <script src="../../js/play-wasm.js"></script>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      if (window.lucide) lucide.createIcons();
-    });
-  </script>
-</body>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                if (window.lucide) lucide.createIcons();
+            });
+        </script>
+    </body>
 </html>

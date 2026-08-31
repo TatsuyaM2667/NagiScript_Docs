@@ -76,3 +76,4 @@ fn main() {
     print("=== NagiScript Playground ===")
     print("WASM module loaded successfully!")
 }
+　

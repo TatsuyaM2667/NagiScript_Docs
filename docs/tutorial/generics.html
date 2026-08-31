@@ -1,95 +1,169 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ジェネリクス - NagiScript</title>
-  <link rel="stylesheet" href="../../css/style.css">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>ジェネリクス - NagiScript</title>
+        <link rel="stylesheet" href="../../css/style.css" />
 
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
-</head>
-<body>
-  <div class="sky-decor" aria-hidden="true">
-    <div class="cloud c1"></div>
-    <div class="cloud c2"></div>
-    <div class="cloud c3"></div>
-    <div class="cloud c4"></div>
-  </div>
-  <header class="header">
-    <a href="../../index.html" class="header-logo"><img src="../../assets/logo.png" alt="NagiScript Logo"><span class="logo-text">NagiScript</span></a>
-    <nav class="header-nav" id="header-nav">
-      <a href="../../index.html">ホーム</a>
-      <a href="../getting-started.html">ドキュメント</a>
-      <a href="../tutorial/basics.html">チュートリアル</a>
-      <a href="../reference/types.html">リファレンス</a>
-      <a href="https://github.com/TatsuyaM2667/nagiscript_lang" class="nav-github">
-        <i data-lucide="github"></i><span>GitHub</span>
-      </a>
-      <button class="theme-toggle" aria-label="テーマ切替">
-        <i data-lucide="moon" class="icon-moon"></i>
-        <i data-lucide="sun" class="icon-sun"></i>
-      </button>
-    </nav>
-    <button class="menu-toggle" id="menu-toggle" aria-label="メニュー"><i data-lucide="menu"></i></button>
-  </header>
-  <div class="sidebar-overlay"></div>
+        <!-- Lucide Icons -->
+        <script
+            src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"
+            defer
+        ></script>
+    </head>
+    <body>
+        <div class="sky-decor" aria-hidden="true">
+            <div class="cloud c1"></div>
+            <div class="cloud c2"></div>
+            <div class="cloud c3"></div>
+            <div class="cloud c4"></div>
+        </div>
+        　
+        <header class="header">
+            <a href="../../index.html" class="header-logo"
+                ><img src="../../assets/logo.png" alt="NagiScript Logo" /><span
+                    class="logo-text"
+                    >NagiScript</span
+                ></a
+            >
+            <nav class="header-nav" id="header-nav">
+                <a href="../../index.html">ホーム</a>
+                <a href="../getting-started.html">ドキュメント</a>
+                <a href="../tutorial/basics.html">チュートリアル</a>
+                <a href="../reference/types.html">リファレンス</a>
+                <a
+                    href="https://github.com/TatsuyaM2667/nagiscript_lang"
+                    class="nav-github"
+                >
+                    <i data-lucide="github"></i><span>GitHub</span>
+                </a>
+                <button class="theme-toggle" aria-label="テーマ切替">
+                    <i data-lucide="moon" class="icon-moon"></i>
+                    <i data-lucide="sun" class="icon-sun"></i>
+                </button>
+            </nav>
+            <button class="menu-toggle" id="menu-toggle" aria-label="メニュー">
+                <i data-lucide="menu"></i>
+            </button>
+        </header>
+        <div class="sidebar-overlay"></div>
 
-  <aside class="sidebar">
-    <div class="sidebar-section">
-      <div class="sidebar-title">入门</div>
-      <a href="../getting-started.html" class="sidebar-link">はじめに</a>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-title">チュートリアル</div>
-      <a href="basics.html" class="sidebar-link">基本概念</a>
-      <a href="functions.html" class="sidebar-link">関数とモジュール</a>
-      <a href="structs-enums.html" class="sidebar-link">構造体と列挙型</a>
-      <a href="generics.html" class="sidebar-link active">ジェネリクス</a>
-      <a href="error-handling.html" class="sidebar-link">エラーハンドリング</a>
-      <a href="memory.html" class="sidebar-link">メモリ管理</a>
-      <a href="async.html" class="sidebar-link">非同期プログラミング</a>
-      <a href="webassembly.html" class="sidebar-link">WebAssembly</a>
-      <a href="browser-app.html" class="sidebar-link">ブラウザアプリ</a>
-      <a href="tui-app.html" class="sidebar-link">TUI アプリ</a>
-      <a href="cli.html" class="sidebar-link">CLI ツール開発</a>
-      <a href="microcontroller.html" class="sidebar-link">組み込み開発</a>
-      <a href="cinterop.html" class="sidebar-link">C言語との相互運用</a>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-title">リファレンス</div>
-      <a href="../reference/types.html" class="sidebar-link">型システム</a>
-      <a href="../reference/syntax.html" class="sidebar-link">構文リファレンス</a>
-      <a href="../reference/operators.html" class="sidebar-link">演算子リファレンス</a>
-      <a href="../reference/standard-library.html" class="sidebar-link">標準ライブラリ</a>
-      <a href="../reference/standard-c-library.html" class="sidebar-link">C 標準ライブラリ</a>
-      <a href="../reference/compiler.html" class="sidebar-link">コンパイラ内部構造</a>
-      <a href="../reference/keywords.html" class="sidebar-link">キーワード一覧</a>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-title">実践</div>
-      <a href="../examples/todo-app.html" class="sidebar-link">Todo アプリ</a>
-      <a href="../examples/web-framework.html" class="sidebar-link">Web フレームワーク</a>
-      <a href="../examples/iot-sensor.html" class="sidebar-link">IoT センサー</a>
-    </div>
-  </aside>
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">入门</div>
+                <a href="../getting-started.html" class="sidebar-link"
+                    >はじめに</a
+                >
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">チュートリアル</div>
+                <a href="basics.html" class="sidebar-link">基本概念</a>
+                <a href="functions.html" class="sidebar-link"
+                    >関数とモジュール</a
+                >
+                <a href="structs-enums.html" class="sidebar-link"
+                    >構造体と列挙型</a
+                >
+                <a href="generics.html" class="sidebar-link active"
+                    >ジェネリクス</a
+                >
+                <a href="error-handling.html" class="sidebar-link"
+                    >エラーハンドリング</a
+                >
+                <a href="memory.html" class="sidebar-link">メモリ管理</a>
+                <a href="async.html" class="sidebar-link"
+                    >非同期プログラミング</a
+                >
+                <a href="webassembly.html" class="sidebar-link">WebAssembly</a>
+                <a href="browser-app.html" class="sidebar-link"
+                    >ブラウザアプリ</a
+                >
+                <a href="tui-app.html" class="sidebar-link">TUI アプリ</a>
+                <a href="cli.html" class="sidebar-link">CLI ツール開発</a>
+                <a href="microcontroller.html" class="sidebar-link"
+                    >組み込み開発</a
+                >
+                <a href="cinterop.html" class="sidebar-link"
+                    >C言語との相互運用</a
+                >
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">リファレンス</div>
+                <a href="../reference/types.html" class="sidebar-link"
+                    >型システム</a
+                >
+                <a href="../reference/syntax.html" class="sidebar-link"
+                    >構文リファレンス</a
+                >
+                <a href="../reference/operators.html" class="sidebar-link"
+                    >演算子リファレンス</a
+                >
+                <a
+                    href="../reference/standard-library.html"
+                    class="sidebar-link"
+                    >標準ライブラリ</a
+                >
+                <a
+                    href="../reference/standard-c-library.html"
+                    class="sidebar-link"
+                    >C 標準ライブラリ</a
+                >
+                <a href="../reference/compiler.html" class="sidebar-link"
+                    >コンパイラ内部構造</a
+                >
+                <a href="../reference/keywords.html" class="sidebar-link"
+                    >キーワード一覧</a
+                >
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">実践</div>
+                <a href="../examples/todo-app.html" class="sidebar-link"
+                    >Todo アプリ</a
+                >
+                <a href="../examples/web-framework.html" class="sidebar-link"
+                    >Web フレームワーク</a
+                >
+                <a href="../examples/iot-sensor.html" class="sidebar-link"
+                    >IoT センサー</a
+                >
+            </div>
+        </aside>
 
-  <main class="main content">
-    <h1>ジェネリクス</h1>
-    <p>型をパラメータとして受け取る汎用コードの書き方を学びます。</p>
+        <main class="main content">
+            <h1>ジェネリクス</h1>
+            <p>型をパラメータとして受け取る汎用コードの書き方を学びます。</p>
 
-    <hr>
+            <hr />
 
-    <h2>現行の対応状況（v0.2.0）</h2>
+            <h2>現行の対応状況（v0.2.0）</h2>
 
-    <div class="callout warn"><span class="ct">現行仕様（v0.2.0)</span><p><code>Vec2&lt;T&gt;</code> のようなジェネリクス構造体、<code>fn identity&lt;T&gt;(...) -&gt; T</code> のようなジェネリック関数、<code>(A, B)</code> のようなタプルは<b>未実装/未検証</b>です。型パラメータは <code>List&lt;i32&gt;</code> など一部の組み込みで限定的にしか使えません。実際の開発では具体的な型で定義してください。</p></div>
+            <div class="callout warn">
+                <span class="ct">現行仕様（v0.2.0)</span>
+                <p>
+                    <code>Vec2&lt;T&gt;</code> のようなジェネリクス構造体、<code
+                        >fn identity&lt;T&gt;(...) -&gt; T</code
+                    >
+                    のようなジェネリック関数、<code>(A, B)</code>
+                    のようなタプルは<b>未実装/未検証</b>です。型パラメータは
+                    <code>List&lt;i32&gt;</code>
+                    など一部の組み込みで限定的にしか使えません。実際の開発では具体的な型で定義してください。
+                </p>
+            </div>
 
-    <h2>実際に推奨される書き方</h2>
+            <h2>実際に推奨される書き方</h2>
 
-    <p>構造体は具体的な型で定義し、複数の型に対応したい場合は型ごとに構造体を分けます。</p>
+            <p>
+                構造体は具体的な型で定義し、複数の型に対応したい場合は型ごとに構造体を分けます。
+            </p>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">struct Vec2i {
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">struct Vec2i {
     x: i32
     y: i32
 }
@@ -110,20 +184,42 @@ fn main() {
     println(a.sum())  // 3
 }</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>List / Rc の既知バグ</h2>
+            <h2>List / Rc の既知バグ</h2>
 
-    <div class="callout warn"><span class="ct">既知バグ（v0.2.0）</span><p><code>List&lt;T&gt;</code> は <code>List.new()</code> / <code>push</code> / <code>len</code> / <code>get</code> / <code>set</code> という API はありますが、LLVM コード生成時に <code>zext i64 to i64</code> エラーが発生しリンクに失敗する既知バグがあります。<code>Rc.new(値)</code> / <code>.get()</code> も API としては存在しますが、<code>.get()</code> の戻り値が意図と異なる場合があります。当面は構造体 + 値渡しを推奨します。</p></div>
+            <div class="callout warn">
+                <span class="ct">既知バグ（v0.2.0）</span>
+                <p>
+                    <code>List&lt;T&gt;</code> は <code>List.new()</code> /
+                    <code>push</code> / <code>len</code> / <code>get</code> /
+                    <code>set</code> という API はありますが、LLVM
+                    コード生成時に
+                    <code>zext i64 to i64</code>
+                    エラーが発生しリンクに失敗する既知バグがあります。<code
+                        >Rc.new(値)</code
+                    >
+                    / <code>.get()</code> も API としては存在しますが、<code
+                        >.get()</code
+                    >
+                    の戻り値が意図と異なる場合があります。当面は構造体 +
+                    値渡しを推奨します。
+                </p>
+            </div>
 
-    <hr>
+            <hr />
 
-    <h2>Result / Option の代用</h2>
+            <h2>Result / Option の代用</h2>
 
-    <p>ジェネリクスではなく具体的な enum で自作します。</p>
+            <p>ジェネリクスではなく具体的な enum で自作します。</p>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">enum MathResult {
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">enum MathResult {
     Value(f64)
     DivByZero
 }
@@ -143,35 +239,45 @@ fn main() {
     }
 }</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>ロードマップ</h2>
+            <h2>ロードマップ</h2>
 
-    <p>以下の機能は将来のバージョンで予定されているものです。</p>
+            <p>以下の機能は将来のバージョンで予定されているものです。</p>
 
-    <ul>
-      <li>ジェネリック関数 <code>fn identity&lt;T&gt;(x: T) -&gt; T</code></li>
-      <li>ジェネリクス構造体 <code>struct Vec2&lt;T&gt;</code></li>
-      <li>タプル <code>(A, B)</code></li>
-      <li>型制約 / 型クラス（<code>T: Printable</code> など）</li>
-      <li><code>List&lt;T&gt;</code> のリンクバグ修正と標準的なコレクション API</li>
-    </ul>
+            <ul>
+                <li>
+                    ジェネリック関数
+                    <code>fn identity&lt;T&gt;(x: T) -&gt; T</code>
+                </li>
+                <li>ジェネリクス構造体 <code>struct Vec2&lt;T&gt;</code></li>
+                <li>タプル <code>(A, B)</code></li>
+                <li>型制約 / 型クラス（<code>T: Printable</code> など）</li>
+                <li>
+                    <code>List&lt;T&gt;</code>
+                    のリンクバグ修正と標準的なコレクション API
+                </li>
+            </ul>
 
-    <hr>
+            <hr />
 
-    <div class="nav-links">
-      <a href="structs-enums.html" class="nav-link prev">← 構造体と列挙型</a>
-      <a href="error-handling.html" class="nav-link next">エラーハンドリング →</a>
-    </div>
-  </main>
+            <div class="nav-links">
+                <a href="structs-enums.html" class="nav-link prev"
+                    >← 構造体と列挙型</a
+                >
+                <a href="error-handling.html" class="nav-link next"
+                    >エラーハンドリング →</a
+                >
+            </div>
+        </main>
 
-  <script src="../../js/main.js"></script>
-  <script src="../../js/play-wasm.js"></script>
+        <script src="../../js/main.js"></script>
+        <script src="../../js/play-wasm.js"></script>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      if (window.lucide) lucide.createIcons();
-    });
-  </script>
-</body>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                if (window.lucide) lucide.createIcons();
+            });
+        </script>
+    </body>
 </html>

@@ -27,7 +27,7 @@
   (memory (export "memory") 2)
   (global $heap (mut i32) (i32.const 288))
   (data (i32.const 0) "\3d\3d\3d\20\4e\61\67\69\53\63\72\69\70\74\20\50\6c\61\79\67\72\6f\75\6e\64\20\3d\3d\3d\00\00\00\00\00\00\00\00\00\00\00\1d\00\00\00\00\00\00\00\57\41\53\4d\20\6d\6f\64\75\6c\65\20\6c\6f\61\64\65\64\20\73\75\63\63\65\73\73\66\75\6c\6c\79\21\30\00\00\00\00\00\00\00\20\00\00\00\00\00\00\00\69\6e\74\65\67\65\72\20\6f\76\65\72\66\6c\6f\77\60\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\69\6e\74\65\67\65\72\20\6f\76\65\72\66\6c\6f\77\80\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\69\6e\74\65\67\65\72\20\6f\76\65\72\66\6c\6f\77\a0\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\69\6e\74\65\67\65\72\20\6f\76\65\72\66\6c\6f\77\c0\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\69\6e\74\65\67\65\72\20\6f\76\65\72\66\6c\6f\77\e0\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\69\6e\74\65\67\65\72\20\6f\76\65\72\66\6c\6f\77\00\01\00\00\00\00\00\00\10\00\00\00\00\00\00\00")
-(func $main (local i32 i32 i32 i32) (local i64) (local i32 i32 i32 i32) (local i64) (local i32 i32 i32) (local i64) 
+(func $main (local i32 i32 i32 i32) (local i64) (local i32 i32 i32 i32) (local i64) (local i32 i32 i32) (local i64)
   global.get $heap
   local.set 10
   loop $top
@@ -88,7 +88,7 @@
   unreachable ;; ループは必ず return で抜ける
   ) ;; func
 
-(func $type_size (param i32) (result i32) (local i32 i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64 i64) (local i32 i32 i32) (local i64) 
+(func $type_size (param i32) (result i32) (local i32 i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64 i64) (local i32 i32 i32) (local i64)
   global.get $heap
   local.set 55
   loop $top
@@ -733,7 +733,7 @@
   unreachable ;; ループは必ず return で抜ける
   ) ;; func
 
-(func $is_prime (param i32) (result i32) (local i32 i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64 i64) (local i32 i32 i32 i32 i32 i32 i32 i32 i32) (local i64) (local i32 i32 i32 i32 i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32 i32 i32 i32 i32 i32) (local i64 i64) (local i32 i32 i32) (local i64) 
+(func $is_prime (param i32) (result i32) (local i32 i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32) (local i64 i64) (local i32 i32 i32 i32 i32 i32 i32 i32 i32) (local i64) (local i32 i32 i32 i32 i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32 i32 i32 i32 i32 i32) (local i64 i64) (local i32 i32 i32) (local i64)
   global.get $heap
   local.set 45
   loop $top
@@ -1152,7 +1152,7 @@
   unreachable ;; ループは必ず return で抜ける
   ) ;; func
 
-(func $gcd (param i32) (param i32) (result i32) (local i32 i32 i32 i32 i32 i32 i32) (local i64) (local i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32) (local i64) 
+(func $gcd (param i32) (param i32) (result i32) (local i32 i32 i32 i32 i32 i32 i32) (local i64) (local i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32) (local i64)
   global.get $heap
   local.set 18
   loop $top
@@ -1293,7 +1293,7 @@
   unreachable ;; ループは必ず return で抜ける
   ) ;; func
 
-(func $factorial (param i32) (result i32) (local i32 i32) (local i64) (local i32) (local i64) (local i32 i32) (local i64) (local i32 i32 i32 i32 i32 i32) (local i64) (local i32 i32 i32 i32 i32 i32 i32) (local i64) (local i32 i32 i32) (local i64) 
+(func $factorial (param i32) (result i32) (local i32 i32) (local i64) (local i32) (local i64) (local i32 i32) (local i64) (local i32 i32 i32 i32 i32 i32) (local i64) (local i32 i32 i32 i32 i32 i32 i32) (local i64) (local i32 i32 i32) (local i64)
   global.get $heap
   local.set 24
   loop $top
@@ -1499,7 +1499,7 @@
   unreachable ;; ループは必ず return で抜ける
   ) ;; func
 
-(func $fibonacci (param i32) (result i32) (local i32 i32) (local i64) (local i32 i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32) (local i64) (local i32 i32 i32 i32) (local i64) (local i32 i32 i32 i32 i32 i32) (local i64) (local i32 i32 i32 i32) (local i64) 
+(func $fibonacci (param i32) (result i32) (local i32 i32) (local i64) (local i32 i32) (local i64) (local i32) (local i64) (local i32) (local i64) (local i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32) (local i64) (local i32 i32 i32 i32) (local i64) (local i32 i32 i32 i32 i32 i32) (local i64) (local i32 i32 i32 i32) (local i64)
   global.get $heap
   local.set 37
   loop $top

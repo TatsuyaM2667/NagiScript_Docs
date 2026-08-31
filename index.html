@@ -1,132 +1,195 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NagiScript - Systems Programming Language</title>
-  <meta name="description" content="LLVMベースのC/Rust/Zig/Odinと深く相互運用できる、Arduino言語並みに書きやすい汎用プログラミング言語">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="icon" href="assets/logo.png">
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
-</head>
-<body>
-  <div class="sky-decor" aria-hidden="true">
-    <div class="cloud c1"></div>
-    <div class="cloud c2"></div>
-    <div class="cloud c3"></div>
-    <div class="cloud c4"></div>
-  </div>
-  <header class="header">
-    <a href="index.html" class="header-logo">
-      <img src="assets/logo.png" alt="NagiScript Logo">
-      <span class="logo-text">NagiScript</span>
-    </a>
-    <nav class="header-nav" id="header-nav">
-      <a href="docs/getting-started.html">ドキュメント</a>
-      <a href="docs/tutorial/basics.html">チュートリアル</a>
-      <a href="docs/reference/types.html">リファレンス</a>
-      <a href="https://github.com/TatsuyaM2667/nagiscript_lang" class="nav-github">
-        <i data-lucide="github"></i>
-        <span>GitHub</span>
-      </a>
-      <div class="search-box">
-        <i data-lucide="search" class="search-icon"></i>
-        <input type="text" placeholder="検索...">
-      </div>
-      <button class="theme-toggle" aria-label="テーマ切替">
-        <i data-lucide="moon" class="icon-moon"></i>
-        <i data-lucide="sun" class="icon-sun"></i>
-      </button>
-    </nav>
-    <button class="menu-toggle" id="menu-toggle" aria-label="メニュー">
-      <i data-lucide="menu"></i>
-    </button>
-  </header>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>NagiScript - Systems Programming Language</title>
+        <meta
+            name="description"
+            content="LLVMベースのC/Rust/Zig/Odinと深く相互運用できる、Arduino言語並みに書きやすい汎用プログラミング言語"
+        />
+        <link rel="stylesheet" href="css/style.css" />
+        <link rel="icon" href="assets/logo.png" />
+        <!-- Lucide Icons -->
+        <script
+            src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"
+            defer
+        ></script>
+    </head>
+    <body>
+        <div class="sky-decor" aria-hidden="true">
+            <div class="cloud c1"></div>
+            <div class="cloud c2"></div>
+            <div class="cloud c3"></div>
+            <div class="cloud c4"></div>
+        </div>
+        <header class="header">
+            <a href="index.html" class="header-logo">
+                <img src="assets/logo.png" alt="NagiScript Logo" />　
+                <span class="logo-text">NagiScript</span>
+            </a>
+            <nav class="header-nav" id="header-nav">
+                <a href="docs/getting-started.html">ドキュメント</a>
+                <a href="docs/tutorial/basics.html">チュートリアル</a>
+                <a href="docs/reference/types.html">リファレンス</a>
+                <a
+                    href="https://github.com/TatsuyaM2667/nagiscript_lang"
+                    class="nav-github"
+                >
+                    <i data-lucide="github"></i>
+                    <span>GitHub</span>
+                </a>
+                <div class="search-box">
+                    <i data-lucide="search" class="search-icon"></i>
+                    <input type="text" placeholder="検索..." />
+                </div>
+                <button class="theme-toggle" aria-label="テーマ切替">
+                    <i data-lucide="moon" class="icon-moon"></i>
+                    <i data-lucide="sun" class="icon-sun"></i>
+                </button>
+            </nav>
+            <button class="menu-toggle" id="menu-toggle" aria-label="メニュー">
+                <i data-lucide="menu"></i>
+            </button>
+        </header>
 
-  <main class="main-full">
-    <section class="hero">
-      <div class="hero-logo-wrap">
-        <img src="assets/logo.png" alt="NagiScript" class="hero-logo">
-      </div>
-      <h1>NagiScript</h1>
-      <p class="subtitle">
-        LLVMベースで C/Rust/Zig/Odin と深く相互運用でき、<br>
-        Arduino言語並みに書きやすい汎用プログラミング言語
-      </p>
-      <div class="hero-badges">
-        <span class="badge"><i data-lucide="zap"></i> LLVM バックエンド</span>
-        <span class="badge"><i data-lucide="globe"></i> WebAssembly 対応</span>
-        <span class="badge"><i data-lucide="shield"></i> 型安全</span>
-        <span class="badge"><i data-lucide="cpu"></i> C ABI 互換</span>
-      </div>
-      <div class="hero-buttons">
-        <a href="docs/getting-started.html" class="btn btn-primary">
-          <i data-lucide="book-open"></i>
-          はじめに
-        </a>
-        <a href="docs/tutorial/basics.html" class="btn btn-secondary">
-          <i data-lucide="graduation-cap"></i>
-          チュートリアル
-        </a>
-        <a href="https://github.com/TatsuyaM2667/nagiscript_lang" class="btn btn-secondary">
-          <i data-lucide="github"></i>
-          GitHub
-        </a>
-      </div>
-    </section>
+        <main class="main-full">
+            <section class="hero">
+                <div class="hero-logo-wrap">
+                    <img
+                        src="assets/logo.png"
+                        alt="NagiScript"
+                        class="hero-logo"
+                    />
+                </div>
+                <h1>NagiScript</h1>
+                <p class="subtitle">
+                    LLVMベースで C/Rust/Zig/Odin と深く相互運用でき、<br />
+                    Arduino言語並みに書きやすい汎用プログラミング言語
+                </p>
+                <div class="hero-badges">
+                    <span class="badge"
+                        ><i data-lucide="zap"></i> LLVM バックエンド</span
+                    >
+                    <span class="badge"
+                        ><i data-lucide="globe"></i> WebAssembly 対応</span
+                    >
+                    <span class="badge"
+                        ><i data-lucide="shield"></i> 型安全</span
+                    >
+                    <span class="badge"
+                        ><i data-lucide="cpu"></i> C ABI 互換</span
+                    >
+                </div>
+                <div class="hero-buttons">
+                    <a href="docs/getting-started.html" class="btn btn-primary">
+                        <i data-lucide="book-open"></i>
+                        はじめに
+                    </a>
+                    <a
+                        href="docs/tutorial/basics.html"
+                        class="btn btn-secondary"
+                    >
+                        <i data-lucide="graduation-cap"></i>
+                        チュートリアル
+                    </a>
+                    <a
+                        href="https://github.com/TatsuyaM2667/nagiscript_lang"
+                        class="btn btn-secondary"
+                    >
+                        <i data-lucide="github"></i>
+                        GitHub
+                    </a>
+                </div>
+            </section>
 
-    <section class="features">
-      <div class="feature-card">
-        <div class="feature-icon"><i data-lucide="layers"></i></div>
-        <h3>LLVM 直マッピング</h3>
-        <p>最適化は LLVM に丸投げ。C/C++ と同等のパフォーマンスを、シンプルな設計で実現します。</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon"><i data-lucide="link"></i></div>
-        <h3>C ABI 相互運用</h3>
-        <p><code>extern "C"</code> / <code>export "C"</code> による Rust/Zig/C/Arduino とのシームレスな連携。</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon"><i data-lucide="shield-check"></i></div>
-        <h3>Safe / Unsafe</h3>
-        <p>生ポインタの参照外しは <code>unsafe</code> 内のみ。安全な領域では境界チェック・オーバーフロー検出がデフォルト。</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon"><i data-lucide="code-2"></i></div>
-        <h3>ジェネリクス</h3>
-        <p>Zig/Odin 方式のコンパイル時ダックタイピング。トレイト制約なしのモノモーフィゼーションで高速コンパイル。</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon"><i data-lucide="refresh-cw"></i></div>
-        <h3>RC ベースメモリ管理</h3>
-        <p>借用チェッカーなしの自動解放。参照カウントによる安全で軽量なヒープ管理。</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon"><i data-lucide="globe-2"></i></div>
-        <h3>Wasm 対応</h3>
-        <p>WebAssembly へのコンパイルをネイティブサポート。React/TypeScript との連携も可能。</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon"><i data-lucide="layout"></i></div>
-        <h3>.ngsx UI 構文</h3>
-        <p>JSX 風マークアップ式で UI コンポーネントを記述。React コンポーネントとの統合を目指します。</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon"><i data-lucide="toggle-left"></i></div>
-        <h3>Val / Var</h3>
-        <p>イミュータブル変数は <code>val</code>、ミュータブル変数は <code>var</code>。明確で読みやすい変数管理。</p>
-      </div>
-    </section>
+            <section class="features">
+                <div class="feature-card">
+                    <div class="feature-icon"><i data-lucide="layers"></i></div>
+                    <h3>LLVM 直マッピング</h3>
+                    <p>
+                        最適化は LLVM に丸投げ。C/C++
+                        と同等のパフォーマンスを、シンプルな設計で実現します。
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i data-lucide="link"></i></div>
+                    <h3>C ABI 相互運用</h3>
+                    <p>
+                        <code>extern "C"</code> / <code>export "C"</code> による
+                        Rust/Zig/C/Arduino とのシームレスな連携。
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i data-lucide="shield-check"></i>
+                    </div>
+                    <h3>Safe / Unsafe</h3>
+                    <p>
+                        生ポインタの参照外しは
+                        <code>unsafe</code>
+                        内のみ。安全な領域では境界チェック・オーバーフロー検出がデフォルト。
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i data-lucide="code-2"></i></div>
+                    <h3>ジェネリクス</h3>
+                    <p>
+                        Zig/Odin
+                        方式のコンパイル時ダックタイピング。トレイト制約なしのモノモーフィゼーションで高速コンパイル。
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i data-lucide="refresh-cw"></i>
+                    </div>
+                    <h3>RC ベースメモリ管理</h3>
+                    <p>
+                        借用チェッカーなしの自動解放。参照カウントによる安全で軽量なヒープ管理。
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i data-lucide="globe-2"></i>
+                    </div>
+                    <h3>Wasm 対応</h3>
+                    <p>
+                        WebAssembly
+                        へのコンパイルをネイティブサポート。React/TypeScript
+                        との連携も可能。
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i data-lucide="layout"></i></div>
+                    <h3>.ngsx UI 構文</h3>
+                    <p>
+                        JSX 風マークアップ式で UI コンポーネントを記述。React
+                        コンポーネントとの統合を目指します。
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i data-lucide="toggle-left"></i>
+                    </div>
+                    <h3>Val / Var</h3>
+                    <p>
+                        イミュータブル変数は
+                        <code>val</code>、ミュータブル変数は
+                        <code>var</code>。明確で読みやすい変数管理。
+                    </p>
+                </div>
+            </section>
 
-    <section class="quickstart">
-      <h2>クイックスタート</h2>
+            <section class="quickstart">
+                <h2>クイックスタート</h2>
 
-      <div class="code-header">
-        <span class="code-lang">bash</span>
-        <button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
-      </div>
-      <pre><code class="lang-bash"># インストール
+                <div class="code-header">
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn">
+                        <i data-lucide="copy"></i><span>Copy</span>
+                    </button>
+                </div>
+                <pre><code class="lang-bash"># インストール
 npm install -g @nagiscript/cli
 
 # プロジェクト作成
@@ -137,13 +200,15 @@ cd hello
 nagiscript run main.ngs
 # => Hello from hello!</code></pre>
 
-      <div style="margin-top: 40px;">
-        <h3>ネイティブビルド &amp; Wasm ビルド</h3>
-        <div class="code-header">
-          <span class="code-lang">bash</span>
-          <button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
-        </div>
-        <pre><code class="lang-bash"># ネイティブバイナリ
+                <div style="margin-top: 40px">
+                    <h3>ネイティブビルド &amp; Wasm ビルド</h3>
+                    <div class="code-header">
+                        <span class="code-lang">bash</span>
+                        <button class="copy-btn">
+                            <i data-lucide="copy"></i><span>Copy</span>
+                        </button>
+                    </div>
+                    <pre><code class="lang-bash"># ネイティブバイナリ
 nagiscript build main.ngs -o app
 
 # WebAssembly
@@ -151,41 +216,70 @@ nagiscript wasm main.ngs -o out
 
 # TypeScript 型定義
 nagiscript dts main.ngs -o out.d.ts</code></pre>
-      </div>
+                </div>
 
-      <h3 style="margin-top: 40px;"><i data-lucide="monitor" style="vertical-align:middle;margin-right:6px;"></i> Inline WASM Playground</h3>
-      <div class="wasm-demo" id="wasm-demo">
-        <div class="wasm-demo-header">
-          <img src="assets/logo.png" alt="N" style="width:32px;height:32px;border-radius:9px;">
-          <h4>NagiScript → WebAssembly ライブ実行</h4>
-          <span class="demo-badge run-status"><i data-lucide="loader" class="spin-icon"></i> 読み込み中…</span>
-        </div>
-        <div class="wasm-demo-body">
-          <div class="demo-controls">
-            <label for="demo-fn">関数</label>
-            <select id="demo-fn"></select>
-            <label for="demo-arg">引数（i32, カンマ区切りで複数）</label>
-            <input id="demo-arg" type="text" value="10" inputmode="numeric">
-            <p class="demo-note"></p>
-          </div>
-          <div class="demo-result">
-            <div class="demo-answer">—</div>
-            <p style="font-size:0.85rem; color:var(--ink-3);">= ネイティブWASM 実行結果（exports 呼び出し）</p>
-          </div>
-        </div>
-        <pre class="demo-code">// 実行コードがここに表示されます</pre>
-      </div>
-    </section>
+                <h3 style="margin-top: 40px">
+                    <i
+                        data-lucide="monitor"
+                        style="vertical-align: middle; margin-right: 6px"
+                    ></i>
+                    Inline WASM Playground
+                </h3>
+                <div class="wasm-demo" id="wasm-demo">
+                    <div class="wasm-demo-header">
+                        <img
+                            src="assets/logo.png"
+                            alt="N"
+                            style="
+                                width: 32px;
+                                height: 32px;
+                                border-radius: 9px;
+                            "
+                        />
+                        <h4>NagiScript → WebAssembly ライブ実行</h4>
+                        <span class="demo-badge run-status"
+                            ><i data-lucide="loader" class="spin-icon"></i>
+                            読み込み中…</span
+                        >
+                    </div>
+                    <div class="wasm-demo-body">
+                        <div class="demo-controls">
+                            <label for="demo-fn">関数</label>
+                            <select id="demo-fn"></select>
+                            <label for="demo-arg"
+                                >引数（i32, カンマ区切りで複数）</label
+                            >
+                            <input
+                                id="demo-arg"
+                                type="text"
+                                value="10"
+                                inputmode="numeric"
+                            />
+                            <p class="demo-note"></p>
+                        </div>
+                        <div class="demo-result">
+                            <div class="demo-answer">—</div>
+                            <p style="font-size: 0.85rem; color: var(--ink-3)">
+                                = ネイティブWASM 実行結果（exports 呼び出し）
+                            </p>
+                        </div>
+                    </div>
+                    <pre class="demo-code">
+// 実行コードがここに表示されます</pre>
+                </div>
+            </section>
 
-    <section class="quickstart">
-      <h2>コードサンプル</h2>
+            <section class="quickstart">
+                <h2>コードサンプル</h2>
 
-      <h3>WASM ライブ実行（Run を押してください）</h3>
-      <div class="code-header">
-        <span class="code-lang">main.ngs</span>
-        <button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
-      </div>
-      <pre><code class="lang-ngs">export &quot;C&quot; fn fibonacci(n: i32) -&gt; i32 {
+                <h3>WASM ライブ実行（Run を押してください）</h3>
+                <div class="code-header">
+                    <span class="code-lang">main.ngs</span>
+                    <button class="copy-btn">
+                        <i data-lucide="copy"></i><span>Copy</span>
+                    </button>
+                </div>
+                <pre><code class="lang-ngs">export &quot;C&quot; fn fibonacci(n: i32) -&gt; i32 {
     if n &lt;= 1 {
         return n
     }
@@ -198,12 +292,14 @@ fn main() {
     print(gcd(48, 36))     // =&gt; 12
 }</code></pre>
 
-      <h3>基本構文</h3>
-      <div class="code-header">
-        <span class="code-lang">main.ngs</span>
-        <button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
-      </div>
-      <pre><code class="lang-ngs">// コメントは C スタイル。セミコロンは行末で省略可能。
+                <h3>基本構文</h3>
+                <div class="code-header">
+                    <span class="code-lang">main.ngs</span>
+                    <button class="copy-btn">
+                        <i data-lucide="copy"></i><span>Copy</span>
+                    </button>
+                </div>
+                <pre><code class="lang-ngs">// コメントは C スタイル。セミコロンは行末で省略可能。
 fn add(a: i32, b: i32) -&gt; i32 {
     return a + b
 }
@@ -216,12 +312,14 @@ fn main() {
     print(add(x, y))    // 数値 / bool / string を出力
 }</code></pre>
 
-      <h3>構造体・enum・パターンマッチ</h3>
-      <div class="code-header">
-        <span class="code-lang">shapes.ngs</span>
-        <button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
-      </div>
-      <pre><code class="lang-ngs">struct Point {
+                <h3>構造体・enum・パターンマッチ</h3>
+                <div class="code-header">
+                    <span class="code-lang">shapes.ngs</span>
+                    <button class="copy-btn">
+                        <i data-lucide="copy"></i><span>Copy</span>
+                    </button>
+                </div>
+                <pre><code class="lang-ngs">struct Point {
     x: f32,
     y: f32,
 }
@@ -246,12 +344,14 @@ fn main() {
     print(area(s))
 }</code></pre>
 
-      <h3>Result とエラー伝播</h3>
-      <div class="code-header">
-        <span class="code-lang">error.ngs</span>
-        <button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
-      </div>
-      <pre><code class="lang-ngs">fn wrap(v: i32) -&gt; Result&lt;i32, string&gt; {
+                <h3>Result とエラー伝播</h3>
+                <div class="code-header">
+                    <span class="code-lang">error.ngs</span>
+                    <button class="copy-btn">
+                        <i data-lucide="copy"></i><span>Copy</span>
+                    </button>
+                </div>
+                <pre><code class="lang-ngs">fn wrap(v: i32) -&gt; Result&lt;i32, string&gt; {
     if v &gt; 10 {
         return Err("too big")
     }
@@ -262,87 +362,179 @@ fn use_res() -&gt; i32 {
     val r: Result&lt;i32, string&gt; = wrap(5)
     return r?                  // Err なら関数から即return
 }</code></pre>
-    </section>
+            </section>
 
-    <section class="quickstart">
-      <h2>対応プラットフォーム</h2>
-      <table>
-        <thead>
-          <tr><th>ターゲット</th><th>状態</th><th>用途</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>x86_64 Linux</td>
-            <td><span class="status-badge status-ok"><i data-lucide="check-circle"></i> 実用</span></td>
-            <td>デスクトップ / サーバー</td>
-          </tr>
-          <tr>
-            <td>WebAssembly</td>
-            <td><span class="status-badge status-ok"><i data-lucide="check-circle"></i> 実用</span></td>
-            <td>Web アプリケーション</td>
-          </tr>
-          <tr>
-            <td>Embedded (ARM Cortex-M)</td>
-            <td><span class="status-badge status-wip"><i data-lucide="clock"></i> 準備中</span></td>
-            <td>IoT / マイコン</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
+            <section class="quickstart">
+                <h2>対応プラットフォーム</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ターゲット</th>
+                            <th>状態</th>
+                            <th>用途</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>x86_64 Linux</td>
+                            <td>
+                                <span class="status-badge status-ok"
+                                    ><i data-lucide="check-circle"></i>
+                                    実用</span
+                                >
+                            </td>
+                            <td>デスクトップ / サーバー</td>
+                        </tr>
+                        <tr>
+                            <td>WebAssembly</td>
+                            <td>
+                                <span class="status-badge status-ok"
+                                    ><i data-lucide="check-circle"></i>
+                                    実用</span
+                                >
+                            </td>
+                            <td>Web アプリケーション</td>
+                        </tr>
+                        <tr>
+                            <td>Embedded (ARM Cortex-M)</td>
+                            <td>
+                                <span class="status-badge status-wip"
+                                    ><i data-lucide="clock"></i> 準備中</span
+                                >
+                            </td>
+                            <td>IoT / マイコン</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
 
-    <section class="quickstart">
-      <h2>ドキュメント構成</h2>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">
-        <div>
-          <h3>入門ガイド</h3>
-          <ul>
-            <li><a href="docs/getting-started.html">はじめに</a> — インストールと初回実行</li>
-            <li><a href="docs/tutorial/basics.html">基本概念</a> — 変数、型、制御構文</li>
-          </ul>
-        </div>
-        <div>
-          <h3>チュートリアル</h3>
-          <ul>
-            <li><a href="docs/tutorial/functions.html">関数とモジュール</a></li>
-            <li><a href="docs/tutorial/structs-enums.html">構造体と列挙型</a></li>
-            <li><a href="docs/tutorial/generics.html">ジェネリクス</a></li>
-            <li><a href="docs/tutorial/error-handling.html">エラーハンドリング</a></li>
-            <li><a href="docs/tutorial/memory.html">メモリ管理</a></li>
-            <li><a href="docs/tutorial/webassembly.html">WebAssembly</a></li>
-            <li><a href="docs/tutorial/browser-app.html">ブラウザアプリ</a></li>
-            <li><a href="docs/tutorial/tui-app.html">TUI アプリ</a></li>
-          </ul>
-        </div>
-        <div>
-          <h3>リファレンス</h3>
-          <ul>
-            <li><a href="docs/reference/types.html">型システム</a></li>
-            <li><a href="docs/reference/syntax.html">構文リファレンス</a></li>
-            <li><a href="docs/reference/operators.html">演算子リファレンス</a></li>
-            <li><a href="docs/reference/standard-library.html">標準ライブラリ</a></li>
-            <li><a href="docs/reference/keywords.html">キーワード一覧</a></li>
-          </ul>
-        </div>
-      </div>
-    </section>
+            <section class="quickstart">
+                <h2>ドキュメント構成</h2>
+                <div
+                    style="
+                        display: grid;
+                        grid-template-columns: repeat(
+                            auto-fit,
+                            minmax(280px, 1fr)
+                        );
+                        gap: 24px;
+                    "
+                >
+                    <div>
+                        <h3>入門ガイド</h3>
+                        <ul>
+                            <li>
+                                <a href="docs/getting-started.html">はじめに</a>
+                                — インストールと初回実行
+                            </li>
+                            <li>
+                                <a href="docs/tutorial/basics.html">基本概念</a>
+                                — 変数、型、制御構文
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>チュートリアル</h3>
+                        <ul>
+                            <li>
+                                <a href="docs/tutorial/functions.html"
+                                    >関数とモジュール</a
+                                >
+                            </li>
+                            <li>
+                                <a href="docs/tutorial/structs-enums.html"
+                                    >構造体と列挙型</a
+                                >
+                            </li>
+                            <li>
+                                <a href="docs/tutorial/generics.html"
+                                    >ジェネリクス</a
+                                >
+                            </li>
+                            <li>
+                                <a href="docs/tutorial/error-handling.html"
+                                    >エラーハンドリング</a
+                                >
+                            </li>
+                            <li>
+                                <a href="docs/tutorial/memory.html"
+                                    >メモリ管理</a
+                                >
+                            </li>
+                            <li>
+                                <a href="docs/tutorial/webassembly.html"
+                                    >WebAssembly</a
+                                >
+                            </li>
+                            <li>
+                                <a href="docs/tutorial/browser-app.html"
+                                    >ブラウザアプリ</a
+                                >
+                            </li>
+                            <li>
+                                <a href="docs/tutorial/tui-app.html"
+                                    >TUI アプリ</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>リファレンス</h3>
+                        <ul>
+                            <li>
+                                <a href="docs/reference/types.html"
+                                    >型システム</a
+                                >
+                            </li>
+                            <li>
+                                <a href="docs/reference/syntax.html"
+                                    >構文リファレンス</a
+                                >
+                            </li>
+                            <li>
+                                <a href="docs/reference/operators.html"
+                                    >演算子リファレンス</a
+                                >
+                            </li>
+                            <li>
+                                <a href="docs/reference/standard-library.html"
+                                    >標準ライブラリ</a
+                                >
+                            </li>
+                            <li>
+                                <a href="docs/reference/keywords.html"
+                                    >キーワード一覧</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
 
-    <footer class="footer">
-      <p>NagiScript — Version 0.2.0 — MIT License</p>
-      <p style="margin-top: 8px;">
-        <a href="https://github.com/TatsuyaM2667/nagiscript_lang" style="display:inline-flex;align-items:center;gap:6px;">
-          <i data-lucide="github"></i> GitHub
-        </a>
-      </p>
-    </footer>
-  </main>
+            <footer class="footer">
+                <p>NagiScript — Version 0.2.0 — MIT License</p>
+                <p style="margin-top: 8px">
+                    <a
+                        href="https://github.com/TatsuyaM2667/nagiscript_lang"
+                        style="
+                            display: inline-flex;
+                            align-items: center;
+                            gap: 6px;
+                        "
+                    >
+                        <i data-lucide="github"></i> GitHub
+                    </a>
+                </p>
+            </footer>
+        </main>
 
-  <script src="js/main.js"></script>
-  <script src="js/play-wasm.js"></script>
-  <script>
-    // Lucide icons を初期化（DOMContentLoaded 後）
-    document.addEventListener('DOMContentLoaded', function() {
-      if (window.lucide) lucide.createIcons();
-    });
-  </script>
-</body>
+        <script src="js/main.js"></script>
+        <script src="js/play-wasm.js"></script>
+        <script>
+            // Lucide icons を初期化（DOMContentLoaded 後）
+            document.addEventListener("DOMContentLoaded", function () {
+                if (window.lucide) lucide.createIcons();
+            });
+        </script>
+    </body>
 </html>

@@ -1,105 +1,200 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CLI ツール開発 - NagiScript</title>
-  <link rel="stylesheet" href="../../css/style.css">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>CLI ツール開発 - NagiScript</title>
+        <link rel="stylesheet" href="../../css/style.css" />
 
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
-</head>
-<body>
-  <div class="sky-decor" aria-hidden="true">
-    <div class="cloud c1"></div>
-    <div class="cloud c2"></div>
-    <div class="cloud c3"></div>
-    <div class="cloud c4"></div>
-  </div>
-  <header class="header">
-    <a href="../../index.html" class="header-logo"><img src="../../assets/logo.png" alt="NagiScript Logo"><span class="logo-text">NagiScript</span></a>
-    <nav class="header-nav" id="header-nav">
-      <a href="../../index.html">ホーム</a>
-      <a href="../getting-started.html">ドキュメント</a>
-      <a href="../tutorial/basics.html">チュートリアル</a>
-      <a href="../reference/types.html">リファレンス</a>
-      <a href="https://github.com/TatsuyaM2667/nagiscript_lang" class="nav-github">
-        <i data-lucide="github"></i><span>GitHub</span>
-      </a>
-      <button class="theme-toggle" aria-label="テーマ切替">
-        <i data-lucide="moon" class="icon-moon"></i>
-        <i data-lucide="sun" class="icon-sun"></i>
-      </button>
-    </nav>
-    <button class="menu-toggle" id="menu-toggle" aria-label="メニュー"><i data-lucide="menu"></i></button>
-  </header>
-  <div class="sidebar-overlay"></div>
+        <!-- Lucide Icons -->
+        <script
+            src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"
+            defer
+        ></script>
+    </head>
+    <body>
+        <div class="sky-decor" aria-hidden="true">
+            <div class="cloud c1"></div>
+            <div class="cloud c2"></div>
+            <div class="cloud c3"></div>
+            <div class="cloud c4"></div>
+        </div>
+        <header class="header">
+            <a href="../../index.html" class="header-logo"
+                ><img src="../../assets/logo.png" alt="NagiScript Logo" /><span
+                    class="logo-text"
+                    >NagiScript</span
+                ></a
+            >
+            <nav class="header-nav" id="header-nav">
+                　
+                <a href="../../index.html">ホーム</a>
+                <a href="../getting-started.html">ドキュメント</a>
+                <a href="../tutorial/basics.html">チュートリアル</a>
+                <a href="../reference/types.html">リファレンス</a>
+                <a
+                    href="https://github.com/TatsuyaM2667/nagiscript_lang"
+                    class="nav-github"
+                >
+                    <i data-lucide="github"></i><span>GitHub</span>
+                </a>
+                <button class="theme-toggle" aria-label="テーマ切替">
+                    <i data-lucide="moon" class="icon-moon"></i>
+                    <i data-lucide="sun" class="icon-sun"></i>
+                </button>
+            </nav>
+            <button class="menu-toggle" id="menu-toggle" aria-label="メニュー">
+                <i data-lucide="menu"></i>
+            </button>
+        </header>
+        <div class="sidebar-overlay"></div>
 
-  <aside class="sidebar">
-    <div class="sidebar-section">
-      <div class="sidebar-title">入门</div>
-      <a href="../getting-started.html" class="sidebar-link">はじめに</a>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-title">チュートリアル</div>
-      <a href="basics.html" class="sidebar-link">基本概念</a>
-      <a href="functions.html" class="sidebar-link">関数とモジュール</a>
-      <a href="structs-enums.html" class="sidebar-link">構造体と列挙型</a>
-      <a href="generics.html" class="sidebar-link">ジェネリクス</a>
-      <a href="error-handling.html" class="sidebar-link">エラーハンドリング</a>
-      <a href="memory.html" class="sidebar-link">メモリ管理</a>
-      <a href="async.html" class="sidebar-link">非同期プログラミング</a>
-      <a href="webassembly.html" class="sidebar-link">WebAssembly</a>
-      <a href="browser-app.html" class="sidebar-link">ブラウザアプリ</a>
-      <a href="tui-app.html" class="sidebar-link">TUI アプリ</a>
-      <a href="cli.html" class="sidebar-link active">CLI ツール開発</a>
-      <a href="microcontroller.html" class="sidebar-link">組み込み開発</a>
-      <a href="cinterop.html" class="sidebar-link">C言語との相互運用</a>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-title">リファレンス</div>
-      <a href="../reference/types.html" class="sidebar-link">型システム</a>
-      <a href="../reference/syntax.html" class="sidebar-link">構文リファレンス</a>
-      <a href="../reference/operators.html" class="sidebar-link">演算子リファレンス</a>
-      <a href="../reference/standard-library.html" class="sidebar-link">標準ライブラリ</a>
-      <a href="../reference/standard-c-library.html" class="sidebar-link">C 標準ライブラリ</a>
-      <a href="../reference/compiler.html" class="sidebar-link">コンパイラ内部構造</a>
-      <a href="../reference/keywords.html" class="sidebar-link">キーワード一覧</a>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-title">実践</div>
-      <a href="../examples/todo-app.html" class="sidebar-link">Todo アプリ</a>
-      <a href="../examples/web-framework.html" class="sidebar-link">Web フレームワーク</a>
-      <a href="../examples/iot-sensor.html" class="sidebar-link">IoT センサー</a>
-    </div>
-  </aside>
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">入门</div>
+                <a href="../getting-started.html" class="sidebar-link"
+                    >はじめに</a
+                >
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">チュートリアル</div>
+                <a href="basics.html" class="sidebar-link">基本概念</a>
+                <a href="functions.html" class="sidebar-link"
+                    >関数とモジュール</a
+                >
+                <a href="structs-enums.html" class="sidebar-link"
+                    >構造体と列挙型</a
+                >
+                <a href="generics.html" class="sidebar-link">ジェネリクス</a>
+                <a href="error-handling.html" class="sidebar-link"
+                    >エラーハンドリング</a
+                >
+                <a href="memory.html" class="sidebar-link">メモリ管理</a>
+                <a href="async.html" class="sidebar-link"
+                    >非同期プログラミング</a
+                >
+                <a href="webassembly.html" class="sidebar-link">WebAssembly</a>
+                <a href="browser-app.html" class="sidebar-link"
+                    >ブラウザアプリ</a
+                >
+                <a href="tui-app.html" class="sidebar-link">TUI アプリ</a>
+                <a href="cli.html" class="sidebar-link active"
+                    >CLI ツール開発</a
+                >
+                <a href="microcontroller.html" class="sidebar-link"
+                    >組み込み開発</a
+                >
+                <a href="cinterop.html" class="sidebar-link"
+                    >C言語との相互運用</a
+                >
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">リファレンス</div>
+                <a href="../reference/types.html" class="sidebar-link"
+                    >型システム</a
+                >
+                <a href="../reference/syntax.html" class="sidebar-link"
+                    >構文リファレンス</a
+                >
+                <a href="../reference/operators.html" class="sidebar-link"
+                    >演算子リファレンス</a
+                >
+                <a
+                    href="../reference/standard-library.html"
+                    class="sidebar-link"
+                    >標準ライブラリ</a
+                >
+                <a
+                    href="../reference/standard-c-library.html"
+                    class="sidebar-link"
+                    >C 標準ライブラリ</a
+                >
+                <a href="../reference/compiler.html" class="sidebar-link"
+                    >コンパイラ内部構造</a
+                >
+                <a href="../reference/keywords.html" class="sidebar-link"
+                    >キーワード一覧</a
+                >
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">実践</div>
+                <a href="../examples/todo-app.html" class="sidebar-link"
+                    >Todo アプリ</a
+                >
+                <a href="../examples/web-framework.html" class="sidebar-link"
+                    >Web フレームワーク</a
+                >
+                <a href="../examples/iot-sensor.html" class="sidebar-link"
+                    >IoT センサー</a
+                >
+            </div>
+        </aside>
 
-  <main class="main content">
-    <h1>CLI ツール開発</h1>
-    <p>NagiScript でコマンドラインツールを開発する方法を学びます。</p>
+        <main class="main content">
+            <h1>CLI ツール開発</h1>
+            <p>NagiScript でコマンドラインツールを開発する方法を学びます。</p>
 
-    <div class="callout warn"><span class="ct">ロードマップ</span><p>CLI ツール開発は、現行コンパイラー v0.2.0 では標準モジュール（<code>std:args</code> / <code>std:fs</code> / <code>std:process</code> 等）が未実装のため、ロードマップ扱いです。下記は<b>将来仕様</b>であり、現行の <code>nagiscript</code> コマンドでは<b>動きません</b>。現行で実際に使えるのは組み込み <code>print</code> / <code>println</code> / <code>panic</code> と、C 標準関数の <code>extern "C" fn</code> 呼び出しのみです。</p></div>
+            <div class="callout warn">
+                <span class="ct">ロードマップ</span>
+                <p>
+                    CLI ツール開発は、現行コンパイラー v0.2.0
+                    では標準モジュール（<code>std:args</code> /
+                    <code>std:fs</code> /
+                    <code>std:process</code>
+                    等）が未実装のため、ロードマップ扱いです。下記は<b>将来仕様</b>であり、現行の
+                    <code>nagiscript</code>
+                    コマンドでは<b>動きません</b>。現行で実際に使えるのは組み込み
+                    <code>print</code> / <code>println</code> /
+                    <code>panic</code> と、C 標準関数の
+                    <code>extern "C" fn</code> 呼び出しのみです。
+                </p>
+            </div>
 
-    <hr>
+            <hr />
 
-    <h2>現行で動く最小の CLI 的プログラム</h2>
+            <h2>現行で動く最小の CLI 的プログラム</h2>
 
-    <p>現行の組み込み <code>println</code> だけでも、引数なしの出力のみの簡単なプログラムは書けます（引数取得は未実装）。</p>
+            <p>
+                現行の組み込み
+                <code>println</code>
+                だけでも、引数なしの出力のみの簡単なプログラムは書けます（引数取得は未実装）。
+            </p>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">fn main() {
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">fn main() {
     println("mytool 1.0.0")
     println("Usage: mytool &lt;command&gt;")
 }</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>基本的な CLI ツール（ロードマップ）</h2>
+            <h2>基本的な CLI ツール（ロードマップ）</h2>
 
-    <div class="callout warn"><span class="ct">ロードマップ</span><p>引数取得は <code>std:args</code>（未実装）、C 標準関数 <code>argc</code> / <code>argv</code> の利用も現行では検証できていません。下記は将来仕様です。<code>match</code> は文字列パターンではなく裸の列挙バリアントに置き換えています。</p></div>
+            <div class="callout warn">
+                <span class="ct">ロードマップ</span>
+                <p>
+                    引数取得は <code>std:args</code>（未実装）、C 標準関数
+                    <code>argc</code> /
+                    <code>argv</code>
+                    の利用も現行では検証できていません。下記は将来仕様です。<code
+                        >match</code
+                    >
+                    は文字列パターンではなく裸の列挙バリアントに置き換えています。
+                </p>
+            </div>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">// ロードマップ: 引数取得には std:args（未実装）が必要
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">// ロードマップ: 引数取得には std:args（未実装）が必要
 enum Command { Help Version Run Unknown }
 
 fn dispatch(cmd: Command) {
@@ -114,90 +209,157 @@ fn print_help() {
     println("Usage: mytool &lt;command&gt;")
 }</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>引数パース（ロードマップ）</h2>
+            <h2>引数パース（ロードマップ）</h2>
 
-    <h3>基本的な引数取得</h3>
+            <h3>基本的な引数取得</h3>
 
-    <div class="callout warn"><span class="ct">ロードマップ</span><p><code>args.get</code> / <code>args.has</code> は <code>std:args</code>（未実装）の API です。<code>Option</code> 型も組み込みでは存在しないため、enum は自前で定義します。下記は将来仕様です。</p></div>
+            <div class="callout warn">
+                <span class="ct">ロードマップ</span>
+                <p>
+                    <code>args.get</code> / <code>args.has</code> は
+                    <code>std:args</code>（未実装）の API です。<code
+                        >Option</code
+                    >
+                    型も組み込みでは存在しないため、enum
+                    は自前で定義します。下記は将来仕様です。
+                </p>
+            </div>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">// ロードマップ: std:args は未実装。下記は将来仕様
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">// ロードマップ: std:args は未実装。下記は将来仕様
 enum Opt { SomeName Ok None }
 </code></pre>
 
-    <h3>使用例（将来仕様）</h3>
+            <h3>使用例（将来仕様）</h3>
 
-    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-bash">$ mytool --name Alice --verbose --output result.txt
+            <div class="code-header">
+                <span class="code-lang">bash</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-bash">$ mytool --name Alice --verbose --output result.txt
 Name: Alice
 Verbose mode enabled</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>出力の制御（ロードマップ）</h2>
+            <h2>出力の制御（ロードマップ）</h2>
 
-    <div class="callout warn"><span class="ct">ロードマップ</span><p>ANSI エスケープによる色付けは想定の将来仕様です。現行の <code>println</code> は 1 引数のみで、<code>+</code> による文字列連結は使えません。</p></div>
+            <div class="callout warn">
+                <span class="ct">ロードマップ</span>
+                <p>
+                    ANSI エスケープによる色付けは想定の将来仕様です。現行の
+                    <code>println</code> は 1 引数のみで、<code>+</code>
+                    による文字列連結は使えません。
+                </p>
+            </div>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">// ロードマップ: 色付き出力は想定の将来仕様
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">// ロードマップ: 色付き出力は想定の将来仕様
 // 現行では println(text) をそのまま出力するのみ
 fn print_colored(text: string) {
     println(text)
 }</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>エラーハンドリング（ロードマップ）</h2>
+            <h2>エラーハンドリング（ロードマップ）</h2>
 
-    <div class="callout warn"><span class="ct">ロードマップ</span><p><code>Result</code> 型は組み込みでは存在しないため enum で自作し、<code>?演算子</code>（エラー伝播）も未実装です。<code>std:fs</code> も未実装です。下記は将来仕様です。</p></div>
+            <div class="callout warn">
+                <span class="ct">ロードマップ</span>
+                <p>
+                    <code>Result</code> 型は組み込みでは存在しないため enum
+                    で自作し、<code>?演算子</code>（エラー伝播）も未実装です。<code
+                        >std:fs</code
+                    >
+                    も未実装です。下記は将来仕様です。
+                </p>
+            </div>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">// ロードマップ: fs モジュールは未実装。Result 形は enum で自作
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">// ロードマップ: fs モジュールは未実装。Result 形は enum で自作
 enum Result { Ok NotFound }
 </code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>実践的な例: ファイルチェッカー（ロードマップ）</h2>
+            <h2>実践的な例: ファイルチェッカー（ロードマップ）</h2>
 
-    <div class="callout warn"><span class="ct">ロードマップ</span><p><code>std:fs</code> / <code>std:args</code> は未実装です。下記は将来仕様です。現行ではファイルアクセスは <code>extern "C" fn</code>（例: <code>fopen</code> / <code>fgets</code> 等）でのみ行えます。</p></div>
+            <div class="callout warn">
+                <span class="ct">ロードマップ</span>
+                <p>
+                    <code>std:fs</code> /
+                    <code>std:args</code>
+                    は未実装です。下記は将来仕様です。現行ではファイルアクセスは
+                    <code>extern "C" fn</code>（例: <code>fopen</code> /
+                    <code>fgets</code> 等）でのみ行えます。
+                </p>
+            </div>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">extern "C" fn fopen(path: *u8, mode: *u8) -&gt; *u8
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">extern "C" fn fopen(path: *u8, mode: *u8) -&gt; *u8
 
 fn check_path(path: string) {
     // ロードマップ: 完全なファイルチェック機能は将来仕様
     println(path)
 }</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>ビルドと実行</h2>
+            <h2>ビルドと実行</h2>
 
-    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-bash"># ビルド
+            <div class="code-header">
+                <span class="code-lang">bash</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-bash"># ビルド
 nagiscript build main.ngs -o mytool
 
 # 実行
 ./mytool --help</code></pre>
 
-    <hr>
+            <hr />
 
-    <div class="nav-links">
-      <a href="tui-app.html" class="nav-link prev">← TUI アプリ</a>
-      <a href="microcontroller.html" class="nav-link next">組み込み開発 →</a>
-    </div>
-  </main>
+            <div class="nav-links">
+                <a href="tui-app.html" class="nav-link prev">← TUI アプリ</a>
+                <a href="microcontroller.html" class="nav-link next"
+                    >組み込み開発 →</a
+                >
+            </div>
+        </main>
 
-  <script src="../../js/main.js"></script>
-  <script src="../../js/play-wasm.js"></script>
+        <script src="../../js/main.js"></script>
+        <script src="../../js/play-wasm.js"></script>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      if (window.lucide) lucide.createIcons();
-    });
-  </script>
-</body>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                if (window.lucide) lucide.createIcons();
+            });
+        </script>
+    </body>
 </html>

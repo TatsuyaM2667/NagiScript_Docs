@@ -1,123 +1,225 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>組み込み・マイコン開発 - NagiScript</title>
-  <link rel="stylesheet" href="../../css/style.css">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>組み込み・マイコン開発 - NagiScript</title>
+        <link rel="stylesheet" href="../../css/style.css" />
 
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
-</head>
-<body>
-  <div class="sky-decor" aria-hidden="true">
-    <div class="cloud c1"></div>
-    <div class="cloud c2"></div>
-    <div class="cloud c3"></div>
-    <div class="cloud c4"></div>
-  </div>
-  <header class="header">
-    <a href="../../index.html" class="header-logo"><img src="../../assets/logo.png" alt="NagiScript Logo"><span class="logo-text">NagiScript</span></a>
-    <nav class="header-nav" id="header-nav">
-      <a href="../../index.html">ホーム</a>
-      <a href="../getting-started.html">ドキュメント</a>
-      <a href="../tutorial/basics.html">チュートリアル</a>
-      <a href="../reference/types.html">リファレンス</a>
-      <a href="https://github.com/TatsuyaM2667/nagiscript_lang" class="nav-github">
-        <i data-lucide="github"></i><span>GitHub</span>
-      </a>
-      <button class="theme-toggle" aria-label="テーマ切替">
-        <i data-lucide="moon" class="icon-moon"></i>
-        <i data-lucide="sun" class="icon-sun"></i>
-      </button>
-    </nav>
-    <button class="menu-toggle" id="menu-toggle" aria-label="メニュー"><i data-lucide="menu"></i></button>
-  </header>
-  <div class="sidebar-overlay"></div>
+        <!-- Lucide Icons -->
+        <script
+            src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"
+            defer
+        ></script>
+    </head>
+    <body>
+        <div class="sky-decor" aria-hidden="true">
+            <div class="cloud c1"></div>
+            <div class="cloud c2"></div>
+            <div class="cloud c3"></div>
+            <div class="cloud c4"></div>
+        </div>
+        　
+        <header class="header">
+            <a href="../../index.html" class="header-logo"
+                ><img src="../../assets/logo.png" alt="NagiScript Logo" /><span
+                    class="logo-text"
+                    >NagiScript</span
+                ></a
+            >
+            <nav class="header-nav" id="header-nav">
+                <a href="../../index.html">ホーム</a>
+                <a href="../getting-started.html">ドキュメント</a>
+                <a href="../tutorial/basics.html">チュートリアル</a>
+                <a href="../reference/types.html">リファレンス</a>
+                <a
+                    href="https://github.com/TatsuyaM2667/nagiscript_lang"
+                    class="nav-github"
+                >
+                    <i data-lucide="github"></i><span>GitHub</span>
+                </a>
+                <button class="theme-toggle" aria-label="テーマ切替">
+                    <i data-lucide="moon" class="icon-moon"></i>
+                    <i data-lucide="sun" class="icon-sun"></i>
+                </button>
+            </nav>
+            <button class="menu-toggle" id="menu-toggle" aria-label="メニュー">
+                <i data-lucide="menu"></i>
+            </button>
+        </header>
+        <div class="sidebar-overlay"></div>
 
-  <aside class="sidebar">
-    <div class="sidebar-section">
-      <div class="sidebar-title">入门</div>
-      <a href="../getting-started.html" class="sidebar-link">はじめに</a>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-title">チュートリアル</div>
-      <a href="basics.html" class="sidebar-link">基本概念</a>
-      <a href="functions.html" class="sidebar-link">関数とモジュール</a>
-      <a href="structs-enums.html" class="sidebar-link">構造体と列挙型</a>
-      <a href="generics.html" class="sidebar-link">ジェネリクス</a>
-      <a href="error-handling.html" class="sidebar-link">エラーハンドリング</a>
-      <a href="memory.html" class="sidebar-link">メモリ管理</a>
-      <a href="async.html" class="sidebar-link">非同期プログラミング</a>
-      <a href="webassembly.html" class="sidebar-link">WebAssembly</a>
-      <a href="browser-app.html" class="sidebar-link">ブラウザアプリ</a>
-      <a href="tui-app.html" class="sidebar-link">TUI アプリ</a>
-      <a href="cli.html" class="sidebar-link">CLI ツール開発</a>
-      <a href="microcontroller.html" class="sidebar-link active">組み込み開発</a>
-      <a href="cinterop.html" class="sidebar-link">C言語との相互運用</a>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-title">リファレンス</div>
-      <a href="../reference/types.html" class="sidebar-link">型システム</a>
-      <a href="../reference/syntax.html" class="sidebar-link">構文リファレンス</a>
-      <a href="../reference/operators.html" class="sidebar-link">演算子リファレンス</a>
-      <a href="../reference/standard-library.html" class="sidebar-link">標準ライブラリ</a>
-      <a href="../reference/standard-c-library.html" class="sidebar-link">C 標準ライブラリ</a>
-      <a href="../reference/compiler.html" class="sidebar-link">コンパイラ内部構造</a>
-      <a href="../reference/keywords.html" class="sidebar-link">キーワード一覧</a>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-title">実践</div>
-      <a href="../examples/todo-app.html" class="sidebar-link">Todo アプリ</a>
-      <a href="../examples/web-framework.html" class="sidebar-link">Web フレームワーク</a>
-      <a href="../examples/iot-sensor.html" class="sidebar-link">IoT センサー</a>
-    </div>
-  </aside>
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">入门</div>
+                <a href="../getting-started.html" class="sidebar-link"
+                    >はじめに</a
+                >
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">チュートリアル</div>
+                <a href="basics.html" class="sidebar-link">基本概念</a>
+                <a href="functions.html" class="sidebar-link"
+                    >関数とモジュール</a
+                >
+                <a href="structs-enums.html" class="sidebar-link"
+                    >構造体と列挙型</a
+                >
+                <a href="generics.html" class="sidebar-link">ジェネリクス</a>
+                <a href="error-handling.html" class="sidebar-link"
+                    >エラーハンドリング</a
+                >
+                <a href="memory.html" class="sidebar-link">メモリ管理</a>
+                <a href="async.html" class="sidebar-link"
+                    >非同期プログラミング</a
+                >
+                <a href="webassembly.html" class="sidebar-link">WebAssembly</a>
+                <a href="browser-app.html" class="sidebar-link"
+                    >ブラウザアプリ</a
+                >
+                <a href="tui-app.html" class="sidebar-link">TUI アプリ</a>
+                <a href="cli.html" class="sidebar-link">CLI ツール開発</a>
+                <a href="microcontroller.html" class="sidebar-link active"
+                    >組み込み開発</a
+                >
+                <a href="cinterop.html" class="sidebar-link"
+                    >C言語との相互運用</a
+                >
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">リファレンス</div>
+                <a href="../reference/types.html" class="sidebar-link"
+                    >型システム</a
+                >
+                <a href="../reference/syntax.html" class="sidebar-link"
+                    >構文リファレンス</a
+                >
+                <a href="../reference/operators.html" class="sidebar-link"
+                    >演算子リファレンス</a
+                >
+                <a
+                    href="../reference/standard-library.html"
+                    class="sidebar-link"
+                    >標準ライブラリ</a
+                >
+                <a
+                    href="../reference/standard-c-library.html"
+                    class="sidebar-link"
+                    >C 標準ライブラリ</a
+                >
+                <a href="../reference/compiler.html" class="sidebar-link"
+                    >コンパイラ内部構造</a
+                >
+                <a href="../reference/keywords.html" class="sidebar-link"
+                    >キーワード一覧</a
+                >
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">実践</div>
+                <a href="../examples/todo-app.html" class="sidebar-link"
+                    >Todo アプリ</a
+                >
+                <a href="../examples/web-framework.html" class="sidebar-link"
+                    >Web フレームワーク</a
+                >
+                <a href="../examples/iot-sensor.html" class="sidebar-link"
+                    >IoT センサー</a
+                >
+            </div>
+        </aside>
 
-  <main class="main content">
-    <h1>組み込み・マイコン開発</h1>
-    <p>NagiScript での組み込みシステム開発を学びます。</p>
+        <main class="main content">
+            <h1>組み込み・マイコン開発</h1>
+            <p>NagiScript での組み込みシステム開発を学びます。</p>
 
-    <div class="callout warn"><span class="ct">ロードマップ</span><p>組み込み・マイコン開発は、現行コンパイラー v0.2.0 ではまだ対応していない分野です（標準ライブラリが未実装のため）。下記の内容は<b>将来仕様</b>であり、現行の <code>nagiscript</code> コマンドでは<b>動きません</b>。現行で動作するのは組み込み <code>print</code> / <code>println</code> / <code>panic</code> と、C 標準関数の <code>extern "C" fn</code> 呼び出しのみです。</p></div>
+            <div class="callout warn">
+                <span class="ct">ロードマップ</span>
+                <p>
+                    組み込み・マイコン開発は、現行コンパイラー v0.2.0
+                    ではまだ対応していない分野です（標準ライブラリが未実装のため）。下記の内容は<b>将来仕様</b>であり、現行の
+                    <code>nagiscript</code>
+                    コマンドでは<b>動きません</b>。現行で動作するのは組み込み
+                    <code>print</code> / <code>println</code> /
+                    <code>panic</code> と、C 標準関数の
+                    <code>extern "C" fn</code> 呼び出しのみです。
+                </p>
+            </div>
 
-    <hr>
+            <hr />
 
-    <h2>概要</h2>
+            <h2>概要</h2>
 
-    <p>NagiScript は以下の特性により、組み込み開発に適しています（将来計画）：</p>
+            <p>
+                NagiScript
+                は以下の特性により、組み込み開発に適しています（将来計画）：
+            </p>
 
-    <ul>
-      <li><strong>軽量ランタイム</strong>: libc のみに依存</li>
-      <li><strong>C ABI 互換</strong>: 既存の C ライブラリをそのまま利用可能</li>
-      <li><strong>Unsafe ブロック</strong>: 低レベルなハードウェア操作をサポート</li>
-      <li><strong>静的型付け</strong>: 実行時エラーを排除</li>
-    </ul>
+            <ul>
+                <li><strong>軽量ランタイム</strong>: libc のみに依存</li>
+                <li>
+                    <strong>C ABI 互換</strong>: 既存の C
+                    ライブラリをそのまま利用可能
+                </li>
+                <li>
+                    <strong>Unsafe ブロック</strong>:
+                    低レベルなハードウェア操作をサポート
+                </li>
+                <li><strong>静的型付け</strong>: 実行時エラーを排除</li>
+            </ul>
 
-    <hr>
+            <hr />
 
-    <h2>対応プラットフォーム（準備中）</h2>
+            <h2>対応プラットフォーム（準備中）</h2>
 
-    <table>
-      <thead>
-        <tr><th>プラットフォーム</th><th>状態</th><th>用途</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>ARM Cortex-M</td><td>🔶 準備中</td><td>STM32, nRF52, etc.</td></tr>
-        <tr><td>RISC-V</td><td>🔶 準備中</td><td>ESP32-C3, etc.</td></tr>
-        <tr><td>x86 ベアメタル</td><td>🔶 準備中</td><td>UEFI, etc.</td></tr>
-      </tbody>
-    </table>
+            <table>
+                <thead>
+                    <tr>
+                        <th>プラットフォーム</th>
+                        <th>状態</th>
+                        <th>用途</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>ARM Cortex-M</td>
+                        <td>🔶 準備中</td>
+                        <td>STM32, nRF52, etc.</td>
+                    </tr>
+                    <tr>
+                        <td>RISC-V</td>
+                        <td>🔶 準備中</td>
+                        <td>ESP32-C3, etc.</td>
+                    </tr>
+                    <tr>
+                        <td>x86 ベアメタル</td>
+                        <td>🔶 準備中</td>
+                        <td>UEFI, etc.</td>
+                    </tr>
+                </tbody>
+            </table>
 
-    <hr>
+            <hr />
 
-    <h2>ハードウェア定義と現行構文の基礎</h2>
+            <h2>ハードウェア定義と現行構文の基礎</h2>
 
-    <p>下記コードはすべて将来仕様で、文法のみ現行構文（<code>extern "C" fn</code>、戻り値は <code>-&gt;</code> と明示 <code>return</code>、<code>string</code> 型）に合わせてあります。</p>
+            <p>
+                下記コードはすべて将来仕様で、文法のみ現行構文（<code
+                    >extern "C" fn</code
+                >、戻り値は <code>-&gt;</code> と明示 <code>return</code>、<code
+                    >string</code
+                >
+                型）に合わせてあります。
+            </p>
 
-    <h3>C言語との連携（基本形）</h3>
+            <h3>C言語との連携（基本形）</h3>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">// ハードウェア定義（C言語で記述）→ 現行では extern "C" fn で宣言
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">// ハードウェア定義（C言語で記述）→ 現行では extern "C" fn で宣言
 extern "C" fn gpio_init(pin: i32)
 extern "C" fn gpio_set(pin: i32, state: bool)
 extern "C" fn delay(ms: i32)
@@ -142,14 +244,19 @@ fn main() {
     blink_led(13, 10)  // ピン 13 の LED を 10 回点滅
 }</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>GPIO 操作</h2>
+            <h2>GPIO 操作</h2>
 
-    <h3>ピン定義</h3>
+            <h3>ピン定義</h3>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">extern "C" fn gpio_init(pin: i32)
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">extern "C" fn gpio_init(pin: i32)
 extern "C" fn gpio_set(pin: i32, state: bool)
 extern "C" fn gpio_read(pin: i32) -&gt; bool
 
@@ -170,14 +277,19 @@ fn pin_read(pin: i32) -&gt; bool {
     return gpio_read(pin)
 }</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>センサー読み取り</h2>
+            <h2>センサー読み取り</h2>
 
-    <h3>温度センサーの例</h3>
+            <h3>温度センサーの例</h3>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">extern "C" fn adc_read(channel: i32) -&gt; i32
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">extern "C" fn adc_read(channel: i32) -&gt; i32
 extern "C" fn delay(ms: i32)
 
 fn read_temperature(sensor_pin: i32) -&gt; f64 {
@@ -196,12 +308,17 @@ fn main() {
     }
 }</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>UART 通信</h2>
+            <h2>UART 通信</h2>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">extern "C" fn uart_init(baud_rate: i32)
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">extern "C" fn uart_init(baud_rate: i32)
 extern "C" fn uart_send(data: *u8, len: i32)
 extern "C" fn uart_receive(buffer: *u8, len: i32) -&gt; i32
 
@@ -214,12 +331,17 @@ fn receive_bytes(buffer: *u8, buffer_size: i32) -&gt; i32 {
     return uart_receive(buffer, buffer_size)
 }</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>I2C デバイス</h2>
+            <h2>I2C デバイス</h2>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">extern "C" fn i2c_init(sda: i32, scl: i32, freq: i32)
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">extern "C" fn i2c_init(sda: i32, scl: i32, freq: i32)
 extern "C" fn i2c_write(addr: u8, data: *u8, len: i32)
 extern "C" fn i2c_read(addr: u8, buffer: *u8, len: i32)
 
@@ -234,12 +356,17 @@ impl I2cDevice {
     }
 }</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>SPI 通信</h2>
+            <h2>SPI 通信</h2>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">extern "C" fn spi_init(mosi: i32, miso: i32, sck: i32, cs: i32)
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">extern "C" fn spi_init(mosi: i32, miso: i32, sck: i32, cs: i32)
 extern "C" fn spi_transfer(data: u8) -&gt; u8
 
 fn spi_write(buffer: *u8, len: i32) {
@@ -252,12 +379,17 @@ fn spi_write(buffer: *u8, len: i32) {
     }
 }</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>割り込み</h2>
+            <h2>割り込み</h2>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">extern "C" fn interrupt_enable(irq: i32, handler_id: i32)
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">extern "C" fn interrupt_enable(irq: i32, handler_id: i32)
 extern "C" fn interrupt_disable(irq: i32)
 extern "C" fn delay(ms: i32)
 
@@ -278,12 +410,17 @@ fn main() {
     }
 }</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>パワーマネジメント</h2>
+            <h2>パワーマネジメント</h2>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">extern "C" fn sleep_enter()
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">extern "C" fn sleep_enter()
 extern "C" fn sleep_exit()
 extern "C" fn deep_sleep(ms: i32)
 
@@ -297,14 +434,30 @@ fn power_save(seconds: i32) {
     deep_sleep(seconds * 1000)
 }</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>実践的な例: IoT センサーノード</h2>
+            <h2>実践的な例: IoT センサーノード</h2>
 
-    <div class="callout warn"><span class="ct">ロードマップ</span><p>この例はハードウェア制御（GPIO / ADC / UART）を前提としており、現行では利用できません。文法のみ現行構文に合わせてあります。<code>loop</code> は現行では使えないため <code>while true</code> に、文字列連結 <code>+</code> は使わない形に直しています。</p></div>
+            <div class="callout warn">
+                <span class="ct">ロードマップ</span>
+                <p>
+                    この例はハードウェア制御（GPIO / ADC /
+                    UART）を前提としており、現行では利用できません。文法のみ現行構文に合わせてあります。<code
+                        >loop</code
+                    >
+                    は現行では使えないため
+                    <code>while true</code> に、文字列連結
+                    <code>+</code> は使わない形に直しています。
+                </p>
+            </div>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">extern "C" fn gpio_init(pin: i32)
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">extern "C" fn gpio_init(pin: i32)
 extern "C" fn gpio_set(pin: i32, state: bool)
 extern "C" fn adc_read(channel: i32) -&gt; i32
 extern "C" fn uart_init(baud_rate: i32)
@@ -354,46 +507,69 @@ fn main() {
     }
 }</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>ビルドとフラッシュ</h2>
+            <h2>ビルドとフラッシュ</h2>
 
-    <div class="callout warn"><span class="ct">ロードマップ</span><p>クロスコンパイル（組み込み向けターゲット）は現行では未対応です。下記は将来仕様です。</p></div>
+            <div class="callout warn">
+                <span class="ct">ロードマップ</span>
+                <p>
+                    クロスコンパイル（組み込み向けターゲット）は現行では未対応です。下記は将来仕様です。
+                </p>
+            </div>
 
-    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-bash"># アーム Cortex-M の場合（将来仕様）
+            <div class="code-header">
+                <span class="code-lang">bash</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-bash"># アーム Cortex-M の場合（将来仕様）
 nagiscript build main.ngs --target arm-cortex-m4 -o firmware.bin
 
 # フラッシュ
 openocd -f interface/stlink.cfg -f target/stm32f4x.cfg \
     -c "program firmware.bin verify reset exit 0x08000000"</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>注意事項</h2>
+            <h2>注意事項</h2>
 
-    <ol>
-      <li><strong>スタックサイズ</strong>: 組み込み環境ではスタックが限られる</li>
-      <li><strong>ヒープ確保</strong>: Rc を使用する場合はヒープサイズに注意</li>
-      <li><strong>割り込み安全性</strong>: 割り込みハンドラ内でのメモリ確保は避ける</li>
-      <li><strong>ボルテージ</strong>: ハードウェアの仕様を確認する</li>
-    </ol>
+            <ol>
+                <li>
+                    <strong>スタックサイズ</strong>:
+                    組み込み環境ではスタックが限られる
+                </li>
+                <li>
+                    <strong>ヒープ確保</strong>: Rc
+                    を使用する場合はヒープサイズに注意
+                </li>
+                <li>
+                    <strong>割り込み安全性</strong>:
+                    割り込みハンドラ内でのメモリ確保は避ける
+                </li>
+                <li>
+                    <strong>ボルテージ</strong>: ハードウェアの仕様を確認する
+                </li>
+            </ol>
 
-    <hr>
+            <hr />
 
-    <div class="nav-links">
-      <a href="cli.html" class="nav-link prev">← CLI ツール開発</a>
-      <a href="cinterop.html" class="nav-link next">C言語との相互運用 →</a>
-    </div>
-  </main>
+            <div class="nav-links">
+                <a href="cli.html" class="nav-link prev">← CLI ツール開発</a>
+                <a href="cinterop.html" class="nav-link next"
+                    >C言語との相互運用 →</a
+                >
+            </div>
+        </main>
 
-  <script src="../../js/main.js"></script>
-  <script src="../../js/play-wasm.js"></script>
+        <script src="../../js/main.js"></script>
+        <script src="../../js/play-wasm.js"></script>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      if (window.lucide) lucide.createIcons();
-    });
-  </script>
-</body>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                if (window.lucide) lucide.createIcons();
+            });
+        </script>
+    </body>
 </html>

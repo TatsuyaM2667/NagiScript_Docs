@@ -1,128 +1,257 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>関数とモジュール - NagiScript</title>
-  <link rel="stylesheet" href="../../css/style.css">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>関数とモジュール - NagiScript</title>
+        <link rel="stylesheet" href="../../css/style.css" />
 
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
-</head>
-<body>
-  <div class="sky-decor" aria-hidden="true">
-    <div class="cloud c1"></div>
-    <div class="cloud c2"></div>
-    <div class="cloud c3"></div>
-    <div class="cloud c4"></div>
-  </div>
-  <header class="header">
-    <a href="../../index.html" class="header-logo"><img src="../../assets/logo.png" alt="NagiScript Logo"><span class="logo-text">NagiScript</span></a>
-    <nav class="header-nav" id="header-nav">
-      <a href="../../index.html">ホーム</a>
-      <a href="../getting-started.html">ドキュメント</a>
-      <a href="../tutorial/basics.html">チュートリアル</a>
-      <a href="../reference/types.html">リファレンス</a>
-      <a href="https://github.com/TatsuyaM2667/nagiscript_lang" class="nav-github">
-        <i data-lucide="github"></i><span>GitHub</span>
-      </a>
-      <button class="theme-toggle" aria-label="テーマ切替">
-        <i data-lucide="moon" class="icon-moon"></i>
-        <i data-lucide="sun" class="icon-sun"></i>
-      </button>
-    </nav>
-    <button class="menu-toggle" id="menu-toggle" aria-label="メニュー"><i data-lucide="menu"></i></button>
-  </header>
-  <div class="sidebar-overlay"></div>
+        <!-- Lucide Icons -->
+        <script
+            src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"
+            defer
+        ></script>
+    </head>
+    <body>
+        <div class="sky-decor" aria-hidden="true">
+            <div class="cloud c1"></div>
+            <div class="cloud c2"></div>
+            　
+            <div class="cloud c3"></div>
+            <div class="cloud c4"></div>
+        </div>
+        <header class="header">
+            <a href="../../index.html" class="header-logo"
+                ><img src="../../assets/logo.png" alt="NagiScript Logo" /><span
+                    class="logo-text"
+                    >NagiScript</span
+                ></a
+            >
+            <nav class="header-nav" id="header-nav">
+                <a href="../../index.html">ホーム</a>
+                <a href="../getting-started.html">ドキュメント</a>
+                <a href="../tutorial/basics.html">チュートリアル</a>
+                <a href="../reference/types.html">リファレンス</a>
+                <a
+                    href="https://github.com/TatsuyaM2667/nagiscript_lang"
+                    class="nav-github"
+                >
+                    <i data-lucide="github"></i><span>GitHub</span>
+                </a>
+                <button class="theme-toggle" aria-label="テーマ切替">
+                    <i data-lucide="moon" class="icon-moon"></i>
+                    <i data-lucide="sun" class="icon-sun"></i>
+                </button>
+            </nav>
+            <button class="menu-toggle" id="menu-toggle" aria-label="メニュー">
+                <i data-lucide="menu"></i>
+            </button>
+        </header>
+        <div class="sidebar-overlay"></div>
 
-  <aside class="sidebar">
-    <div class="sidebar-section">
-      <div class="sidebar-title">入门</div>
-      <a href="../getting-started.html" class="sidebar-link">はじめに</a>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-title">チュートリアル</div>
-      <a href="basics.html" class="sidebar-link">基本概念</a>
-      <a href="functions.html" class="sidebar-link active">関数とモジュール</a>
-      <a href="structs-enums.html" class="sidebar-link">構造体と列挙型</a>
-      <a href="generics.html" class="sidebar-link">ジェネリクス</a>
-      <a href="error-handling.html" class="sidebar-link">エラーハンドリング</a>
-      <a href="memory.html" class="sidebar-link">メモリ管理</a>
-      <a href="async.html" class="sidebar-link">非同期プログラミング</a>
-      <a href="webassembly.html" class="sidebar-link">WebAssembly</a>
-      <a href="browser-app.html" class="sidebar-link">ブラウザアプリ</a>
-      <a href="tui-app.html" class="sidebar-link">TUI アプリ</a>
-      <a href="cli.html" class="sidebar-link">CLI ツール開発</a>
-      <a href="microcontroller.html" class="sidebar-link">組み込み開発</a>
-      <a href="cinterop.html" class="sidebar-link">C言語との相互運用</a>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-title">リファレンス</div>
-      <a href="../reference/types.html" class="sidebar-link">型システム</a>
-      <a href="../reference/syntax.html" class="sidebar-link">構文リファレンス</a>
-      <a href="../reference/operators.html" class="sidebar-link">演算子リファレンス</a>
-      <a href="../reference/standard-library.html" class="sidebar-link">標準ライブラリ</a>
-      <a href="../reference/standard-c-library.html" class="sidebar-link">C 標準ライブラリ</a>
-      <a href="../reference/compiler.html" class="sidebar-link">コンパイラ内部構造</a>
-      <a href="../reference/keywords.html" class="sidebar-link">キーワード一覧</a>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-title">実践</div>
-      <a href="../examples/todo-app.html" class="sidebar-link">Todo アプリ</a>
-      <a href="../examples/web-framework.html" class="sidebar-link">Web フレームワーク</a>
-      <a href="../examples/iot-sensor.html" class="sidebar-link">IoT センサー</a>
-    </div>
-  </aside>
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">入门</div>
+                <a href="../getting-started.html" class="sidebar-link"
+                    >はじめに</a
+                >
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">チュートリアル</div>
+                <a href="basics.html" class="sidebar-link">基本概念</a>
+                <a href="functions.html" class="sidebar-link active"
+                    >関数とモジュール</a
+                >
+                <a href="structs-enums.html" class="sidebar-link"
+                    >構造体と列挙型</a
+                >
+                <a href="generics.html" class="sidebar-link">ジェネリクス</a>
+                <a href="error-handling.html" class="sidebar-link"
+                    >エラーハンドリング</a
+                >
+                <a href="memory.html" class="sidebar-link">メモリ管理</a>
+                <a href="async.html" class="sidebar-link"
+                    >非同期プログラミング</a
+                >
+                <a href="webassembly.html" class="sidebar-link">WebAssembly</a>
+                <a href="browser-app.html" class="sidebar-link"
+                    >ブラウザアプリ</a
+                >
+                <a href="tui-app.html" class="sidebar-link">TUI アプリ</a>
+                <a href="cli.html" class="sidebar-link">CLI ツール開発</a>
+                <a href="microcontroller.html" class="sidebar-link"
+                    >組み込み開発</a
+                >
+                <a href="cinterop.html" class="sidebar-link"
+                    >C言語との相互運用</a
+                >
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">リファレンス</div>
+                <a href="../reference/types.html" class="sidebar-link"
+                    >型システム</a
+                >
+                <a href="../reference/syntax.html" class="sidebar-link"
+                    >構文リファレンス</a
+                >
+                <a href="../reference/operators.html" class="sidebar-link"
+                    >演算子リファレンス</a
+                >
+                <a
+                    href="../reference/standard-library.html"
+                    class="sidebar-link"
+                    >標準ライブラリ</a
+                >
+                <a
+                    href="../reference/standard-c-library.html"
+                    class="sidebar-link"
+                    >C 標準ライブラリ</a
+                >
+                <a href="../reference/compiler.html" class="sidebar-link"
+                    >コンパイラ内部構造</a
+                >
+                <a href="../reference/keywords.html" class="sidebar-link"
+                    >キーワード一覧</a
+                >
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">実践</div>
+                <a href="../examples/todo-app.html" class="sidebar-link"
+                    >Todo アプリ</a
+                >
+                <a href="../examples/web-framework.html" class="sidebar-link"
+                    >Web フレームワーク</a
+                >
+                <a href="../examples/iot-sensor.html" class="sidebar-link"
+                    >IoT センサー</a
+                >
+            </div>
+        </aside>
 
-  <main class="main content">
-    <h1>関数</h1>
-    <p>関数の定義と呼び出しを学びます。※モジュール分割（<code>import</code>）は現行では<b>未実装</b>のため、本ページ末尾にロードマップとしてまとめます。</p>
+        <main class="main content">
+            <h1>関数</h1>
+            <p>
+                関数の定義と呼び出しを学びます。※モジュール分割（<code>import</code>）は現行では<b>未実装</b>のため、本ページ末尾にロードマップとしてまとめます。
+            </p>
 
-    <div class="callout warn">
-      <span class="ct">現行仕様（v0.2.0）</span>
-      <p>戻り値の型は <code>fn name(...) -&gt; 型</code> の<b><code>-&gt;</code> 構文</b>です。<code>-&gt;</code> を省略した書き方は<b>動きません</b>。またブロック末尾の暗黙 return（式ブロック）は<b>非対応</b>なので、必ず <code>return</code> を明示してください。</p>
-    </div>
+            <div class="callout warn">
+                <span class="ct">現行仕様（change.md, 2026-08）</span>
+                <p>
+                    戻り値の型は <code>fn name(...) -&gt; 型</code> の<b
+                        ><code>-&gt;</code> 構文</b
+                    >です。<code>-&gt;</code>
+                    を省略した書き方は<b>動きません</b>。通常は
+                    <code>return</code> を明示しますが、<b>ブロック末尾</b>に置いた
+                    <code>if</code> / <code>match</code> は返り値の tail
+                    式として扱われ、各分岐が値を返せば <code>return</code>
+                    なしで関数の戻り値になります（change.md 2026-08 で対応）。
+                    途中の式は <code>return</code> で明示してください。
+                </p>
+            </div>
 
-    <hr>
+            <hr />
 
-    <h2>関数の定義</h2>
+            <h2>関数の定義</h2>
 
-    <h3>戻り値あり</h3>
+            <h3>戻り値あり</h3>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">fn add(a: i32, b: i32) -&gt; i32 {
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">fn add(a: i32, b: i32) -&gt; i32 {
     return a + b
 }</code></pre>
 
-    <h3>戻り値なし</h3>
+            <h3>末尾 if / match を戻り値に（change.md, 2026-08）</h3>
 
-    <p>戻り値がない場合は <code>-&gt;</code> を書きません（<code>-&gt; void</code> は不可）。</p>
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">fn greet(name: string) {
+            <p>
+                関数の<b>ブロック末尾</b>（<code>}</code>
+                直前）に置いた <code>if</code> / <code>match</code>
+                は、全分岐が値を返せば <code>return</code> なしでそのまま戻り値になります。<code
+                    >else</code
+                >
+                が無い経路など、値を欠く分岐があるとコンパイルエラーになります。
+            </p>
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">enum Op { Add Sub }
+
+fn classify(n: i32) -&gt; string {
+    if n &gt; 0 { "pos" } else { "non-pos" }   // 末尾の if が戻り値になる
+}
+
+fn apply(op: Op, a: i32, b: i32) -&gt; i32 {
+    match op {                             // 末尾の match が戻り値になる
+        Add =&gt; a + b,
+        Sub =&gt; a - b,
+    }
+}
+
+fn must_return(x: bool) -&gt; i32 {
+    if x { return 1 }                      // else が無い → エラー
+}</code></pre>
+
+            <h3>戻り値なし</h3>
+
+            <p>
+                戻り値がない場合は <code>-&gt;</code> を書きません（<code
+                    >-&gt; void</code
+                >
+                は不可）。
+            </p>
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">fn greet(name: string) {
     println(name)
 }</code></pre>
 
-    <h3>引数なし・文字列を返す</h3>
+            <h3>引数なし・文字列を返す</h3>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">fn get_version() -&gt; string {
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">fn get_version() -&gt; string {
     return "1.0.0"
 }</code></pre>
 
-    <h3>関数の呼び出し</h3>
+            <h3>関数の呼び出し</h3>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">val result = add(10, 20)   // 30
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">val result = add(10, 20)   // 30
 greet("Alice")              // Alice
 val ver = get_version()     // "1.0.0"
 println(result)</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>再帰関数</h2>
+            <h2>再帰関数</h2>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">fn factorial(n: i32) -&gt; i32 {
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">fn factorial(n: i32) -&gt; i32 {
     if n &lt;= 1 {
         return 1
     }
@@ -132,16 +261,31 @@ println(result)</code></pre>
 val result = factorial(5)  // 120
 println(result)</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>エクスポート（Wasm / C 連携）</h2>
+            <h2>エクスポート（Wasm / C 連携）</h2>
 
-    <div class="callout note">
-      <span class="ct">現行仕様（v0.2.0）</span>
-      <p><code>export</code> は<b>関数宣言の前置</b>にのみ使えます。<code>export "C" fn ...</code> の形を書き、Wasm や C ABI から呼び出せるようにします。変数を export する「export 文」は<b>使えません</b>（<code>export fn ...</code> は誤り）。</p>
-    </div>
-    <div class="code-header"><span class="code-lang">utils.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">// utils.ngs
+            <div class="callout note">
+                <span class="ct">現行仕様（v0.2.0）</span>
+                <p>
+                    <code>export</code>
+                    は<b>関数宣言の前置</b>にのみ使えます。<code
+                        >export "C" fn ...</code
+                    >
+                    の形を書き、Wasm や C ABI から呼び出せるようにします。変数を
+                    export する「export 文」は<b>使えません</b>（<code
+                        >export fn ...</code
+                    >
+                    は誤り）。
+                </p>
+            </div>
+            <div class="code-header">
+                <span class="code-lang">utils.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">// utils.ngs
 export "C" fn add(a: i32, b: i32) -&gt; i32 {
     return a + b
 }
@@ -150,21 +294,38 @@ export "C" fn multiply(a: i32, b: i32) -&gt; i32 {
     return a * b
 }</code></pre>
 
-    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-bash"># WebAssembly 向けにビルド（外部から add / multiply を呼べる）
+            <div class="code-header">
+                <span class="code-lang">bash</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-bash"># WebAssembly 向けにビルド（外部から add / multiply を呼べる）
 nagiscript wasm utils.ngs -o utils.wasm</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>関数型・クロージャは未対応</h2>
+            <h2>関数型・クロージャは未対応</h2>
 
-    <div class="callout roadmap">
-      <span class="ct">ロードマップ（未実装）</span>
-      <p>関数を値として扱う「関数式」（<code>val f = fn(x) { ... }</code>）、関数型フィールド（<code>handler: fn(...)</code>）、高階関数、クロージャは<b>現行ではサポートされていません</b>（不安定）。関数の動的切り替えが必要な場合は、enum のバリアントを <code>match</code> + <code>if</code> で分岐して実装してください。</p>
-    </div>
+            <div class="callout roadmap">
+                <span class="ct">ロードマップ（未実装）</span>
+                <p>
+                    関数を値として扱う「関数式」（<code
+                        >val f = fn(x) { ... }</code
+                    >）、関数型フィールド（<code>handler: fn(...)</code
+                    >）、高階関数、クロージャは<b>現行ではサポートされていません</b>（不安定）。関数の動的切り替えが必要な場合は、enum
+                    のバリアントを <code>match</code> +
+                    <code>if</code> で分岐して実装してください。
+                </p>
+            </div>
 
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">enum Op { Add Sub }
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">enum Op { Add Sub }
 
 fn apply(op: Op, a: i32, b: i32) -&gt; i32 {
     match op {
@@ -176,25 +337,48 @@ fn apply(op: Op, a: i32, b: i32) -&gt; i32 {
 val result = apply(Op.Add(), 10, 5)  // 15
 println(result)</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>モジュール / import（ロードマップ）</h2>
+            <h2>モジュール / import（ロードマップ）</h2>
 
-    <div class="callout roadmap">
-      <span class="ct">ロードマップ（未実装）</span>
-      <p><code>import</code> は<b>未実装</b>です。複数ファイルへの分割はできず、<code>import "std:io"</code> のような標準モジュールも存在しません。現在は単一ファイルにすべての関数を記述します。複数ファイル分割・<code>std:</code> モジュール・パッケージ管理は将来の予定です。</p>
-    </div>
+            <div class="callout roadmap">
+                <span class="ct">ロードマップ（未実装）</span>
+                <p>
+                    <code>import</code>
+                    は<b>未実装</b>です。複数ファイルへの分割はできず、<code
+                        >import "std:io"</code
+                    >
+                    のような標準モジュールも存在しません。現在は単一ファイルにすべての関数を記述します。複数ファイル分割・<code
+                        >std:</code
+                    >
+                    モジュール・パッケージ管理は将来の予定です。
+                </p>
+            </div>
 
-    <hr>
+            <hr />
 
-    <h2>メソッド（impl ブロック）</h2>
+            <h2>メソッド（impl ブロック）</h2>
 
-    <div class="callout note">
-      <span class="ct">現行仕様（v0.2.0）</span>
-      <p>メソッドは <code>impl</code> ブロックで定義します。文字列組み込みの <code>s.len()</code> / <code>s.to_upper()</code> のようなメソッドは現行では<b>定義されていません</b>。※ <code>impl</code> と <code>self</code> の詳細は「構造体と列挙型」を参照してください。</p>
-    </div>
-    <div class="code-header"><span class="code-lang">filename.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">struct Counter {
+            <div class="callout note">
+                <span class="ct">現行仕様（v0.2.0）</span>
+                <p>
+                    メソッドは
+                    <code>impl</code> ブロックで定義します。文字列組み込みの
+                    <code>s.len()</code> /
+                    <code>s.to_upper()</code>
+                    のようなメソッドは現行では<b>定義されていません</b>。※
+                    <code>impl</code> と
+                    <code>self</code>
+                    の詳細は「構造体と列挙型」を参照してください。
+                </p>
+            </div>
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">struct Counter {
     n: i32,
 }
 
@@ -210,21 +394,23 @@ fn main() {
     println(c2.n)  // 2
 }</code></pre>
 
-    <hr>
+            <hr />
 
-    <div class="nav-links">
-      <a href="basics.html" class="nav-link prev">← 基本概念</a>
-      <a href="structs-enums.html" class="nav-link next">構造体と列挙型 →</a>
-    </div>
-  </main>
+            <div class="nav-links">
+                <a href="basics.html" class="nav-link prev">← 基本概念</a>
+                <a href="structs-enums.html" class="nav-link next"
+                    >構造体と列挙型 →</a
+                >
+            </div>
+        </main>
 
-  <script src="../../js/main.js"></script>
-  <script src="../../js/play-wasm.js"></script>
+        <script src="../../js/main.js"></script>
+        <script src="../../js/play-wasm.js"></script>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      if (window.lucide) lucide.createIcons();
-    });
-  </script>
-</body>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                if (window.lucide) lucide.createIcons();
+            });
+        </script>
+    </body>
 </html>

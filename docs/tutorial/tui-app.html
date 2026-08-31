@@ -1,92 +1,178 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TUI アプリの作り方 - NagiScript</title>
-  <meta name="description" content="NagiScript でターミナル UI（TUI）アプリを作るチュートリアル。ANSI エスケープで画面を制御し、ネイティブバイナリとして配布する">
-  <link rel="stylesheet" href="../../css/style.css">
-  <link rel="icon" href="../../assets/logo.png">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>TUI アプリの作り方 - NagiScript</title>
+        <meta
+            name="description"
+            content="NagiScript でターミナル UI（TUI）アプリを作るチュートリアル。ANSI エスケープで画面を制御し、ネイティブバイナリとして配布する"
+        />
+        <link rel="stylesheet" href="../../css/style.css" />
+        <link rel="icon" href="../../assets/logo.png" />
 
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
-</head>
-<body>
-  <div class="sky-decor" aria-hidden="true">
-    <div class="cloud c1"></div>
-    <div class="cloud c2"></div>
-    <div class="cloud c3"></div>
-    <div class="cloud c4"></div>
-  </div>
-  <header class="header">
-    <a href="../../index.html" class="header-logo"><img src="../../assets/logo.png" alt="NagiScript Logo"><span class="logo-text">NagiScript</span></a>
-    <nav class="header-nav" id="header-nav">
-      <a href="../../index.html">ホーム</a>
-      <a href="../getting-started.html">ドキュメント</a>
-      <a href="../tutorial/basics.html">チュートリアル</a>
-      <a href="../reference/types.html">リファレンス</a>
-      <a href="https://github.com/TatsuyaM2667/nagiscript_lang" class="nav-github">
-        <i data-lucide="github"></i><span>GitHub</span>
-      </a>
-      <button class="theme-toggle" aria-label="テーマ切替">
-        <i data-lucide="moon" class="icon-moon"></i>
-        <i data-lucide="sun" class="icon-sun"></i>
-      </button>
-    </nav>
-    <button class="menu-toggle" id="menu-toggle" aria-label="メニュー"><i data-lucide="menu"></i></button>
-  </header>
-  <div class="sidebar-overlay"></div>
+        <!-- Lucide Icons -->
+        <script
+            src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"
+            defer
+        ></script>
+    </head>
+    <body>
+        <div class="sky-decor" aria-hidden="true">
+            　
+            <div class="cloud c1"></div>
+            <div class="cloud c2"></div>
+            <div class="cloud c3"></div>
+            <div class="cloud c4"></div>
+        </div>
+        <header class="header">
+            <a href="../../index.html" class="header-logo"
+                ><img src="../../assets/logo.png" alt="NagiScript Logo" /><span
+                    class="logo-text"
+                    >NagiScript</span
+                ></a
+            >
+            <nav class="header-nav" id="header-nav">
+                <a href="../../index.html">ホーム</a>
+                <a href="../getting-started.html">ドキュメント</a>
+                <a href="../tutorial/basics.html">チュートリアル</a>
+                <a href="../reference/types.html">リファレンス</a>
+                <a
+                    href="https://github.com/TatsuyaM2667/nagiscript_lang"
+                    class="nav-github"
+                >
+                    <i data-lucide="github"></i><span>GitHub</span>
+                </a>
+                <button class="theme-toggle" aria-label="テーマ切替">
+                    <i data-lucide="moon" class="icon-moon"></i>
+                    <i data-lucide="sun" class="icon-sun"></i>
+                </button>
+            </nav>
+            <button class="menu-toggle" id="menu-toggle" aria-label="メニュー">
+                <i data-lucide="menu"></i>
+            </button>
+        </header>
+        <div class="sidebar-overlay"></div>
 
-  <aside class="sidebar">
-    <div class="sidebar-section">
-      <div class="sidebar-title">入门</div>
-      <a href="../getting-started.html" class="sidebar-link">はじめに</a>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-title">チュートリアル</div>
-      <a href="basics.html" class="sidebar-link">基本概念</a>
-      <a href="functions.html" class="sidebar-link">関数とモジュール</a>
-      <a href="structs-enums.html" class="sidebar-link">構造体と列挙型</a>
-      <a href="generics.html" class="sidebar-link">ジェネリクス</a>
-      <a href="error-handling.html" class="sidebar-link">エラーハンドリング</a>
-      <a href="memory.html" class="sidebar-link">メモリ管理</a>
-      <a href="async.html" class="sidebar-link">非同期プログラミング</a>
-      <a href="webassembly.html" class="sidebar-link">WebAssembly</a>
-      <a href="browser-app.html" class="sidebar-link">ブラウザアプリ</a>
-      <a href="tui-app.html" class="sidebar-link active">TUI アプリ</a>
-      <a href="cli.html" class="sidebar-link">CLI ツール開発</a>
-      <a href="microcontroller.html" class="sidebar-link">組み込み開発</a>
-      <a href="cinterop.html" class="sidebar-link">C言語との相互運用</a>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-title">リファレンス</div>
-      <a href="../reference/types.html" class="sidebar-link">型システム</a>
-      <a href="../reference/syntax.html" class="sidebar-link">構文リファレンス</a>
-      <a href="../reference/operators.html" class="sidebar-link">演算子リファレンス</a>
-      <a href="../reference/standard-library.html" class="sidebar-link">標準ライブラリ</a>
-      <a href="../reference/standard-c-library.html" class="sidebar-link">C 標準ライブラリ</a>
-      <a href="../reference/compiler.html" class="sidebar-link">コンパイラ内部構造</a>
-      <a href="../reference/keywords.html" class="sidebar-link">キーワード一覧</a>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-title">実践</div>
-      <a href="../examples/todo-app.html" class="sidebar-link">Todo アプリ</a>
-      <a href="../examples/web-framework.html" class="sidebar-link">Web フレームワーク</a>
-      <a href="../examples/iot-sensor.html" class="sidebar-link">IoT センサー</a>
-    </div>
-  </aside>
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">入门</div>
+                <a href="../getting-started.html" class="sidebar-link"
+                    >はじめに</a
+                >
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">チュートリアル</div>
+                <a href="basics.html" class="sidebar-link">基本概念</a>
+                <a href="functions.html" class="sidebar-link"
+                    >関数とモジュール</a
+                >
+                <a href="structs-enums.html" class="sidebar-link"
+                    >構造体と列挙型</a
+                >
+                <a href="generics.html" class="sidebar-link">ジェネリクス</a>
+                <a href="error-handling.html" class="sidebar-link"
+                    >エラーハンドリング</a
+                >
+                <a href="memory.html" class="sidebar-link">メモリ管理</a>
+                <a href="async.html" class="sidebar-link"
+                    >非同期プログラミング</a
+                >
+                <a href="webassembly.html" class="sidebar-link">WebAssembly</a>
+                <a href="browser-app.html" class="sidebar-link"
+                    >ブラウザアプリ</a
+                >
+                <a href="tui-app.html" class="sidebar-link active"
+                    >TUI アプリ</a
+                >
+                <a href="cli.html" class="sidebar-link">CLI ツール開発</a>
+                <a href="microcontroller.html" class="sidebar-link"
+                    >組み込み開発</a
+                >
+                <a href="cinterop.html" class="sidebar-link"
+                    >C言語との相互運用</a
+                >
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">リファレンス</div>
+                <a href="../reference/types.html" class="sidebar-link"
+                    >型システム</a
+                >
+                <a href="../reference/syntax.html" class="sidebar-link"
+                    >構文リファレンス</a
+                >
+                <a href="../reference/operators.html" class="sidebar-link"
+                    >演算子リファレンス</a
+                >
+                <a
+                    href="../reference/standard-library.html"
+                    class="sidebar-link"
+                    >標準ライブラリ</a
+                >
+                <a
+                    href="../reference/standard-c-library.html"
+                    class="sidebar-link"
+                    >C 標準ライブラリ</a
+                >
+                <a href="../reference/compiler.html" class="sidebar-link"
+                    >コンパイラ内部構造</a
+                >
+                <a href="../reference/keywords.html" class="sidebar-link"
+                    >キーワード一覧</a
+                >
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">実践</div>
+                <a href="../examples/todo-app.html" class="sidebar-link"
+                    >Todo アプリ</a
+                >
+                <a href="../examples/web-framework.html" class="sidebar-link"
+                    >Web フレームワーク</a
+                >
+                <a href="../examples/iot-sensor.html" class="sidebar-link"
+                    >IoT センサー</a
+                >
+            </div>
+        </aside>
 
-  <main class="main content">
-    <h1>TUI アプリの作り方</h1>
-    <p>ターミナル上でインタラクティブに操作できる「TUI（Text User Interface）」アプリを NagiScript で作ります。ネイティブバイナリとして単体で動く、キーボード操作のツールを作るのがゴールです。</p>
+        <main class="main content">
+            <h1>TUI アプリの作り方</h1>
+            <p>
+                ターミナル上でインタラクティブに操作できる「TUI（Text User
+                Interface）」アプリを NagiScript
+                で作ります。ネイティブバイナリとして単体で動く、キーボード操作のツールを作るのがゴールです。
+            </p>
 
-    <hr>
+            <hr />
 
-    <h2>TUI の基本構造</h2>
-    <p>TUI アプリの骨組みは「描画 → 入力待ち → 状態更新 → 再描画」のループです。NagiScript ではこのループを <code>while</code> で書き、画面更新は ANSI エスケープシーケンスの <code>print</code> 出力で行います。</p>
-    <div class="callout note"><span class="ct">現行仕様（v0.2.0)</span><p>文字列の <code>+</code> 連結や数値の文字列化（<code>str()</code>）は<b>未実装</b>です。ANSI シーケンスは <code>"\x1b["</code> のような文字列リテラルを <code>print(...)</code> で出力し、数値は <code>println(n)</code> でそのまま表示します。<code>const</code> も存在しないため、定数は <code>val</code> を使います。</p></div>
-    <div class="code-header"><span class="code-lang">loop.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">fn main() {
+            <h2>TUI の基本構造</h2>
+            <p>
+                TUI アプリの骨組みは「描画 → 入力待ち → 状態更新 →
+                再描画」のループです。NagiScript ではこのループを
+                <code>while</code> で書き、画面更新は ANSI
+                エスケープシーケンスの <code>print</code> 出力で行います。
+            </p>
+            <div class="callout note">
+                <span class="ct">現行仕様（v0.2.0)</span>
+                <p>
+                    文字列の
+                    <code>+</code>
+                    連結や数値の文字列化（<code>str()</code>）は<b>未実装</b>です。ANSI
+                    シーケンスは <code>"\x1b["</code> のような文字列リテラルを
+                    <code>print(...)</code> で出力し、数値は
+                    <code>println(n)</code> でそのまま表示します。<code
+                        >const</code
+                    >
+                    も存在しないため、定数は <code>val</code> を使います。
+                </p>
+            </div>
+            <div class="code-header">
+                <span class="code-lang">loop.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">fn main() {
     var frame = 0
     print("\x1b[?25l")     // カーソル非表示
     while true {
@@ -100,26 +186,71 @@
     }
     print("\x1b[?25h")     // カーソル表示
 }</code></pre>
-    <div class="callout note"><span class="ct">ロードマップ</span><p>「<code>const ESC = "\x1b["</code> のような定数」や「<code>ESC + "2J"</code> のような文字列組み立て（<code>+</code> 連結・<code>str()</code> 変換）は現行では<b>未実装</b>です。現在はリテラル全体を1つの文字列として <code>print</code> / <code>println</code> で出力してください。<code>const</code> <code>+</code> <code>str()</code> は将来の予定です。</p></div>
+            <div class="callout note">
+                <span class="ct">ロードマップ</span>
+                <p>
+                    「<code>const ESC = "\x1b["</code> のような定数」や「<code
+                        >ESC + "2J"</code
+                    >
+                    のような文字列組み立て（<code>+</code> 連結・<code
+                        >str()</code
+                    >
+                    変換）は現行では<b>未実装</b>です。現在はリテラル全体を1つの文字列として
+                    <code>print</code> /
+                    <code>println</code> で出力してください。<code>const</code>
+                    <code>+</code> <code>str()</code> は将来の予定です。
+                </p>
+            </div>
 
-    <hr>
+            <hr />
 
-    <h2>画面の制御（ANSI エスケープ）</h2>
-    <p>よく使う制御コードは以下のとおりです。<code>print</code> でそのまま出力できます。</p>
-    <table>
-      <thead><tr><th>コード</th><th>効果</th></tr></thead>
-      <tbody>
-        <tr><td><code>\x1b[2J</code></td><td>画面クリア</td></tr>
-        <tr><td><code>\x1b[H</code></td><td>カーソルを左上へ移動</td></tr>
-        <tr><td><code>\x1b[&lt;行&gt;;&lt;列&gt;H</code></td><td>指定位置へ移動</td></tr>
-        <tr><td><code>\x1b[&lt;n&gt;A/B/C/D</code></td><td>カーソルを n 移動（上/下/右/左）</td></tr>
-        <tr><td><code>\x1b[?25l / ?25h</code></td><td>カーソル非表示 / 表示</td></tr>
-        <tr><td><code>\x1b[0m</code></td><td>装飾リセット</td></tr>
-      </tbody>
-    </table>
+            <h2>画面の制御（ANSI エスケープ）</h2>
+            <p>
+                よく使う制御コードは以下のとおりです。<code>print</code>
+                でそのまま出力できます。
+            </p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>コード</th>
+                        <th>効果</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>\x1b[2J</code></td>
+                        <td>画面クリア</td>
+                    </tr>
+                    <tr>
+                        <td><code>\x1b[H</code></td>
+                        <td>カーソルを左上へ移動</td>
+                    </tr>
+                    <tr>
+                        <td><code>\x1b[&lt;行&gt;;&lt;列&gt;H</code></td>
+                        <td>指定位置へ移動</td>
+                    </tr>
+                    <tr>
+                        <td><code>\x1b[&lt;n&gt;A/B/C/D</code></td>
+                        <td>カーソルを n 移動（上/下/右/左）</td>
+                    </tr>
+                    <tr>
+                        <td><code>\x1b[?25l / ?25h</code></td>
+                        <td>カーソル非表示 / 表示</td>
+                    </tr>
+                    <tr>
+                        <td><code>\x1b[0m</code></td>
+                        <td>装飾リセット</td>
+                    </tr>
+                </tbody>
+            </table>
 
-    <div class="code-header"><span class="code-lang">progress.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">fn main() {
+            <div class="code-header">
+                <span class="code-lang">progress.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">fn main() {
     var i = 0
     while i &lt;= 100 {
         print("\r")            // \r で行先頭に戻る
@@ -128,8 +259,23 @@
     }
     println("done")
 }</code></pre>
-    <div class="callout warn"><span class="ct">ロードマップ</span><p>進捗バー文字列を組み立てる <code>progress_bar()</code>（下記の将来案）は文字列の <code>+</code> 連結と <code>str()</code> 変換が必要なため、現行では<b>動きません</b>。<code>] "</code> や <code>%</code> を含む完成形進捗バーは、連結と <code>str()</code> が実装された将来バージョンで使用できます。現在は数値を <code>println</code> で出力する簡易表示にしてください。</p></div>
-    <pre><code>// 将来案（未実装）
+            <div class="callout warn">
+                <span class="ct">ロードマップ</span>
+                <p>
+                    進捗バー文字列を組み立てる
+                    <code>progress_bar()</code>（下記の将来案）は文字列の
+                    <code>+</code> 連結と
+                    <code>str()</code>
+                    変換が必要なため、現行では<b>動きません</b>。<code
+                        >] "</code
+                    >
+                    や <code>%</code> を含む完成形進捗バーは、連結と
+                    <code>str()</code>
+                    が実装された将来バージョンで使用できます。現在は数値を
+                    <code>println</code> で出力する簡易表示にしてください。
+                </p>
+            </div>
+            <pre><code>// 将来案（未実装）
 // fn progress_bar(width: i32, done: i32, total: i32) string {
 //     var bar = "["
 //     val filled = (done * width) / total
@@ -142,12 +288,25 @@
 //     return bar
 // }</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>キーボード入力を受け取る</h2>
-    <p>ユーザーがキーを押した瞬間に反応させるには、端末を raw モードにする必要があります。これは C 標準ライブラリの <code>termios</code> を <code>extern</code> で呼び出すと実現できます。C との相互運用の詳細は <a href="cinterop.html">C言語との相互運用</a> を参照してください。</p>
-    <div class="code-header"><span class="code-lang">rawmode.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">// termios を extern "C" で宣言（libc にリンク）
+            <h2>キーボード入力を受け取る</h2>
+            <p>
+                ユーザーがキーを押した瞬間に反応させるには、端末を raw
+                モードにする必要があります。これは C 標準ライブラリの
+                <code>termios</code> を
+                <code>extern</code> で呼び出すと実現できます。C
+                との相互運用の詳細は
+                <a href="cinterop.html">C言語との相互運用</a>
+                を参照してください。
+            </p>
+            <div class="code-header">
+                <span class="code-lang">rawmode.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">// termios を extern "C" で宣言（libc にリンク）
 extern "C" fn tcgetattr(fd: i32, termp: *u8) -&gt; i32
 extern "C" fn tcsetattr(fd: i32, actions: i32, termp: *u8) -&gt; i32
 extern "C" fn getchar() -&gt; i32
@@ -164,12 +323,44 @@ fn raw_mode_enter() {
 fn read_key() -&gt; i32 {
     return getchar()
 }</code></pre>
-    <div class="callout warn"><span class="ct">注意（現行仕様）</span><p>ポインタは <code>*u8</code> 形式で、アドレスを取るのは <code>&amp;&amp;x as *u8</code>、取り出すのは <code>unsafe { *ptr }</code> です。<code>*mut</code> / <code>*const</code> 記法は存在しません。<code>struct termios</code> の正確なレイアウトは取得していません。上記は概念的な raw モード実装であり、実際にはプラットフォームの termios 定義に合わせる必要があります。<code>println(frame)</code> と同じく出力は <code>print</code> / <code>println</code> を使います。</p></div>
-    <p>シンプルな対話アプリであれば、raw モードを使わず「1行の入力で Enter 確定」でも十分動きます。</p>
-    <h3>1行入力で動くバージョン</h3>
-    <div class="callout note"><span class="ct">現行仕様（v0.2.0)</span><p>行組み立てには文字列の <code>+</code> 連結が必要なため、現行では <code>getchar()</code> で押されたキーの<i>コード値</i>をそのまま表示するバージョンを示します。Enter（10 か 13）で終了します。</p></div>
-    <div class="code-header"><span class="code-lang">input.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">extern "C" fn getchar() -&gt; i32
+            <div class="callout warn">
+                <span class="ct">注意（現行仕様）</span>
+                <p>
+                    ポインタは <code>*u8</code> 形式で、アドレスを取るのは
+                    <code>&amp;&amp;x as *u8</code>、取り出すのは
+                    <code>unsafe { *ptr }</code> です。<code>*mut</code> /
+                    <code>*const</code> 記法は存在しません。<code
+                        >struct termios</code
+                    >
+                    の正確なレイアウトは取得していません。上記は概念的な raw
+                    モード実装であり、実際にはプラットフォームの termios
+                    定義に合わせる必要があります。<code>println(frame)</code>
+                    と同じく出力は <code>print</code> /
+                    <code>println</code> を使います。
+                </p>
+            </div>
+            <p>
+                シンプルな対話アプリであれば、raw モードを使わず「1行の入力で
+                Enter 確定」でも十分動きます。
+            </p>
+            <h3>1行入力で動くバージョン</h3>
+            <div class="callout note">
+                <span class="ct">現行仕様（v0.2.0)</span>
+                <p>
+                    行組み立てには文字列の
+                    <code>+</code> 連結が必要なため、現行では
+                    <code>getchar()</code>
+                    で押されたキーの<i>コード値</i>をそのまま表示するバージョンを示します。Enter（10
+                    か 13）で終了します。
+                </p>
+            </div>
+            <div class="code-header">
+                <span class="code-lang">input.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">extern "C" fn getchar() -&gt; i32
 
 fn read_key() -&gt; i32 {
     while true {
@@ -187,14 +378,43 @@ fn main() {
     }
     println("bye!")
 }</code></pre>
-    <div class="callout warn"><span class="ct">ロードマップ</span><p>「プロンプトを表示して1行の文字列を組み立てる」（<code>io.print(prompt)</code> → <code>line + str(c as u8)</code> → <code>"Hello, " + name + "!"</code>）は、文字列連結と <code>str()</code> が未実装のため<b>現行では動きません</b>。単一引数の <code>print</code> / <code>println</code> とキーコード表示で代用してください。</p></div>
+            <div class="callout warn">
+                <span class="ct">ロードマップ</span>
+                <p>
+                    「プロンプトを表示して1行の文字列を組み立てる」（<code
+                        >io.print(prompt)</code
+                    >
+                    → <code>line + str(c as u8)</code> →
+                    <code>"Hello, " + name + "!"</code>）は、文字列連結と
+                    <code>str()</code>
+                    が未実装のため<b>現行では動きません</b>。単一引数の
+                    <code>print</code> /
+                    <code>println</code> とキーコード表示で代用してください。
+                </p>
+            </div>
 
-    <hr>
+            <hr />
 
-    <h2>タスクマネージャー TUI を作る</h2>
-    <div class="callout note"><span class="ct">現行仕様（v0.2.0)</span><p><code>List&lt;T&gt;</code> は LLVM リンクに失敗する既知バグ、<code>Rc</code> は <code>.get()</code> の戻り値が不確実、<code>std:fs</code> / <code>Result</code> 型は未実装です。そのため実用的な「タスクリスト管理」アプリは固定配列 <code>[Task; 16]</code> + 件数カウンターで状態を持ち、保存・読み込みは行わないメモリ内版として示します。</p></div>
-    <div class="code-header"><span class="code-lang">tasks.ngs</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-ngs">extern "C" fn getchar() -&gt; i32
+            <h2>タスクマネージャー TUI を作る</h2>
+            <div class="callout note">
+                <span class="ct">現行仕様（v0.2.0)</span>
+                <p>
+                    <code>List&lt;T&gt;</code> は LLVM
+                    リンクに失敗する既知バグ、<code>Rc</code> は
+                    <code>.get()</code> の戻り値が不確実、<code>std:fs</code> /
+                    <code>Result</code>
+                    型は未実装です。そのため実用的な「タスクリスト管理」アプリは固定配列
+                    <code>[Task; 16]</code> +
+                    件数カウンターで状態を持ち、保存・読み込みは行わないメモリ内版として示します。
+                </p>
+            </div>
+            <div class="code-header">
+                <span class="code-lang">tasks.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">extern "C" fn getchar() -&gt; i32
 
 struct Task {
     title: string
@@ -253,48 +473,69 @@ fn read_key() -&gt; i32 {
     return getchar()
 }</code></pre>
 
-    <hr>
+            <hr />
 
-    <h2>ビルドと実行</h2>
-    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button></div>
-    <pre><code class="lang-bash"># ネイティブバイナリにコンパイル（termios は libc にリンク）
+            <h2>ビルドと実行</h2>
+            <div class="code-header">
+                <span class="code-lang">bash</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-bash"># ネイティブバイナリにコンパイル（termios は libc にリンク）
 nagiscript build tasks.ngs -o task-manager
 
 # 実行
 ./task-manager</code></pre>
-    <p>単一バイナリで動くので、インストーラーやコンテナなしでそのまま配布できます。</p>
+            <p>
+                単一バイナリで動くので、インストーラーやコンテナなしでそのまま配布できます。
+            </p>
 
-    <hr>
+            <hr />
 
-    <h2>発展させるときのヒント</h2>
-    <ol>
-      <li><strong>ウィンドウ描画を抽象化</strong> — 位置指定（<code>\x1b[行;列H</code>）を使うと、複数ペインを自由に並べられます</li>
-      <li><strong>状態は struct でまとめる</strong> — <code>AppState</code> を1つの構造体にすると再描画・永続化が楽になります</li>
-      <li><strong>永久化は将来の <code>std:fs</code> で</strong> — 現行ではファイル保存・読み込み（<code>std:fs</code>）は未実装です。保存機能はロードマップとして設計に残し、当面はメモリ内で動かします</li>
-      <li><strong>色を使う</strong> — <code>\x1b[31m</code>（赤）等を組み合わせて選択中カーソルや完了タスクを強調できます</li>
-    </ol>
+            <h2>発展させるときのヒント</h2>
+            <ol>
+                <li>
+                    <strong>ウィンドウ描画を抽象化</strong> —
+                    位置指定（<code>\x1b[行;列H</code>）を使うと、複数ペインを自由に並べられます
+                </li>
+                <li>
+                    <strong>状態は struct でまとめる</strong> —
+                    <code>AppState</code>
+                    を1つの構造体にすると再描画・永続化が楽になります
+                </li>
+                <li>
+                    <strong>永久化は将来の <code>std:fs</code> で</strong> —
+                    現行ではファイル保存・読み込み（<code>std:fs</code>）は未実装です。保存機能はロードマップとして設計に残し、当面はメモリ内で動かします
+                </li>
+                <li>
+                    <strong>色を使う</strong> —
+                    <code>\x1b[31m</code
+                    >（赤）等を組み合わせて選択中カーソルや完了タスクを強調できます
+                </li>
+            </ol>
 
-    <hr>
+            <hr />
 
-    <div class="nav-links">
-      <a href="browser-app.html" class="nav-link">
-        <span class="label">前</span>
-        <span class="title">← ブラウザアプリ</span>
-      </a>
-      <a href="cli.html" class="nav-link">
-        <span class="label">次</span>
-        <span class="title">CLI ツール開発 →</span>
-      </a>
-    </div>
-  </main>
+            <div class="nav-links">
+                <a href="browser-app.html" class="nav-link">
+                    <span class="label">前</span>
+                    <span class="title">← ブラウザアプリ</span>
+                </a>
+                <a href="cli.html" class="nav-link">
+                    <span class="label">次</span>
+                    <span class="title">CLI ツール開発 →</span>
+                </a>
+            </div>
+        </main>
 
-  <script src="../../js/main.js"></script>
-  <script src="../../js/play-wasm.js"></script>
+        <script src="../../js/main.js"></script>
+        <script src="../../js/play-wasm.js"></script>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      if (window.lucide) lucide.createIcons();
-    });
-  </script>
-</body>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                if (window.lucide) lucide.createIcons();
+            });
+        </script>
+    </body>
 </html>

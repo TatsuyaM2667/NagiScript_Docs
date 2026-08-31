@@ -9,35 +9,47 @@
             rel="icon"
             href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>"
         />
-    
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
-</head>
+
+        <!-- Lucide Icons -->
+        <script
+            src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"
+            defer
+        ></script>
+    </head>
     <body>
-  <div class="sky-decor" aria-hidden="true">
-    <div class="cloud c1"></div>
-    <div class="cloud c2"></div>
-    <div class="cloud c3"></div>
-    <div class="cloud c4"></div>
-  </div>
+        　
+        <div class="sky-decor" aria-hidden="true">
+            <div class="cloud c1"></div>
+            <div class="cloud c2"></div>
+            <div class="cloud c3"></div>
+            <div class="cloud c4"></div>
+        </div>
         <header class="header">
             <a href="../../index.html" class="header-logo"
-                ><img src="../../assets/logo.png" alt="NagiScript Logo"><span class="logo-text">NagiScript</span></a
+                ><img src="../../assets/logo.png" alt="NagiScript Logo" /><span
+                    class="logo-text"
+                    >NagiScript</span
+                ></a
             >
             <nav class="header-nav" id="header-nav">
-      <a href="../../index.html">ホーム</a>
-      <a href="../getting-started.html">ドキュメント</a>
-      <a href="../tutorial/basics.html">チュートリアル</a>
-      <a href="../reference/types.html">リファレンス</a>
-      <a href="https://github.com/TatsuyaM2667/nagiscript_lang" class="nav-github">
-        <i data-lucide="github"></i><span>GitHub</span>
-      </a>
-      <button class="theme-toggle" aria-label="テーマ切替">
-        <i data-lucide="moon" class="icon-moon"></i>
-        <i data-lucide="sun" class="icon-sun"></i>
-      </button>
-    </nav>
-    <button class="menu-toggle" id="menu-toggle" aria-label="メニュー"><i data-lucide="menu"></i></button>
+                <a href="../../index.html">ホーム</a>
+                <a href="../getting-started.html">ドキュメント</a>
+                <a href="../tutorial/basics.html">チュートリアル</a>
+                <a href="../reference/types.html">リファレンス</a>
+                <a
+                    href="https://github.com/TatsuyaM2667/nagiscript_lang"
+                    class="nav-github"
+                >
+                    <i data-lucide="github"></i><span>GitHub</span>
+                </a>
+                <button class="theme-toggle" aria-label="テーマ切替">
+                    <i data-lucide="moon" class="icon-moon"></i>
+                    <i data-lucide="sun" class="icon-sun"></i>
+                </button>
+            </nav>
+            <button class="menu-toggle" id="menu-toggle" aria-label="メニュー">
+                <i data-lucide="menu"></i>
+            </button>
         </header>
         <div class="sidebar-overlay"></div>
 
@@ -126,17 +138,35 @@
             <h1>標準ライブラリ</h1>
             <p>NagiScript の標準ライブラリを解説します。</p>
 
-            <div class="callout warn"><span class="ct">現行仕様（v0.2.0）</span><p>std: モジュール群（io / math / fs / args / async / net 等）は現行コンパイラー v0.2.0 では<b>未実装</b>です。実際に使えるのは下記の組み込み <code>print</code> / <code>println</code> / <code>panic</code> と、ランタイムの <code>__ngs_*</code> 関数のみです。これら std: モジュールは将来（ロードマップ）として扱ってください。</p></div>
+            <div class="callout warn">
+                <span class="ct">現行仕様（v0.2.0）</span>
+                <p>
+                    std: モジュール群（io / math / fs / args / async / net
+                    等）は現行コンパイラー v0.2.0
+                    では<b>未実装</b>です。実際に使えるのは下記の組み込み
+                    <code>print</code> / <code>println</code> /
+                    <code>panic</code> と、ランタイムの
+                    <code>__ngs_*</code> 関数のみです。これら std:
+                    モジュールは将来（ロードマップ）として扱ってください。
+                </p>
+            </div>
 
             <hr />
 
             <h2>組み込み API</h2>
 
-            <p>現行の NagiScript が提供する出力 API は組み込みの <code>print(値)</code> と <code>println(値)</code> です。引数はちょうど 1 個で、文字列・数値・bool を表示できます。</p>
+            <p>
+                現行の NagiScript が提供する出力 API は組み込みの
+                <code>print(値)</code> と
+                <code>println(値)</code> です。引数はちょうど 1
+                個で、文字列・数値・bool を表示できます。
+            </p>
 
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">fn main() {
     println("Hello, World!")
@@ -150,24 +180,47 @@
 
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">fn main() {
     panic("something went wrong")
 }</code></pre>
 
             <h3>文字列比較・数値変換</h3>
-            <p>文字列比較や数値変換はランタイムの <code>__ngs_*</code> 関数を経由して行われます（詳細は内部実装）。型名は <code>str</code> ではなく <code>string</code> です。<code>str</code> と書くと unknown type <code>str</code> エラーになります。</p>
+            <p>
+                文字列比較や数値変換はランタイムの
+                <code>__ngs_*</code>
+                関数を経由して行われます（詳細は内部実装）。型名は
+                <code>str</code> ではなく <code>string</code> です。<code
+                    >str</code
+                >
+                と書くと unknown type <code>str</code> エラーになります。
+            </p>
 
             <hr />
 
             <h2>List&lt;T&gt;</h2>
 
-            <div class="callout warn"><span class="ct">既知バグ</span><p><code>List&lt;T&gt;</code> は <code>List.new()</code> / <code>push</code> / <code>len</code> / <code>get</code> / <code>set</code> の API としては定義されていますが、現行 v0.2.0 では LLVM コード生成時に <code>zext i64 to i64</code> エラーが発生し、リンクに失敗する既知バグがあります。当面は構造体 + 値渡しを推奨します。</p></div>
+            <div class="callout warn">
+                <span class="ct">既知バグ</span>
+                <p>
+                    <code>List&lt;T&gt;</code> は <code>List.new()</code> /
+                    <code>push</code> / <code>len</code> / <code>get</code> /
+                    <code>set</code> の API としては定義されていますが、現行
+                    v0.2.0 では LLVM コード生成時に
+                    <code>zext i64 to i64</code>
+                    エラーが発生し、リンクに失敗する既知バグがあります。当面は構造体
+                    + 値渡しを推奨します。
+                </p>
+            </div>
 
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">// なお、List は現行ビルドでリンクに失敗する既知バグがあるため、
 // 当面は構造体 + 値渡しでの実装を推奨します
@@ -180,11 +233,22 @@ struct IntList {
 
             <h2>Rc&lt;T&gt;</h2>
 
-            <div class="callout warn"><span class="ct">要検証</span><p><code>Rc.new(値)</code> と <code>.get()</code> は API としては存在しますが、v0.2.0 では <code>.get()</code> の戻り値が意図と異なる場合があります。安定性を確認するまで続けて、当面は構造体 + 値渡しを推奨します。</p></div>
+            <div class="callout warn">
+                <span class="ct">要検証</span>
+                <p>
+                    <code>Rc.new(値)</code> と <code>.get()</code> は API
+                    としては存在しますが、v0.2.0 では
+                    <code>.get()</code>
+                    の戻り値が意図と異なる場合があります。安定性を確認するまで続けて、当面は構造体
+                    + 値渡しを推奨します。
+                </p>
+            </div>
 
             <div class="code-header">
                 <span class="code-lang">main.ngs</span
-                ><button class="copy-btn"><i data-lucide="copy"></i><span>Copy</span></button>
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
             </div>
             <pre><code class="lang-ngs">// Rc の .get() の戻り値は要検証のため、当面は構造体 + 値渡しで実装します
 struct Data {
@@ -198,14 +262,33 @@ fn main() {
 
             <hr />
 
-            <div class="callout roadmap"><span class="ct">ロードマップ</span><p>以下の std: モジュール群は将来のバージョンでの実装予定（ロードマップ）であり、現行 v0.2.0 では <b>使用できません</b>。</p><ul>
-                <li><code>std:io</code> — 入出力（<code>io.println</code> 等）</li>
-                <li><code>std:math</code> — 数値演算（<code>math.sin</code>, <code>math.pow</code> 等）</li>
-                <li><code>std:fs</code> — ファイル操作</li>
-                <li><code>std:args</code> — コマンドライン引数</li>
-                <li><code>std:async</code> — 非同期処理</li>
-                <li><code>std:net</code> — ネットワーク</li>
-            </ul><p>現行では上記の組み込み <code>print</code> / <code>println</code> / <code>panic</code> と、C 標準関数を <code>extern "C" fn</code> で宣言して利用してください。</p></div>
+            <div class="callout roadmap">
+                <span class="ct">ロードマップ</span>
+                <p>
+                    以下の std:
+                    モジュール群は将来のバージョンでの実装予定（ロードマップ）であり、現行
+                    v0.2.0 では <b>使用できません</b>。
+                </p>
+                <ul>
+                    <li>
+                        <code>std:io</code> — 入出力（<code>io.println</code>
+                        等）
+                    </li>
+                    <li>
+                        <code>std:math</code> — 数値演算（<code>math.sin</code>,
+                        <code>math.pow</code> 等）
+                    </li>
+                    <li><code>std:fs</code> — ファイル操作</li>
+                    <li><code>std:args</code> — コマンドライン引数</li>
+                    <li><code>std:async</code> — 非同期処理</li>
+                    <li><code>std:net</code> — ネットワーク</li>
+                </ul>
+                <p>
+                    現行では上記の組み込み <code>print</code> /
+                    <code>println</code> / <code>panic</code> と、C 標準関数を
+                    <code>extern "C" fn</code> で宣言して利用してください。
+                </p>
+            </div>
 
             <hr />
 
@@ -222,12 +305,12 @@ fn main() {
         </main>
 
         <script src="../../js/main.js"></script>
-  <script src="../../js/play-wasm.js"></script>
-    
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      if (window.lucide) lucide.createIcons();
-    });
-  </script>
-</body>
+        <script src="../../js/play-wasm.js"></script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                if (window.lucide) lucide.createIcons();
+            });
+        </script>
+    </body>
 </html>
