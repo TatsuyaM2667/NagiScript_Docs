@@ -109,15 +109,15 @@ struct Response {
 }
 
 fn home_handler() -&gt; Response {
-    return Response { status: Status.Ok(), body: "Welcome to NagiScript Web Framework!" }
+    return Response { status: Status.Ok, body: "Welcome to NagiScript Web Framework!" }
 }
 
 fn hello_handler() -&gt; Response {
-    return Response { status: Status.Ok(), body: "Hello, World!" }
+    return Response { status: Status.Ok, body: "Hello, World!" }
 }
 
 fn not_found() -&gt; Response {
-    return Response { status: Status.NotFound(), body: "Page not found" }
+    return Response { status: Status.NotFound, body: "Page not found" }
 }
 
 fn route(req: Request) -&gt; Response {

@@ -151,7 +151,7 @@
             <p>
                 まず
                 <code>enum</code> で成功・失敗の状態を定義します。値の生成は
-                <code>Result.Ok()</code> のように<b>括弧</b>が必要です。
+                <code>Result.Ok</code> のように<b>括弧なし</b>で生成します（データを持つバリアントのみ括弧が必要）。
             </p>
             <div class="code-header">
                 <span class="code-lang">result.ngs</span
@@ -166,9 +166,9 @@
 
 fn find(key: i32) -&gt; Result {
     if key == 1 {
-        return Result.Ok()
+        return Result.Ok
     }
-    return Result.NotFound()
+    return Result.NotFound
 }
 
 fn main() {
@@ -203,9 +203,9 @@ fn main() {
 
 fn find(key: i32) -&gt; Result {
     if key == 1 {
-        return Result.Ok()
+        return Result.Ok
     }
-    return Result.NotFound()
+    return Result.NotFound
 }
 
 fn main() {
@@ -256,9 +256,9 @@ fn main() {
 
 fn safe_divide(a: i32, b: i32) -&gt; DivResult {
     if b == 0 {
-        return DivResult.Error()
+        return DivResult.Error
     }
-    return DivResult.Ok()
+    return DivResult.Ok
 }
 
 fn main() {

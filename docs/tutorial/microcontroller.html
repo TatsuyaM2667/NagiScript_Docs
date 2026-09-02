@@ -352,7 +352,7 @@ struct I2cDevice {
 impl I2cDevice {
     fn write(self: I2cDevice, data: u8) {
         var buf = data
-        i2c_write(self.addr, &amp;&amp;buf as *u8, 1)
+        i2c_write(self.addr, &amp;buf as *u8, 1)
     }
 }</code></pre>
 

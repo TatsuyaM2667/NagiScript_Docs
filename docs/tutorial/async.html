@@ -154,9 +154,9 @@ fn main() {
 async fn safe_fetch(url: string) -&gt; Result {
     val response = await http.get(url)
     if response.ok {
-        return Result.Ok()
+        return Result.Ok
     }
-    return Result.Error()
+    return Result.Error
 }</code></pre>
 
     <hr>

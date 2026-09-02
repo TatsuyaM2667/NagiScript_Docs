@@ -313,11 +313,11 @@ extern "C" fn getchar() -&gt; i32
 
 fn raw_mode_enter() {
     var term: [64]u8 = [0; 64]     // struct termios の配置領域
-    tcgetattr(0, &amp;&amp;term[0] as *u8)
+    tcgetattr(0, &amp;term[0] as *u8)
     // ECHO ビットを落として反映（byte 位置は 実装依存）
     var next = term[12] &amp; 247      // ECHO(8) の逆ビット
     term[12] = next
-    tcsetattr(0, 0, &amp;&amp;term[0] as *u8)
+    tcsetattr(0, 0, &amp;term[0] as *u8)
 }
 
 fn read_key() -&gt; i32 {
@@ -327,7 +327,7 @@ fn read_key() -&gt; i32 {
                 <span class="ct">注意（現行仕様）</span>
                 <p>
                     ポインタは <code>*u8</code> 形式で、アドレスを取るのは
-                    <code>&amp;&amp;x as *u8</code>、取り出すのは
+                    <code>&amp;x as *u8</code>、取り出すのは
                     <code>unsafe { *ptr }</code> です。<code>*mut</code> /
                     <code>*const</code> 記法は存在しません。<code
                         >struct termios</code
@@ -374,7 +374,7 @@ fn main() {
     while true {
         val k = read_key()
         println(k)          // 押されたキーの文字コードを表示
-        if k == 10 || k == 13 { break }   // LF / CR
+        if k == 10 or k == 13 { break }   // LF / CR
     }
     println("bye!")
 }</code></pre>
@@ -432,8 +432,8 @@ fn add_task(title: string) {
 }
 
 fn toggle_task(index: i32) {
-    if index &gt;= 0 &amp;&amp; index &lt; task_count {
-        tasks[index].done = !tasks[index].done
+    if index &gt;= 0 and index &lt; task_count {
+        tasks[index].done = not tasks[index].done
     }
 }
 

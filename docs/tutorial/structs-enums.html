@@ -233,10 +233,8 @@ fn main() {
                 <span class="ct">現行仕様（v0.2.0)</span>
                 <p>
                     enum の定義は裸のバリアント名 <code>Red</code> /
-                    <code>Green</code> を列挙します。値を生成するときは
-                    <code>Color.Red()</code> のように必ず
-                    <code>()</code> を付けます（<code>Color.Red</code>
-                    と書くとエラーになります）。
+                     <code>Green</code> を列挙します。バリアント値を生成するときは
+                     <code>Color.Red</code> のように括弧なしで生成できます（データを持つバリアントのみ括弧が必要、例: <code>Some(42)</code>）。
                 </p>
             </div>
 
@@ -252,7 +250,7 @@ fn main() {
     Blue
 }
 
-val c = Color.Red()</code></pre>
+val c = Color.Red</code></pre>
 
             <h3>データを持つ列挙型</h3>
 
@@ -377,7 +375,7 @@ fn main() {
                     Option 型も組み込みでは存在しないため enum
                     で自作します。データを持つバリアント（<code>Found(User)</code>）はパターン
                     <code>Found(u)</code> で取り出せます。find_user は失敗時に
-                    <code>Lookup.NotFound()</code>（括弧付き）で戻します。
+                    <code>Lookup.NotFound</code>（括弧なし）で戻します。
                 </p>
             </div>
 
@@ -400,7 +398,7 @@ fn find_user(id: i32) -&gt; Lookup {
     if id == 1 {
         return Lookup.Found(User { name: "Alice" })
     }
-    return Lookup.NotFound()
+    return Lookup.NotFound
 }
 
 fn main() {

@@ -279,6 +279,36 @@ val s2 = "型推論でもOK"
 // 文字列同士は比較できる
 val eq = s1 == s2  // false</code></pre>
 
+            <h3>文字列補間（f-string）</h3>
+
+            <div class="callout note">
+                <span class="ct">現行仕様</span>
+                <p>
+                    <code>f"..."</code> で変数を埋め込めます。式も
+                    <code>{ }</code> 内に書けます。<code>+</code>
+                    による文字列連結が未実装のため、文字列組み立ては
+                    f-string が主力になります。
+                </p>
+            </div>
+            <div class="code-header">
+                <span class="code-lang">filename.ngs</span
+                ><button class="copy-btn">
+                    <i data-lucide="copy"></i><span>Copy</span>
+                </button>
+            </div>
+            <pre><code class="lang-ngs">val name = "NagiScript"
+val version = 42
+
+// 変数の埋め込み
+println(f"Hello, {name}!")           // Hello, NagiScript!
+
+// 式も OK
+println(f"version = {version + 1}") // version = 43
+
+// 型名の埋め込み
+val lang: string = "NGS"
+println(f"lang = {lang}")           // lang = NGS</code></pre>
+
             <h3>真偽値型</h3>
 
             <div class="code-header">
@@ -290,8 +320,8 @@ val eq = s1 == s2  // false</code></pre>
             <pre><code class="lang-ngs">val flag1: bool = true
 val flag2 = false
 
-// 論理演算は && / || / !（キーワード and / or / not は使えない）
-if flag1 && !flag2 {
+// 論理演算は and / or / not（&& / || / ! は使えない）
+if flag1 and not flag2 {
     println("ok")
 }</code></pre>
 
@@ -389,9 +419,9 @@ while true {
                 <span class="ct">現行仕様（v0.2.0）</span>
                 <p>
                     パターンは<b>裸の列挙バリアント名</b>（例 <code>Ok</code>,
-                    <code>NotFound</code>）と、ワイルドカード
-                    <code>_</code> です。enum の値を生成するときは
-                    <code>Status.Ok()</code> のように括弧が必要です。
+                     <code>NotFound</code>）と、ワイルドカード
+                     <code>_</code> です。enum のバリアント値を生成するときは
+                     <code>Status.Ok</code> のように括弧は不要です（データを持つバリアントのみ括弧が必要、例: <code>Some(42)</code>）。
                 </p>
             </div>
             <div class="code-header">
@@ -411,7 +441,7 @@ fn show(s: Status) {
 }
 
 fn main() {
-    show(Status.Ok())
+    show(Status.Ok)
 }</code></pre>
 
             <h3>ブロック</h3>
@@ -471,12 +501,12 @@ val y: f64 = x  // OK: i32 から f64 への拡張</code></pre>
             <h2>文字列操作</h2>
 
             <div class="callout note">
-                <span class="ct">現行仕様（v0.2.0）</span>
+                <span class="ct">現行仕様</span>
                 <p>
                     文字列の連結
-                    <code>s + "..."</code> は<b>未実装</b>ですし、<code
-                        >s.len()</code
-                    >
+                    <code>s + "..."</code> は<b>未実装</b>です。文字列結合には
+                    <code>f"..."</code>（文字列補間）を使用してください。
+                    <code>s.len()</code>
                     のようなメソッドも現行では定義されていません。文字列は
                     <code>==</code> / <code>!=</code> での比較が可能です。
                 </p>
@@ -493,8 +523,11 @@ val y: f64 = x  // OK: i32 から f64 への拡張</code></pre>
 val eq = s == "Hello"  // true
 val ne = s != "World"  // true
 
+// 文字列結合（+ は不可 → f-string を使う）
+val joined = f"{s}, World!"  // "Hello, World!"
+
 // 表示
-println(s)</code></pre>
+println(joined)</code></pre>
 
             <hr />
 

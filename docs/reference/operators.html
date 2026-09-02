@@ -140,9 +140,9 @@
                 <p>
                     このページは現行コンパイラー v0.2.0
                     の正仕様に合わせてあります。論理演算は
-                    <code>&amp;&amp;</code> / <code>||</code> /
-                    <code>!</code> を使用します。<code>and</code> /
-                    <code>or</code> / <code>not</code> のキーワード、文字列の
+                    <code>and</code> /
+                    <code>or</code> / <code>not</code> を使用します。<code>&amp;&amp;</code> / <code>||</code> /
+                    <code>!</code> は<b>使えません</b>。文字列の
                     <code>+</code>
                     連結、<code>?</code>（エラー伝播）は<b>未実装・使えません</b>。
                 </p>
@@ -283,21 +283,21 @@ val result = a / b  // 1.66666...</code></pre>
                 </thead>
                 <tbody>
                     <tr>
-                        <td><code>&amp;&amp;</code></td>
+                        <td><code>and</code></td>
                         <td>論理AND</td>
-                        <td><code>true &amp;&amp; false</code></td>
+                        <td><code>true and false</code></td>
                         <td><code>false</code></td>
                     </tr>
                     <tr>
-                        <td><code>||</code></td>
+                        <td><code>or</code></td>
                         <td>論理OR</td>
-                        <td><code>true || false</code></td>
+                        <td><code>true or false</code></td>
                         <td><code>true</code></td>
                     </tr>
                     <tr>
-                        <td><code>!</code></td>
+                        <td><code>not</code></td>
                         <td>論理NOT</td>
-                        <td><code>!true</code></td>
+                        <td><code>not true</code></td>
                         <td><code>false</code></td>
                     </tr>
                 </tbody>
@@ -306,13 +306,10 @@ val result = a / b  // 1.66666...</code></pre>
             <div class="callout warn">
                 <span class="ct">現行仕様（v0.2.0）</span>
                 <p>
-                    論理演算には <code>&amp;&amp;</code> / <code>||</code> /
-                    <code>!</code> を使用します。<code>and</code> /
+                    論理演算には <code>and</code> /
                     <code>or</code> /
-                    <code>not</code> のキーワードは<b>未実装</b>で、<code
-                        >true and false</code
-                    >
-                    のような書き方はコンパイルできません。
+                    <code>not</code> を使用します。<code>&amp;&amp;</code> / <code>||</code> /
+                    <code>!</code> は<b>使えません</b>。
                 </p>
             </div>
 
@@ -322,8 +319,8 @@ val result = a / b  // 1.66666...</code></pre>
                     <i data-lucide="copy"></i><span>Copy</span>
                 </button>
             </div>
-            <pre><code class="lang-ngs">val a = true &amp;&amp; (5 &gt; 3)
-val b = !false
+            <pre><code class="lang-ngs">val a = true and (5 &gt; 3)
+val b = not false
 println(a)
 println(b)</code></pre>
 
@@ -385,9 +382,9 @@ println(b)</code></pre>
                 </thead>
                 <tbody>
                     <tr>
-                        <td><code>&amp;&amp;</code></td>
+                        <td><code>&amp;</code></td>
                         <td>アドレス取得</td>
-                        <td><code>val ptr = &amp;&amp;x as *i32</code></td>
+                        <td><code>val ptr = &amp;x as *i32</code></td>
                     </tr>
                     <tr>
                         <td><code>*</code></td>
@@ -406,7 +403,7 @@ println(b)</code></pre>
                 <span class="ct">現行仕様（v0.2.0）</span>
                 <p>
                     ポインタは <code>*T</code> 形式、アドレス取得は
-                    <code>&amp;&amp;x as *T</code>、参照外しは
+                    <code>&amp;x as *T</code>、参照外しは
                     <code>unsafe { *ptr }</code> を使います。<code
                         >.offset(n)</code
                     >
@@ -429,7 +426,7 @@ println(b)</code></pre>
     unsafe { return *ptr }
 }
 var x = 42
-val p = &amp;&amp;x as *i32
+val p = &amp;x as *i32
 println(read(p))</code></pre>
 
             <hr />
@@ -529,12 +526,12 @@ println(read(p))</code></pre>
                     </tr>
                     <tr>
                         <td>7</td>
-                        <td><code>&amp;&amp;</code></td>
+                        <td><code>and</code></td>
                         <td>論理AND</td>
                     </tr>
                     <tr>
                         <td>8</td>
-                        <td><code>||</code></td>
+                        <td><code>or</code></td>
                         <td>論理OR</td>
                     </tr>
                     <tr>

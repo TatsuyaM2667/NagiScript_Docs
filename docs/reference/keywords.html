@@ -479,8 +479,9 @@
                             <code>not</code>
                         </td>
                         <td>
-                            未実装。論理演算は <code>&amp;&amp;</code> /
-                            <code>||</code> / <code>!</code> を使う
+                            <b>実装済み</b>。論理演算に使用。
+                            <code>&amp;&amp;</code> / <code>||</code> /
+                            <code>!</code> は<b>使えません</b>
                         </td>
                     </tr>
                     <tr>
@@ -543,7 +544,7 @@ while counter &lt; 3 {
 }
 
 // match は裸のバリアント名と _ を使う
-val st = match Status.Ok() {
+val st = match Status.Ok {
     Ok =&gt; "200",
     _ =&gt; "404",
 }
@@ -552,7 +553,7 @@ println(st)
 // unsafe とポインタ
 unsafe {
     var v = 42
-    val p = &amp;&amp;v as *i32
+    val p = &amp;v as *i32
     println(*p)
 }
 

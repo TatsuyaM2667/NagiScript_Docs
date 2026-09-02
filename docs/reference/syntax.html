@@ -424,8 +424,8 @@ fn show(s: Status) {
                     <b>裸の列挙バリアント名</b>（<code>Ok</code>,
                     <code>NotFound</code> など）と
                     <code>_</code> ワイルドカードを使用します。enum
-                    の値を生成するときは
-                    <code>Status.Ok()</code> のように括弧が必要です。
+                     のバリアント値を生成するときは
+                     <code>Status.Ok</code> のように括弧は不要です（データを持つバリアントのみ括弧が必要、例: <code>Some(42)</code>）。
                 </p>
             </div>
 
@@ -472,6 +472,16 @@ fn main() {
                     >
                     形式は動きません。また
                     <code>self</code> には型注釈が必須です。
+                </p>
+            </div>
+            <div class="callout roadmap">
+                <span class="ct">ロードマップ（設計方針）</span>
+                <p>
+                    <code>self</code> の渡し方は将来的に「常に暗黙の参照渡し」（Python
+                    のオブジェクトモデルに近い）に統一する方針です。現在は値渡しですが、Rc
+                    / heap 系の型（List, Stack 等）は参照渡しに切り替える予定です。借用チェッカー（<code>check_borrow</code>）は未実装の方針であり、RC
+                    ベースの所有権管理で運用する予定です（Rust
+                    の借用チェックとは異なる設計）。
                 </p>
             </div>
 
@@ -527,9 +537,9 @@ fn main() {
 
 fn divide(a: f64, b: f64) -&gt; Result {
     if b == 0.0 {
-        return Result.Err()
+        return Result.Err
     }
-    return Result.Ok()
+    return Result.Ok
 }</code></pre>
 
             <div class="callout roadmap">
@@ -557,14 +567,14 @@ fn divide(a: f64, b: f64) -&gt; Result {
     unsafe { return *ptr }
 }
 var x = 42
-val p = &amp;&amp;x as *i32
+val p = &amp;x as *i32
 println(read(p))</code></pre>
 
             <div class="callout warn">
                 <span class="ct">現行仕様（v0.2.0）</span>
                 <p>
                     ポインタは <code>*T</code> 形式、アドレス取得は
-                    <code>&amp;&amp;x as *T</code>、参照外しは
+                    <code>&amp;x as *T</code>、参照外しは
                     <code>unsafe { *ptr }</code> を使います。<code
                         >ptr-&gt;</code
                     >
@@ -793,19 +803,19 @@ fn greet(name: string) -&gt; string {
                 </thead>
                 <tbody>
                     <tr>
-                        <td><code>&amp;&amp;</code></td>
+                        <td><code>and</code></td>
                         <td>論理AND</td>
-                        <td><code>a &amp;&amp; b</code></td>
+                        <td><code>a and b</code></td>
                     </tr>
                     <tr>
-                        <td><code>||</code></td>
+                        <td><code>or</code></td>
                         <td>論理OR</td>
-                        <td><code>a || b</code></td>
+                        <td><code>a or b</code></td>
                     </tr>
                     <tr>
-                        <td><code>!</code></td>
+                        <td><code>not</code></td>
                         <td>論理NOT</td>
-                        <td><code>!a</code></td>
+                        <td><code>not a</code></td>
                     </tr>
                 </tbody>
             </table>
@@ -813,10 +823,9 @@ fn greet(name: string) -&gt; string {
             <div class="callout warn">
                 <span class="ct">現行仕様（v0.2.0）</span>
                 <p>
-                    論理演算は <code>&amp;&amp;</code> <code>||</code>
-                    <code>!</code> を使用します。<code>and</code> /
-                    <code>or</code> /
-                    <code>not</code> のキーワードは<b>使えません</b>。
+                    論理演算は <code>and</code> <code>or</code>
+                    <code>not</code> を使用します。<code>&amp;&amp;</code> / <code>||</code> /
+                    <code>!</code> は<b>使えません</b>。
                 </p>
             </div>
 
@@ -836,9 +845,9 @@ fn greet(name: string) -&gt; string {
                         <td><code>fn f() -&gt; i32</code></td>
                     </tr>
                     <tr>
-                        <td><code>&amp;&amp;</code></td>
+                        <td><code>&amp;</code></td>
                         <td>アドレス取得</td>
-                        <td><code>&amp;&amp;x as *i32</code></td>
+                        <td><code>&amp;x as *i32</code></td>
                     </tr>
                     <tr>
                         <td><code>*</code></td>

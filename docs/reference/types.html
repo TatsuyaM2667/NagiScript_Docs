@@ -380,17 +380,17 @@ fn show(s: Status) {
 }
 
 fn main() {
-    show(Status.Ok())
+    show(Status.Ok)
 }</code></pre>
             <div class="callout warn">
                 <span class="ct">現行仕様（v0.2.0）</span>
                 <p>
-                    enum の値は
-                    <code>Status.Ok()</code> のように括弧付きで生成します。<code
-                        >match</code
-                    >
-                    のパターンは裸のバリアント名（<code>Ok</code> 等）と
-                    <code>_</code> ワイルドカードです。
+                    enum のバリアント値は
+                     <code>Status.Ok</code> のように括弧なしで生成します（データを持つバリアントのみ括弧が必要、例: <code>Some(42)</code>）。<code
+                         >match</code
+                     >
+                     のパターンは裸のバリアント名（<code>Ok</code> 等）と
+                     <code>_</code> ワイルドカードです。
                 </p>
             </div>
 
@@ -398,7 +398,7 @@ fn main() {
             <div class="callout roadmap">
                 <span class="ct">ロードマップ（未実装）</span>
                 <p>
-                    <code>(i32, str)</code> のようなタプルや
+                    <code>(i32, string)</code> のようなタプルや
                     <code>val (a, b) = ...</code> のデストラクチャリングは未実装
                     /
                     未検証です。複数の値をまとめる場合は構造体を使ってください。
@@ -481,9 +481,9 @@ println(v.y)</code></pre>
 
 fn find(id: i32) -&gt; Status {
     if id == 1 {
-        return Status.Ok()
+        return Status.Ok
     }
-    return Status.NotFound()
+    return Status.NotFound
 }
 
 fn main() {
@@ -568,7 +568,7 @@ val n: i64 = x as i64</code></pre>
                     ポインタ型は <code>*T</code> 形式（例:
                     <code>*i32</code>）です。<code>*const T</code> /
                     <code>*mut T</code> の区別はありません。アドレスは
-                    <code>&amp;&amp;x as *i32</code>、参照解除は
+                    <code>&amp;x as *i32</code>、参照解除は
                     <code>unsafe { *ptr }</code> で行います。<code
                         >ptr-&gt;</code
                     >
@@ -592,7 +592,7 @@ val n: i64 = x as i64</code></pre>
 
 fn main() {
     var x = 42
-    val p = &amp;&amp;x as *i32
+    val p = &amp;x as *i32
     println(read(p))  // 42
 }</code></pre>
 
@@ -604,7 +604,7 @@ fn main() {
                 </button>
             </div>
             <pre><code class="lang-ngs">var arr: [i32; 3] = [1, 2, 3]
-val ptr: *i32 = &amp;&amp;arr[0]
+val ptr: *i32 = &amp;arr[0]
 unsafe {
     println(*ptr)
 }</code></pre>

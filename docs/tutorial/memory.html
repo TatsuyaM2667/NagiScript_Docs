@@ -292,7 +292,7 @@ fn main() {
             <h2>Unsafe ブロックとポインタ</h2>
             <p>
                 ポインタは <code>*T</code> 型で表し、<code
-                    >&amp;&amp;x as *T</code
+                    >&amp;x as *T</code
                 >
                 でアドレスを取得します。取り回しは
                 <code>unsafe</code> ブロックにまとめます：
@@ -311,7 +311,7 @@ fn main() {
 
 fn main() {
     var x = 42
-    val p = &amp;&amp;x as *i32
+    val p = &amp;x as *i32
     println(read(p))
 }</code></pre>
             <div class="callout note">

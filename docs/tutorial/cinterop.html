@@ -247,7 +247,7 @@ fn main() {
     val p1 = Point { x: 0.0, y: 0.0 }
     val p2 = Point { x: 3.0, y: 4.0 }
 
-    val dist = c_distance(&amp;&amp;p1 as *Point, &amp;&amp;p2 as *Point)  // 5.0
+    val dist = c_distance(&amp;p1 as *Point, &amp;p2 as *Point)  // 5.0
     println(dist)
 }</code></pre>
 
@@ -298,7 +298,7 @@ extern int double_(int x);</code></pre>
             </div>
             <pre><code class="lang-ngs">fn main() {
     var x = 42
-    val ptr = &amp;&amp;x as *i32  // アドレスを取得
+    val ptr = &amp;x as *i32  // アドレスを取得
 
     unsafe {
         val value = *ptr  // 値を参照
@@ -330,7 +330,7 @@ extern int double_(int x);</code></pre>
 
 fn main() {
     val numbers = [10, 20, 30, 40, 50]
-    val sum = sum_array(&amp;&amp;numbers[0] as *i32, 5)  // 150
+    val sum = sum_array(&amp;numbers[0] as *i32, 5)  // 150
 }</code></pre>
 
             <hr />
